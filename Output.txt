@@ -1,0 +1,455 @@
+********************************************
+Object-Oriented Software Development
+
+Section: A
+CRN: 34964
+Type: Lecture  
+Time: 2:35-3:55
+Days: TR
+Location: Minto Centre 2000
+Professor: Babak Esfandiari 
+
+Section: A1
+CRN: 34965
+Type: Laboratory 
+Time: 11:35-1:25
+Days: T
+Location: Architecture Building 508
+Professor: Babak Esfandiari 
+
+Section: A2
+CRN: 34966
+Type: Laboratory 
+Time: 11:35-1:25
+Days: M
+Location: Architecture Building 508
+Professor: Babak Esfandiari 
+
+Section: A3
+CRN: 34967
+Type: Laboratory 
+Time: 4:05-5:55
+Days: T
+Location: Architecture Building 508
+Professor: Babak Esfandiari 
+
+Section: A4
+CRN: 34968
+Type: Laboratory 
+Time: 2:35-4:25
+Days: W
+Location: Architecture Building 508
+Professor: Babak Esfandiari 
+
+Section: A5
+CRN: 34969
+Type: Laboratory 
+Time: 9:35-11:25
+Days: R
+Location: Architecture Building 508
+Professor: Babak Esfandiari 
+
+********************************************
+Computer Systems Foundations
+
+Section: A
+CRN: 34958
+Type: Lecture 
+Time: 2:35-3:55
+Days: WF
+Location: Azrieli Theatre 102
+Professor: James Green 
+
+Section: A1
+CRN: 34959
+Type: Laboratory 
+Time: 2:35-4:25
+Days: M
+Location: Canal Building 5109
+Professor: James Green 
+
+Section: A3
+CRN: 34961
+Type: Laboratory 
+Time: 11:35-1:25
+Days: M
+Location: Canal Building 5109
+Professor: James Green 
+
+Section: A5
+CRN: 34963
+Type: Laboratory 
+Time: 11:35-1:25
+Days: W
+Location: Canal Building 5109
+Professor: James Green 
+
+********************************************
+Multivariable Calculus for Engineering or Physics
+
+Section: A
+CRN: 33700
+Type: Lecture  
+Time: 4:05-5:25
+Days: MW
+Location: Azrieli Theatre 301
+Professor: Angelo B. Mingarelli 
+
+Section: A1
+CRN: 33701
+Type: Tutorial 
+Time: 10:35-11:25
+Days: M
+Location: Southam Hall 316
+Professor: TBA
+
+Section: A2
+CRN: 33702
+Type: Tutorial 
+Time: 10:35-11:25
+Days: M
+Location: Southam Hall 318
+Professor: TBA
+
+Section: A3
+CRN: 33703
+Type: Tutorial 
+Time: 10:35-11:25
+Days: M
+Location: Southam Hall 317
+Professor: TBA
+
+Section: A4
+CRN: 33704
+Type: Tutorial 
+Time: 10:35-11:25
+Days: M
+Location: Southam Hall 406
+Professor: TBA
+
+Section: A5
+CRN: 33705
+Type: Tutorial 
+Time: 10:35-11:25
+Days: M
+Location: Canal Building 3101
+Professor: TBA
+
+Section: B
+CRN: 33706
+Type: Lecture  
+Time: 8:35-9:55
+Days: TR
+Location: Azrieli Theatre 101
+Professor: Ramon Cova 
+
+Section: B1
+CRN: 33707
+Type: Tutorial 
+Time: 8:35-9:25
+Days: F
+Location: Southam Hall 316
+Professor: TBA
+
+Section: B2
+CRN: 33708
+Type: Tutorial 
+Time: 8:35-9:25
+Days: F
+Location: Southam Hall 318
+Professor: TBA
+
+Section: B3
+CRN: 33709
+Type: Tutorial 
+Time: 8:35-9:25
+Days: F
+Location: Southam Hall 317
+Professor: TBA
+
+Section: B4
+CRN: 33710
+Type: Tutorial 
+Time: 8:35-9:25
+Days: F
+Location: Southam Hall 406
+Professor: TBA
+
+Section: B5
+CRN: 33711
+Type: Tutorial 
+Time: 8:35-9:25
+Days: F
+Location: River Building 3202
+Professor: TBA
+
+Section: C
+CRN: 33712
+Type: Lecture  
+Time: 4:05-5:25
+Days: TR
+Location: Azrieli Theatre 301
+Professor: Mohammad-Reza Rafsanjani-Sadeghi 
+
+Section: C1
+CRN: 33713
+Type: Lecture  
+Time: 2:35-3:25
+Days: M
+Location: Southam Hall 316
+Professor: TBA
+
+Section: C2
+CRN: 33714
+Type: Tutorial 
+Time: 2:35-3:25
+Days: M
+Location: Southam Hall 406
+Professor: TBA
+
+Section: C3
+CRN: 33715
+Type: Tutorial 
+Time: 2:35-3:25
+Days: M
+Location: Southam Hall 402
+Professor: TBA
+
+Section: C4
+CRN: 33716
+Type: Tutorial 
+Time: 2:35-3:25
+Days: M
+Location: Southam Hall 313
+Professor: TBA
+
+Section: C5
+CRN: 33717
+Type: Tutorial 
+Time: 2:35-3:25
+Days: M
+Location: Southam Hall 317
+Professor: TBA
+
+Section: D
+CRN: 33718
+Type: Lecture  
+Time: 8:35-9:55
+Days: TR
+Location: Loeb Building C164
+Professor: Mohammad-Reza Rafsanjani-Sadeghi 
+
+Section: D1
+CRN: 33719
+Type: Tutorial 
+Time: 4:35-5:25
+Days: T
+Location: Southam Hall 316
+Professor: TBA
+
+Section: D2
+CRN: 33720
+Type: Tutorial 
+Time: 4:35-5:25
+Days: T
+Location: Southam Hall 318
+Professor: TBA
+
+Section: D3
+CRN: 33721
+Type: Tutorial 
+Time: 4:35-5:25
+Days: T
+Location: Southam Hall 317
+Professor: TBA
+
+********************************************
+Circuits and Signals
+
+Section: A
+CRN: 31935
+Type: Lecture  
+Time: 2:35-3:55
+Days: TR
+Location: Azrieli Theatre 302
+Professor: Tom Ray 
+
+Section: B
+CRN: 31936
+Type: Lecture  
+Time: 1:05-2:25
+Days: MW
+Location: Tory Building 360
+Professor: Tom Ray 
+
+Section: C
+CRN: 31937
+Type: Lecture  
+Time: 10:05-11:25
+Days: TR
+Location: Azrieli Theatre 302
+Professor: Tom Ray 
+
+Section: L1
+CRN: 31938
+Type: Laboratory 
+Time: 8:35-11:25
+Days: M
+Location: Tory Building 446
+Professor: Tom Ray 
+
+Section: L2
+CRN: 31939
+Type: Laboratory 
+Time: 11:35-2:25
+Days: T
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+Section: L3
+CRN: 31940
+Type: Laboratory 
+Time: 8:35-11:25
+Days: F
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+Section: L4
+CRN: 31941
+Type: Laboratory 
+Time: 2:35-5:25
+Days: M
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+Section: L5
+CRN: 31942
+Type: Laboratory 
+Time: 2:35-5:25
+Days: F
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+Section: L6
+CRN: 31943
+Type: Laboratory 
+Time: 8:35-11:25
+Days: W
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+Section: L7
+CRN: 31944
+Type: Laboratory 
+Time: 2:35-5:25
+Days: W
+Location: Mackenzie Building 3269
+Professor: TBA
+
+Section: L8
+CRN: 31945
+Type: Laboratory 
+Time: 11:35-2:25
+Days: F
+Location: Mackenzie Building 3269
+Professor: Tom Ray 
+
+********************************************
+Communication Skills for Engineering Students
+
+Section: A
+CRN: 30759
+Type: Lecture  
+Time: 11:35-2:25
+Days: W
+Location: University Centre 280
+Professor: Kimberley Davis 
+
+Section: B
+CRN: 30760
+Type: Lecture  
+Time: 2:35-5:25
+Days: R
+Location: University Centre 376
+Professor: Ralph Calistro 
+
+Section: C
+CRN: 30761
+Type: Lecture  
+Time: 11:35-2:25
+Days: F
+Location: Paterson Hall 215
+Professor: Janet Elisabeth Meyer 
+
+Section: D
+CRN: 30762
+Type: Lecture  
+Time: 11:35-2:25
+Days: R
+Location: University Centre 376
+Professor: Marlene R Lundy 
+
+Section: E
+CRN: 30763
+Type: Lecture  
+Time: 2:35-5:25
+Days: M
+Location: Paterson Hall 215
+Professor: Kimberley Davis 
+
+Section: F
+CRN: 30764
+Type: Lecture  
+Time: 8:35-11:25
+Days: F
+Location: University Centre 280
+Professor: Marlene R Lundy 
+
+Section: G
+CRN: 30765
+Type: Lecture  
+Time: 11:35-2:25
+Days: M
+Location: Southam Hall 303
+Professor: Janet Elisabeth Meyer 
+
+Section: H
+CRN: 30766
+Type: Lecture  
+Time: 11:35-2:25
+Days: T
+Location: University Centre 378
+Professor: Helen Marina Triantafellou 
+
+Section: I
+CRN: 30767
+Type: Lecture  
+Time: 6:05-8:55
+Days: T
+Location: Paterson Hall 215
+Professor: Cheryl Lynne Cundell 
+
+Section: V
+CRN: 30768
+Type: Lecture  
+Time: 2:35-5:25
+Days: W
+Location: Paterson Hall 215
+Professor: Janet Elisabeth Meyer 
+
+Section: W
+CRN: 30769
+Type: Lecture  
+Time: 8:35-11:25
+Days: R
+Location: Southam Hall 309
+Professor: Kimberley Davis 
+
+Section: X
+CRN: 30770
+Type: Lecture  
+Time: 6:05-8:55
+Days: W
+Location: Tory Building 204
+Professor: Alex Myers 
+
