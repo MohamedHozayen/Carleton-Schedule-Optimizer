@@ -48,7 +48,9 @@ class Course:
 		
 class Section:
 	# This class has 4 instance variables containing info on the listings
-	def __init__(self, section, CRN, time, day, location, prof):
+	def __init__(self, title, courseCode, section, CRN, time, day, location, prof):
+		self.title = title
+		self.courseCode = courseCode
 		self.section = section
 		self.CRN = CRN
 		self.time = time
@@ -63,6 +65,69 @@ class Section:
 		self.section = newsection
 		return self
 
+class Schedule:
+	# This class has an attribute for each day of the week
+	def __init__(self):
+		self.monday = Day()
+		self.tuesday = Day()
+		self.wednesday = Day()
+		self.thursday = Day()
+		self.friday = Day()
+		self.conflict = False
+
+	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
+	def addSection(self, newsection):
+		for day in newsection.day: # section.day is a string storing the days the class is held
+			if 'M' in day:
+				self.monday.addClass(newsection)
+				if self.monday.conflict == True:
+					self.conflict = True
+			elif 'T' in day:
+				self.tuesday.addClass(newsection)
+				if self.tuesday.conflict == True:
+					self.conflict = True
+			elif 'W' in day:
+				self.wednesday.addClass(newsection)
+				if self.wednesday.conflict == True:
+					self.conflict = True
+			elif 'R' in day:
+				self.thursday.addClass(newsection)
+				if self.thursday.conflict == True:
+					self.conflict = True
+			elif 'F' in day:
+				self.friday.addClass(newsection)
+				if self.friday.conflict == True:
+					self.conflict = True
+	
+	# This method outputs the schedule, showing each class for each day
+	def outputSchedule(self):
+		for day in [a for a in dir(self) if not a.startswith('__') and not a.startswith('conflict') and not callable(getattr(self,a))]:
+			print(day)
+			for section in getattr(self,day).sections:
+				print(section.courseCode+section.section)
+
+class Day:
+	# This class has an attribute for sections, time slots, total breaks, and whether or not there is a conflict
+	def __init__(self):
+		self.sections = []
+		self.conflict = False
+		self.breaksTotal = 0
+		self.timeSlots = {'835': 0,'905': 0,'935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'105': 0,'135': 0,'205': 0,'235': 0,'305': 0,'335': 0,'405': 0,'435': 0,'505': 0,'535': 0,'605': 0,'635': 0,'705': 0,'735': 0,}
+	
+	# This method adds a class section to the day, incrementing its corresponding time slots. If a time slot has more than one course in it, the conflict boolean is assigned True
+	def addClass(self, section):
+		times = section.time.split('-')
+		startTime = times[0]
+		endTime = times[1]
+		# We go through each timeslot and increment ones where the current section overlaps
+		for key in self.timeSlots:
+			if (key >= startTime and key < endTime):
+				self.timeSlots[key] = self.timeSlots[key] + 1
+		# The conflict flag is raised if any timeslot has 2 courses at once
+		if not (0 in self.timeSlots.values()) or (1 in self.timeSlots.values()):
+			self.conflict = True
+		self.sections.append(section)
+		
 def getWebsiteData(term, subject, coursecode):
 	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
 	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
@@ -70,7 +135,7 @@ def getWebsiteData(term, subject, coursecode):
 	soup = BeautifulSoup(r.text, "html.parser", from_encoding='utf8')
 	return soup
 
-def getCourseData(data):
+def getCourseData(data,courseCode):
 	# These lists will contain all the sections of the corresponding type for the given course
 	lectures = []
 	labs = []
@@ -124,7 +189,7 @@ def getCourseData(data):
 						typeIncrement = 0
 				# The increment depends on the type of section we are looking at and is determined earlier
 				if j == (28 + typeIncrement):
-					courseTime = thing[22:].strip('</td>').replace('am','').replace('pm','').replace(' ','')
+					courseTime = thing[22:].strip('</td>').replace('am','').replace('pm','').replace(' ','').replace(':','')
 				if j == (29 + typeIncrement):
 					courseDay = thing[22:].strip('</td>')
 				if j == (30 + typeIncrement):
@@ -136,7 +201,7 @@ def getCourseData(data):
 
 		# Here we make an instance of the section class and add it to the corresponding list			
 		if counter == 2: 
-			section = Section(courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf)
+			section = Section(courseTitle,courseCode,courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf)
 			if any(i.isdigit() for i in courseSection): # Lecture sections don't have numbers
 				if courseType == 'Laboratory':
 					labs.append(section)
@@ -156,7 +221,7 @@ def getSemesterData(term, subject, coursecode):
 	for i in range(1, len(subject)+1):
 		soup = getWebsiteData(term, subject[str(i)], coursecode[str(i)])
 		tag = soup.body.contents[5].contents[13]
-		course = getCourseData(tag)
+		course = getCourseData(tag,subject[str(i)]+coursecode[str(i)])
 		semesterData.append(course)
 	return semesterData
 	
@@ -222,4 +287,10 @@ def main():
 	for course in semesterData:
 		course.CombineTutorials()
 	outputAllSectionData(semesterData)
+	someschedule = Schedule()
+	someschedule.addSection(semesterData[0].lectures[0])
+	someschedule.addSection(semesterData[1].lectures[0])
+	someschedule.addSection(semesterData[2].lectures[0])
+	someschedule.outputSchedule()
+
 main()

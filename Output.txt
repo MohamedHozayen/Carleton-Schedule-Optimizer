@@ -5,7 +5,7 @@ Lectures
 -------------------
 Section: A
 CRN: 34964
-Time: 2:35-3:55
+Time: 235-355
 Days: TR
 Location: Minto Centre 2000
 Professor: Babak Esfandiari 
@@ -14,35 +14,35 @@ Labs
 -------------------
 Section: A1
 CRN: 34965
-Time: 11:35-1:25
+Time: 1135-125
 Days: T
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A2
 CRN: 34966
-Time: 11:35-1:25
+Time: 1135-125
 Days: M
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A3
 CRN: 34967
-Time: 4:05-5:55
+Time: 405-555
 Days: T
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A4
 CRN: 34968
-Time: 2:35-4:25
+Time: 235-425
 Days: W
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A5
 CRN: 34969
-Time: 9:35-11:25
+Time: 935-1125
 Days: R
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
@@ -54,7 +54,7 @@ Lectures
 -------------------
 Section: A
 CRN: 34958
-Time: 2:35-3:55
+Time: 235-355
 Days: WF
 Location: Azrieli Theatre 102
 Professor: James Green 
@@ -63,21 +63,21 @@ Labs
 -------------------
 Section: A1
 CRN: 34959
-Time: 2:35-4:25
+Time: 235-425
 Days: M
 Location: Canal Building 5109
 Professor: James Green 
 
 Section: A3
 CRN: 34961
-Time: 11:35-1:25
+Time: 1135-125
 Days: M
 Location: Canal Building 5109
 Professor: James Green 
 
 Section: A5
 CRN: 34963
-Time: 11:35-1:25
+Time: 1135-125
 Days: W
 Location: Canal Building 5109
 Professor: James Green 
@@ -89,28 +89,28 @@ Lectures
 -------------------
 Section: A
 CRN: 33700
-Time: 4:05-5:25
+Time: 405-525
 Days: MW
 Location: Azrieli Theatre 301
 Professor: Angelo B. Mingarelli 
 
 Section: B
 CRN: 33706
-Time: 8:35-9:55
+Time: 835-955
 Days: TR
 Location: Azrieli Theatre 101
 Professor: Ramon Cova 
 
 Section: C
 CRN: 33712
-Time: 4:05-5:25
+Time: 405-525
 Days: TR
 Location: Azrieli Theatre 301
 Professor: Mohammad-Reza Rafsanjani-Sadeghi 
 
 Section: D
 CRN: 33718
-Time: 8:35-9:55
+Time: 835-955
 Days: TR
 Location: Loeb Building C164
 Professor: Mohammad-Reza Rafsanjani-Sadeghi 
@@ -119,28 +119,28 @@ Tutorials
 -------------------
 Section: A1/A2/A3/A4/A5
 CRN: 33701
-Time: 10:35-11:25
+Time: 1035-1125
 Days: M
 Location: Southam Hall 316
 Professor: TBA
 
 Section: B1/B2/B3/B4/B5
 CRN: 33705
-Time: 10:35-11:25
+Time: 1035-1125
 Days: M
 Location: Canal Building 3101
 Professor: TBA
 
 Section: C1/C2/C3/C4/C5
 CRN: 33711
-Time: 8:35-9:25
+Time: 835-925
 Days: F
 Location: River Building 3202
 Professor: TBA
 
 Section: D1/D2/D3
 CRN: 33717
-Time: 2:35-3:25
+Time: 235-325
 Days: M
 Location: Southam Hall 317
 Professor: TBA
@@ -152,21 +152,21 @@ Lectures
 -------------------
 Section: A
 CRN: 31935
-Time: 2:35-3:55
+Time: 235-355
 Days: TR
 Location: Azrieli Theatre 302
 Professor: Tom Ray 
 
 Section: B
 CRN: 31936
-Time: 1:05-2:25
+Time: 105-225
 Days: MW
 Location: Tory Building 360
 Professor: Tom Ray 
 
 Section: C
 CRN: 31937
-Time: 10:05-11:25
+Time: 1005-1125
 Days: TR
 Location: Azrieli Theatre 302
 Professor: Tom Ray 
@@ -175,56 +175,56 @@ Labs
 -------------------
 Section: L1
 CRN: 31938
-Time: 8:35-11:25
+Time: 835-1125
 Days: M
 Location: Tory Building 446
 Professor: Tom Ray 
 
 Section: L2
 CRN: 31939
-Time: 11:35-2:25
+Time: 1135-225
 Days: T
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L3
 CRN: 31940
-Time: 8:35-11:25
+Time: 835-1125
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L4
 CRN: 31941
-Time: 2:35-5:25
+Time: 235-525
 Days: M
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L5
 CRN: 31942
-Time: 2:35-5:25
+Time: 235-525
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L6
 CRN: 31943
-Time: 8:35-11:25
+Time: 835-1125
 Days: W
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L7
 CRN: 31944
-Time: 2:35-5:25
+Time: 235-525
 Days: W
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L8
 CRN: 31945
-Time: 11:35-2:25
+Time: 1135-225
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -236,84 +236,84 @@ Lectures
 -------------------
 Section: A
 CRN: 30759
-Time: 11:35-2:25
+Time: 1135-225
 Days: W
 Location: University Centre 280
 Professor: Kimberley Davis 
 
 Section: B
 CRN: 30760
-Time: 2:35-5:25
+Time: 235-525
 Days: R
 Location: University Centre 376
 Professor: Ralph Calistro 
 
 Section: C
 CRN: 30761
-Time: 11:35-2:25
+Time: 1135-225
 Days: F
 Location: Paterson Hall 215
 Professor: Janet Elisabeth Meyer 
 
 Section: D
 CRN: 30762
-Time: 11:35-2:25
+Time: 1135-225
 Days: R
 Location: University Centre 376
 Professor: Marlene R Lundy 
 
 Section: E
 CRN: 30763
-Time: 2:35-5:25
+Time: 235-525
 Days: M
 Location: Paterson Hall 215
 Professor: Kimberley Davis 
 
 Section: F
 CRN: 30764
-Time: 8:35-11:25
+Time: 835-1125
 Days: F
 Location: University Centre 280
 Professor: Marlene R Lundy 
 
 Section: G
 CRN: 30765
-Time: 11:35-2:25
+Time: 1135-225
 Days: M
 Location: Southam Hall 303
 Professor: Janet Elisabeth Meyer 
 
 Section: H
 CRN: 30766
-Time: 11:35-2:25
+Time: 1135-225
 Days: T
 Location: University Centre 378
 Professor: Helen Marina Triantafellou 
 
 Section: I
 CRN: 30767
-Time: 6:05-8:55
+Time: 605-855
 Days: T
 Location: Paterson Hall 215
 Professor: Cheryl Lynne Cundell 
 
 Section: V
 CRN: 30768
-Time: 2:35-5:25
+Time: 235-525
 Days: W
 Location: Paterson Hall 215
 Professor: Janet Elisabeth Meyer 
 
 Section: W
 CRN: 30769
-Time: 8:35-11:25
+Time: 835-1125
 Days: R
 Location: Southam Hall 309
 Professor: Kimberley Davis 
 
 Section: X
 CRN: 30770
-Time: 6:05-8:55
+Time: 605-855
 Days: W
 Location: Tory Building 204
 Professor: Alex Myers 
