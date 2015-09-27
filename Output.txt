@@ -5,7 +5,7 @@ Lectures
 -------------------
 Section: A
 CRN: 34964
-Time: 235-355
+Time: 1435-1555
 Days: TR
 Location: Minto Centre 2000
 Professor: Babak Esfandiari 
@@ -14,28 +14,28 @@ Labs
 -------------------
 Section: A1
 CRN: 34965
-Time: 1135-125
+Time: 1135-1325
 Days: T
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A2
 CRN: 34966
-Time: 1135-125
+Time: 1135-1325
 Days: M
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A3
 CRN: 34967
-Time: 405-555
+Time: 1605-1755
 Days: T
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
 Section: A4
 CRN: 34968
-Time: 235-425
+Time: 1435-1625
 Days: W
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
@@ -54,7 +54,7 @@ Lectures
 -------------------
 Section: A
 CRN: 34958
-Time: 235-355
+Time: 1435-1555
 Days: WF
 Location: Azrieli Theatre 102
 Professor: James Green 
@@ -63,21 +63,21 @@ Labs
 -------------------
 Section: A1
 CRN: 34959
-Time: 235-425
+Time: 1435-1625
 Days: M
 Location: Canal Building 5109
 Professor: James Green 
 
 Section: A3
 CRN: 34961
-Time: 1135-125
+Time: 1135-1325
 Days: M
 Location: Canal Building 5109
 Professor: James Green 
 
 Section: A5
 CRN: 34963
-Time: 1135-125
+Time: 1135-1325
 Days: W
 Location: Canal Building 5109
 Professor: James Green 
@@ -89,7 +89,7 @@ Lectures
 -------------------
 Section: A
 CRN: 33700
-Time: 405-525
+Time: 1605-1725
 Days: MW
 Location: Azrieli Theatre 301
 Professor: Angelo B. Mingarelli 
@@ -103,7 +103,7 @@ Professor: Ramon Cova
 
 Section: C
 CRN: 33712
-Time: 405-525
+Time: 1605-1725
 Days: TR
 Location: Azrieli Theatre 301
 Professor: Mohammad-Reza Rafsanjani-Sadeghi 
@@ -140,7 +140,7 @@ Professor: TBA
 
 Section: D1/D2/D3
 CRN: 33717
-Time: 235-325
+Time: 1435-1525
 Days: M
 Location: Southam Hall 317
 Professor: TBA
@@ -152,14 +152,14 @@ Lectures
 -------------------
 Section: A
 CRN: 31935
-Time: 235-355
+Time: 1435-1555
 Days: TR
 Location: Azrieli Theatre 302
 Professor: Tom Ray 
 
 Section: B
 CRN: 31936
-Time: 105-225
+Time: 1305-1425
 Days: MW
 Location: Tory Building 360
 Professor: Tom Ray 
@@ -182,7 +182,7 @@ Professor: Tom Ray
 
 Section: L2
 CRN: 31939
-Time: 1135-225
+Time: 1135-1425
 Days: T
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -196,14 +196,14 @@ Professor: Tom Ray
 
 Section: L4
 CRN: 31941
-Time: 235-525
+Time: 1435-1725
 Days: M
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L5
 CRN: 31942
-Time: 235-525
+Time: 1435-1725
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -217,14 +217,14 @@ Professor: Tom Ray
 
 Section: L7
 CRN: 31944
-Time: 235-525
+Time: 1435-1725
 Days: W
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
 Section: L8
 CRN: 31945
-Time: 1135-225
+Time: 1135-1425
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -236,35 +236,35 @@ Lectures
 -------------------
 Section: A
 CRN: 30759
-Time: 1135-225
+Time: 1135-1425
 Days: W
 Location: University Centre 280
 Professor: Kimberley Davis 
 
 Section: B
 CRN: 30760
-Time: 235-525
+Time: 1435-1725
 Days: R
 Location: University Centre 376
 Professor: Ralph Calistro 
 
 Section: C
 CRN: 30761
-Time: 1135-225
+Time: 1135-1425
 Days: F
 Location: Paterson Hall 215
 Professor: Janet Elisabeth Meyer 
 
 Section: D
 CRN: 30762
-Time: 1135-225
+Time: 1135-1425
 Days: R
 Location: University Centre 376
 Professor: Marlene R Lundy 
 
 Section: E
 CRN: 30763
-Time: 235-525
+Time: 1435-1725
 Days: M
 Location: Paterson Hall 215
 Professor: Kimberley Davis 
@@ -278,28 +278,28 @@ Professor: Marlene R Lundy
 
 Section: G
 CRN: 30765
-Time: 1135-225
+Time: 1135-1425
 Days: M
 Location: Southam Hall 303
 Professor: Janet Elisabeth Meyer 
 
 Section: H
 CRN: 30766
-Time: 1135-225
+Time: 1135-1425
 Days: T
 Location: University Centre 378
 Professor: Helen Marina Triantafellou 
 
 Section: I
 CRN: 30767
-Time: 605-855
+Time: 1805-2055
 Days: T
 Location: Paterson Hall 215
 Professor: Cheryl Lynne Cundell 
 
 Section: V
 CRN: 30768
-Time: 235-525
+Time: 1435-1725
 Days: W
 Location: Paterson Hall 215
 Professor: Janet Elisabeth Meyer 
@@ -313,7 +313,7 @@ Professor: Kimberley Davis
 
 Section: X
 CRN: 30770
-Time: 605-855
+Time: 1805-2055
 Days: W
 Location: Tory Building 204
 Professor: Alex Myers 

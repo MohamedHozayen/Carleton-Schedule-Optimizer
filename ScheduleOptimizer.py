@@ -18,19 +18,22 @@ class Course:
 	def CombineTutorials(self):
 		sections = '' # This string will hold all the sections for a given lecture (A, B, etc.)
 		firstletter = ''
+		firsttime = ''
 		newtutorials = []
 		firstpass = True
 		i = 0 # i counts each tutorial in the list of tutorials
 		x = 0 # x keeps track of the index containing the first tutorial for a given section (A, B, etc.)
 		for tutorial in self.tutorials:
 			currentletter = tutorial.GetSection()[0]
+			currenttime = tutorial.GetTime()
 			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
-			if currentletter == firstletter:
+			if currentletter == firstletter and currenttime == firsttime:
 				sections = sections + '/' + tutorial.GetSection()
 				i = i + 1
 			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list 
 			else:
 				firstletter = currentletter
+				firsttime = currenttime
 				if firstpass == True:
 					firstpass = False
 				else:
@@ -60,6 +63,9 @@ class Section:
 	
 	def GetSection(self):
 		return self.section
+
+	def GetTime(self):
+		return self.time
 		
 	def ChangeSection(self, newsection):
 		self.section = newsection
@@ -73,6 +79,7 @@ class Schedule:
 		self.wednesday = Day()
 		self.thursday = Day()
 		self.friday = Day()
+		self.breaks = 0
 		self.conflict = False
 
 	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
@@ -80,39 +87,47 @@ class Schedule:
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
 				self.monday.addClass(newsection)
+				self.breaks = self.breaks + self.monday.getBreaks()
 				if self.monday.conflict == True:
 					self.conflict = True
 			elif 'T' in day:
 				self.tuesday.addClass(newsection)
+				self.breaks = self.breaks + self.tuesday.getBreaks()
 				if self.tuesday.conflict == True:
 					self.conflict = True
 			elif 'W' in day:
 				self.wednesday.addClass(newsection)
+				self.breaks = self.breaks + self.wednesday.getBreaks()
 				if self.wednesday.conflict == True:
 					self.conflict = True
 			elif 'R' in day:
 				self.thursday.addClass(newsection)
+				self.breaks = self.breaks + self.thursday.getBreaks()
 				if self.thursday.conflict == True:
 					self.conflict = True
 			elif 'F' in day:
 				self.friday.addClass(newsection)
+				self.breaks = self.breaks + self.friday.getBreaks()
 				if self.friday.conflict == True:
 					self.conflict = True
 	
-	# This method outputs the schedule, showing each class for each day
+	# This method outputs the schedule, showing the total break time, conflict warning, and each class for each day
 	def outputSchedule(self):
-		for day in [a for a in dir(self) if not a.startswith('__') and not a.startswith('conflict') and not callable(getattr(self,a))]:
-			print(day)
+		print('Total break time: '+str(self.breaks*30)+' minutes')
+		print('Conflicts: '+str(self.conflict)+'\n')
+		for day in [a for a in dir(self) if not a.startswith('__') and not a.startswith('conflict') and not a.startswith('breaks') and not callable(getattr(self,a))]:
+			print(day.capitalize())
 			for section in getattr(self,day).sections:
-				print(section.courseCode+section.section)
+				print(section.courseCode+section.section+": "+section.time)
+			print('')
 
 class Day:
 	# This class has an attribute for sections, time slots, total breaks, and whether or not there is a conflict
 	def __init__(self):
 		self.sections = []
 		self.conflict = False
-		self.breaksTotal = 0
-		self.timeSlots = {'835': 0,'905': 0,'935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'105': 0,'135': 0,'205': 0,'235': 0,'305': 0,'335': 0,'405': 0,'435': 0,'505': 0,'535': 0,'605': 0,'635': 0,'705': 0,'735': 0,}
+		self.breaks = 0
+		self.timeSlots = {'0835': 0,'0905': 0,'0935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'1305': 0,'1335': 0,'1405': 0,'1435': 0,'1505': 0,'1535': 0,'1605': 0,'1635': 0,'1705': 0,'1735': 0,'1805': 0,'1835': 0,'1905': 0,'1935': 0,'2005': 0,'2035': 0}
 	
 	# This method adds a class section to the day, incrementing its corresponding time slots. If a time slot has more than one course in it, the conflict boolean is assigned True
 	def addClass(self, section):
@@ -124,10 +139,23 @@ class Day:
 			if (key >= startTime and key < endTime):
 				self.timeSlots[key] = self.timeSlots[key] + 1
 		# The conflict flag is raised if any timeslot has 2 courses at once
-		if not (0 in self.timeSlots.values()) or (1 in self.timeSlots.values()):
+		if not ((0 in self.timeSlots.values()) or (1 in self.timeSlots.values())):
 			self.conflict = True
 		self.sections.append(section)
+		self.calculateBreaks()
+	
+	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
+	def calculateBreaks(self):
+		values = ''
+		for key in sorted(self.timeSlots):
+			values = values+str(self.timeSlots[key])
+		count = values.count('0')
+		count = count - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
+		self.breaks = count
 		
+	def getBreaks(self):
+		return self.breaks
+	
 def getWebsiteData(term, subject, coursecode):
 	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
 	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
@@ -189,7 +217,18 @@ def getCourseData(data,courseCode):
 						typeIncrement = 0
 				# The increment depends on the type of section we are looking at and is determined earlier
 				if j == (28 + typeIncrement):
-					courseTime = thing[22:].strip('</td>').replace('am','').replace('pm','').replace(' ','').replace(':','')
+					time = thing[22:].strip('</td>').replace(' ','').replace(':','')
+					time = time.split('-')
+					# We translate the 12 hour time to 24 hour time
+					if 'pm' in time[0]:
+						time[0] = str(int(time[0].strip('pm'))+1200)
+					else:
+						time[0] = str(int(time[0].strip('am')))			
+					if 'pm' in time[1]:
+						time[1] = str(int(time[1].strip('pm'))+1200)
+					else:
+						time[1] = str(int(time[1].strip('am')))					
+					courseTime = time[0]+'-'+time[1]					
 				if j == (29 + typeIncrement):
 					courseDay = thing[22:].strip('</td>')
 				if j == (30 + typeIncrement):
