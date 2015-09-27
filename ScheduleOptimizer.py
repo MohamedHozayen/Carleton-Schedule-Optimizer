@@ -139,7 +139,7 @@ class Day:
 			if (key >= startTime and key < endTime):
 				self.timeSlots[key] = self.timeSlots[key] + 1
 		# The conflict flag is raised if any timeslot has 2 courses at once
-		if not ((0 in self.timeSlots.values()) or (1 in self.timeSlots.values())):
+		if any(count > 0 for count in self.timeSlots.values()):
 			self.conflict = True
 		self.sections.append(section)
 		self.calculateBreaks()
@@ -149,6 +149,13 @@ class Day:
 		values = ''
 		for key in sorted(self.timeSlots):
 			values = values+str(self.timeSlots[key])
+		newvalues = ''
+		for value in values:
+			if value != '0':
+				newvalues = newvalues + '1'
+			else:
+				newvalues = newvalues + '0'
+		values = newvalues
 		count = values.count('0')
 		count = count - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
 		self.breaks = count
@@ -329,7 +336,9 @@ def main():
 	someschedule = Schedule()
 	someschedule.addSection(semesterData[0].lectures[0])
 	someschedule.addSection(semesterData[1].lectures[0])
-	someschedule.addSection(semesterData[2].lectures[0])
+	someschedule.addSection(semesterData[2].lectures[1])
+	someschedule.addSection(semesterData[3].lectures[1])
+	someschedule.addSection(semesterData[4].lectures[1])
 	someschedule.outputSchedule()
-
+	
 main()
