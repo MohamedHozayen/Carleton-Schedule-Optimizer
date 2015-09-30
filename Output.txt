@@ -47,6 +47,15 @@ Days: R
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
 
+Tutorials
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
+
 ********************************************
 Computer Systems Foundations
 
@@ -82,6 +91,15 @@ Days: W
 Location: Canal Building 5109
 Professor: James Green 
 
+Tutorials
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
+
 ********************************************
 Multivariable Calculus for Engineering or Physics
 
@@ -114,6 +132,15 @@ Time: 835-955
 Days: TR
 Location: Loeb Building C164
 Professor: Mohammad-Reza Rafsanjani-Sadeghi 
+
+Labs
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
 
 Tutorials
 -------------------
@@ -229,6 +256,15 @@ Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
 
+Tutorials
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
+
 ********************************************
 Communication Skills for Engineering Students
 
@@ -280,7 +316,7 @@ Section: G
 CRN: 30765
 Time: 1135-1425
 Days: M
-Location: Southam Hall 303
+Location: University Centre 280
 Professor: Janet Elisabeth Meyer 
 
 Section: H
@@ -317,4 +353,22 @@ Time: 1805-2055
 Days: W
 Location: Tory Building 204
 Professor: Alex Myers 
+
+Labs
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
+
+Tutorials
+-------------------
+Section: 
+CRN: 
+Time: 
+Days: 
+Location: 
+Professor: 
 

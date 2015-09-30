@@ -11,11 +11,18 @@ class Course:
 		self.lectures = lectures
 		self.labs = labs
 		self.tutorials = tutorials
-
+		# If there are no tuttorials or labs, we append dummy sections to those lists
+		if self.tutorials == []:
+			self.tutorials.append(Section('Dummy Tutorial','','','','','','',''))
+		if self.labs == []:
+			self.labs.append(Section('Dummy Lab','','','','','','',''))
+			
 	def ChangeTutorials(self, newtutorials):
 		self.tutorials = newtutorials
 
 	def CombineTutorials(self):
+		if self.tutorials[0].title == 'Dummy Tutorial': # We don't do anything if the course has no tutorials
+			return
 		sections = '' # This string will hold all the sections for a given lecture (A, B, etc.)
 		firstletter = ''
 		firsttime = ''
@@ -79,38 +86,51 @@ class Schedule:
 		self.wednesday = Day()
 		self.thursday = Day()
 		self.friday = Day()
-		self.breaks = 0
+		self.breaks = 10000
 		self.conflict = False
 
 	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
 	def addSection(self, newsection):
+		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
+			self.breaks = 0
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
+				self.breaks = self.breaks - self.monday.getBreaks()
 				self.monday.addClass(newsection)
 				self.breaks = self.breaks + self.monday.getBreaks()
 				if self.monday.conflict == True:
 					self.conflict = True
 			elif 'T' in day:
+				self.breaks = self.breaks - self.tuesday.getBreaks()
 				self.tuesday.addClass(newsection)
 				self.breaks = self.breaks + self.tuesday.getBreaks()
 				if self.tuesday.conflict == True:
 					self.conflict = True
 			elif 'W' in day:
+				self.breaks = self.breaks - self.wednesday.getBreaks()
 				self.wednesday.addClass(newsection)
 				self.breaks = self.breaks + self.wednesday.getBreaks()
 				if self.wednesday.conflict == True:
 					self.conflict = True
 			elif 'R' in day:
+				self.breaks = self.breaks - self.thursday.getBreaks()
 				self.thursday.addClass(newsection)
 				self.breaks = self.breaks + self.thursday.getBreaks()
 				if self.thursday.conflict == True:
 					self.conflict = True
 			elif 'F' in day:
+				self.breaks = self.breaks - self.friday.getBreaks()
 				self.friday.addClass(newsection)
 				self.breaks = self.breaks + self.friday.getBreaks()
 				if self.friday.conflict == True:
 					self.conflict = True
 	
+	def getConflict(self):
+		return self.conflict
+		
+	def getBreaks(self):
+		return self.breaks
+		
 	# This method outputs the schedule, showing the total break time, conflict warning, and each class for each day
 	def outputSchedule(self):
 		print('Total break time: '+str(self.breaks*30)+' minutes')
@@ -132,17 +152,17 @@ class Day:
 	# This method adds a class section to the day, incrementing its corresponding time slots. If a time slot has more than one course in it, the conflict boolean is assigned True
 	def addClass(self, section):
 		times = section.time.split('-')
-		startTime = times[0]
-		endTime = times[1]
+		startTime = int(times[0])
+		endTime = int(times[1])
 		# We go through each timeslot and increment ones where the current section overlaps
 		for key in self.timeSlots:
-			if (key >= startTime and key < endTime):
+			if (int(key) >= startTime and int(key) < endTime):
 				self.timeSlots[key] = self.timeSlots[key] + 1
 		# The conflict flag is raised if any timeslot has 2 courses at once
-		if any(count > 0 for count in self.timeSlots.values()):
+		if any(count > 1 for count in self.timeSlots.values()):
 			self.conflict = True
 		self.sections.append(section)
-		self.calculateBreaks()
+		self.calculateBreaks() # After appending a section, the total break time is calculated
 	
 	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
 	def calculateBreaks(self):
@@ -156,13 +176,14 @@ class Day:
 			else:
 				newvalues = newvalues + '0'
 		values = newvalues
-		count = values.count('0')
-		count = count - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
-		self.breaks = count
+		self.breaks = values.count('0') - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
 		
 	def getBreaks(self):
 		return self.breaks
-	
+
+	def getTimeSlots(self):
+		return self.timeSlots
+		
 def getWebsiteData(term, subject, coursecode):
 	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
 	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
@@ -328,17 +349,52 @@ def getSemesterObject():
 			semesterData = pickle.load(input) # protocol version is auto detected	
 	return semesterData
 
+def getCombinations(semesterData):
+	combinations = 1
+	for course in semesterData:
+		combinations = combinations*len(course.lectures)
+		if len(course.labs) != 0:
+			combinations = combinations*len(course.labs)
+	print ('Total combinations: '+str(combinations))
+	
 def main():
 	semesterData = getSemesterObject()
 	for course in semesterData:
 		course.CombineTutorials()
 	outputAllSectionData(semesterData)
-	someschedule = Schedule()
-	someschedule.addSection(semesterData[0].lectures[0])
-	someschedule.addSection(semesterData[1].lectures[0])
-	someschedule.addSection(semesterData[2].lectures[1])
-	someschedule.addSection(semesterData[3].lectures[1])
-	someschedule.addSection(semesterData[4].lectures[1])
-	someschedule.outputSchedule()
+	
+	firstpass = True
+	schedule = Schedule()
+	newschedule = Schedule()
+	for lecture0 in semesterData[0].lectures:
+		for lab0 in semesterData[0].labs:
+			for lecture1 in semesterData[1].lectures:
+				for lab1 in semesterData[1].labs:
+					for lecture2 in semesterData[2].lectures:
+						for lab2 in semesterData[2].labs:
+							for lecture3 in semesterData[3].lectures:
+								for lab3 in semesterData[3].labs:
+									for lecture4 in semesterData[4].lectures:
+										for lab4 in semesterData[4].labs:
+											newschedule.addSection(lecture0)
+											newschedule.addSection(lab0)
+											newschedule.addSection(lecture1)
+											newschedule.addSection(lab1)
+											newschedule.addSection(lecture2)
+											newschedule.addSection(lab2)
+											newschedule.addSection(lecture3)
+											newschedule.addSection(lab3)
+											newschedule.addSection(lecture4)
+											newschedule.addSection(lab4)
+											if firstpass and not newschedule.getConflict():
+												schedule = newschedule
+												firstpass = False
+												newschedule = Schedule()
+											elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
+												schedule = newschedule
+												newschedule = Schedule()
+											else:
+												newschedule = Schedule()
+	schedule.outputSchedule()
 	
 main()
