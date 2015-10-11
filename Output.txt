@@ -42,19 +42,10 @@ Professor: Babak Esfandiari
 
 Section: A5
 CRN: 34969
-Time: 935-1125
+Time: 0935-1125
 Days: R
 Location: Architecture Building 508
 Professor: Babak Esfandiari 
-
-Tutorials
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
 
 ********************************************
 Computer Systems Foundations
@@ -91,15 +82,6 @@ Days: W
 Location: Canal Building 5109
 Professor: James Green 
 
-Tutorials
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
-
 ********************************************
 Multivariable Calculus for Engineering or Physics
 
@@ -114,7 +96,7 @@ Professor: Angelo B. Mingarelli
 
 Section: B
 CRN: 33706
-Time: 835-955
+Time: 0835-0955
 Days: TR
 Location: Azrieli Theatre 101
 Professor: Ramon Cova 
@@ -128,19 +110,10 @@ Professor: Mohammad-Reza Rafsanjani-Sadeghi
 
 Section: D
 CRN: 33718
-Time: 835-955
+Time: 0835-0955
 Days: TR
 Location: Loeb Building C164
 Professor: Mohammad-Reza Rafsanjani-Sadeghi 
-
-Labs
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
 
 Tutorials
 -------------------
@@ -160,7 +133,7 @@ Professor: TBA
 
 Section: C1/C2/C3/C4/C5
 CRN: 33711
-Time: 835-925
+Time: 0835-0925
 Days: F
 Location: River Building 3202
 Professor: TBA
@@ -202,7 +175,7 @@ Labs
 -------------------
 Section: L1
 CRN: 31938
-Time: 835-1125
+Time: 0835-1125
 Days: M
 Location: Tory Building 446
 Professor: Tom Ray 
@@ -216,7 +189,7 @@ Professor: Tom Ray
 
 Section: L3
 CRN: 31940
-Time: 835-1125
+Time: 0835-1125
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -237,7 +210,7 @@ Professor: Tom Ray
 
 Section: L6
 CRN: 31943
-Time: 835-1125
+Time: 0835-1125
 Days: W
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
@@ -255,15 +228,6 @@ Time: 1135-1425
 Days: F
 Location: Mackenzie Building 3269
 Professor: Tom Ray 
-
-Tutorials
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
 
 ********************************************
 Communication Skills for Engineering Students
@@ -307,7 +271,7 @@ Professor: Kimberley Davis
 
 Section: F
 CRN: 30764
-Time: 835-1125
+Time: 0835-1125
 Days: F
 Location: University Centre 280
 Professor: Marlene R Lundy 
@@ -342,7 +306,7 @@ Professor: Janet Elisabeth Meyer
 
 Section: W
 CRN: 30769
-Time: 835-1125
+Time: 0835-1125
 Days: R
 Location: Southam Hall 309
 Professor: Kimberley Davis 
@@ -353,22 +317,4 @@ Time: 1805-2055
 Days: W
 Location: Tory Building 204
 Professor: Alex Myers 
-
-Labs
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
-
-Tutorials
--------------------
-Section: 
-CRN: 
-Time: 
-Days: 
-Location: 
-Professor: 
 

@@ -135,10 +135,10 @@ class Schedule:
 	def outputSchedule(self):
 		print('Total break time: '+str(self.breaks*30)+' minutes')
 		print('Conflicts: '+str(self.conflict)+'\n')
-		for day in [a for a in dir(self) if not a.startswith('__') and not a.startswith('conflict') and not a.startswith('breaks') and not callable(getattr(self,a))]:
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			print(day.capitalize())
 			for section in getattr(self,day).sections:
-				print(section.courseCode+section.section+": "+section.time)
+				print(section.time+": "+section.courseCode+section.section)
 			print('')
 
 class Day:
@@ -248,14 +248,22 @@ def getCourseData(data,courseCode):
 					time = thing[22:].strip('</td>').replace(' ','').replace(':','')
 					time = time.split('-')
 					# We translate the 12 hour time to 24 hour time
-					if 'pm' in time[0]:
+					if 'pm' in time[0] and ('12' not in time[0] or len(time[0]) < 6):
 						time[0] = str(int(time[0].strip('pm'))+1200)
+					elif 'pm' in time[0] and '12' in time[0]:
+						time[0] = time[0].strip('pm')
 					else:
-						time[0] = str(int(time[0].strip('am')))			
-					if 'pm' in time[1]:
+						time[0] = str(int(time[0].strip('am')))
+						if int(time[0]) < 1000:
+							time[0] = '0'+time[0]					
+					if 'pm' in time[1] and ('12' not in time[1] or len(time[1]) < 6):
 						time[1] = str(int(time[1].strip('pm'))+1200)
+					elif 'pm' in time[1] and '12' in time[1]:
+						time[1] = time[1].strip('pm')					
 					else:
-						time[1] = str(int(time[1].strip('am')))					
+						time[1] = str(int(time[1].strip('am')))
+						if int(time[1]) < 1000:
+							time[1] = '0'+time[1]	
 					courseTime = time[0]+'-'+time[1]					
 				if j == (29 + typeIncrement):
 					courseDay = thing[22:].strip('</td>')
@@ -300,7 +308,7 @@ def outputAllSectionData(semesterData):
 		text_file.write('********************************************\n')
 		text_file.write(course.title+'\n\n')
 		
-		if not course.lectures == []:
+		if len(course.lectures) > 0:
 			text_file.write('Lectures\n-------------------\n')
 			for lecture in course.lectures:
 				text_file.write('Section: '+lecture.section+'\n')
@@ -309,7 +317,7 @@ def outputAllSectionData(semesterData):
 				text_file.write('Days: '+lecture.day+'\n')
 				text_file.write('Location: '+lecture.location+'\n')
 				text_file.write('Professor: '+lecture.prof+'\n\n')
-		if not course.labs == []:
+		if len(course.labs) > 1:
 			text_file.write('Labs\n-------------------\n')
 			for lab in course.labs:
 				text_file.write('Section: '+lab.section+'\n')
@@ -318,7 +326,7 @@ def outputAllSectionData(semesterData):
 				text_file.write('Days: '+lab.day+'\n')
 				text_file.write('Location: '+lab.location+'\n')
 				text_file.write('Professor: '+lab.prof+'\n\n')
-		if not course.tutorials == []:
+		if len(course.tutorials) > 1:
 			text_file.write('Tutorials\n-------------------\n')
 			for tutorial in course.tutorials:
 				text_file.write('Section: '+tutorial.section+'\n')
@@ -357,15 +365,12 @@ def getCombinations(semesterData):
 			combinations = combinations*len(course.labs)
 	print ('Total combinations: '+str(combinations))
 	
-def main():
-	semesterData = getSemesterObject()
-	for course in semesterData:
-		course.CombineTutorials()
-	outputAllSectionData(semesterData)
-	
+def getOptimizedSchedule(semesterData):
 	firstpass = True
 	schedule = Schedule()
 	newschedule = Schedule()
+	
+	# The lectures, tutorials, and labs for all sections are checked
 	for lecture0 in semesterData[0].lectures:
 		for lab0 in semesterData[0].labs:
 			for lecture1 in semesterData[1].lectures:
@@ -389,12 +394,21 @@ def main():
 											if firstpass and not newschedule.getConflict():
 												schedule = newschedule
 												firstpass = False
-												newschedule = Schedule()
 											elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
 												schedule = newschedule
-												newschedule = Schedule()
-											else:
-												newschedule = Schedule()
-	schedule.outputSchedule()
+											newschedule = Schedule()
+	if firstpass:
+		print('There is no possible conflict-free schedule for the given courses')
+		return newschedule
+	else:
+		schedule.outputSchedule()
+		return schedule
+	
+def main():
+	semesterData = getSemesterObject()
+	for course in semesterData:
+		course.CombineTutorials()
+	outputAllSectionData(semesterData)
+	schedule = getOptimizedSchedule(semesterData)
 	
 main()
