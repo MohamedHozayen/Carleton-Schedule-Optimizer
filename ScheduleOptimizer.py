@@ -133,12 +133,15 @@ class Schedule:
 		
 	# This method outputs the schedule, showing the total break time, conflict warning, and each class for each day
 	def outputSchedule(self):
-		print('Total break time: '+str(self.breaks*30)+' minutes')
-		print('Conflicts: '+str(self.conflict)+'\n')
+		print('Total break time for optimal schedule: '+str(self.breaks*30)+' minutes'+'\n')
+		# print('Conflicts: '+str(self.conflict)+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			print(day.capitalize())
+			daylist = []
 			for section in getattr(self,day).sections:
-				print(section.time+": "+section.courseCode+section.section)
+				daylist.append(section.time+": "+section.courseCode+section.section)
+			for section in sorted(daylist):
+				print(section)
 			print('')
 
 class Day:
@@ -360,10 +363,11 @@ def getSemesterObject():
 def getCombinations(semesterData):
 	combinations = 1
 	for course in semesterData:
-		combinations = combinations*len(course.lectures)
-		if len(course.labs) != 0:
+		# The tutorials go hand-in-hand with lectures so they are not taken into account
+		combinations = combinations*len(course.lectures) 
+		if len(course.labs) != 1: # There is always the dummy lab
 			combinations = combinations*len(course.labs)
-	print ('Total combinations: '+str(combinations))
+	print ('Possible schedules for the given courses: '+str(combinations))
 	
 def getOptimizedSchedule(semesterData):
 	firstpass = True
@@ -409,6 +413,7 @@ def main():
 	for course in semesterData:
 		course.CombineTutorials()
 	outputAllSectionData(semesterData)
+	getCombinations(semesterData)
 	schedule = getOptimizedSchedule(semesterData)
 	
 main()
