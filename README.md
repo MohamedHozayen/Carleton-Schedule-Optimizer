@@ -5,4 +5,4 @@ Things to do:
 1) Make the combineTutorials method work for combining labs and lectures as well
 2) Make the getOptimizedSchedule function keep a list of all schedules with the minimal break time and display the number of schedules with the minimal break time
 3) Make the schedule optimizer work for labs that are biweekly
-4) Make the combineTutorials method only combine if the sections are at the same time
+4) Fix the getCombinations function to account for tutorials

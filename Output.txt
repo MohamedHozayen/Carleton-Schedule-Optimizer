@@ -1,320 +1,348 @@
 ********************************************
-Object-Oriented Software Development
+Introductory Real-Time Systems
+SYSC2003
 
 Lectures
 -------------------
 Section: A
-CRN: 34964
-Time: 1435-1555
-Days: TR
-Location: Minto Centre 2000
-Professor: Babak Esfandiari 
-
-Labs
--------------------
-Section: A1
-CRN: 34965
-Time: 1135-1325
-Days: T
-Location: Architecture Building 508
-Professor: Babak Esfandiari 
-
-Section: A2
-CRN: 34966
-Time: 1135-1325
-Days: M
-Location: Architecture Building 508
-Professor: Babak Esfandiari 
-
-Section: A3
-CRN: 34967
-Time: 1605-1755
-Days: T
-Location: Architecture Building 508
-Professor: Babak Esfandiari 
-
-Section: A4
-CRN: 34968
-Time: 1435-1625
-Days: W
-Location: Architecture Building 508
-Professor: Babak Esfandiari 
-
-Section: A5
-CRN: 34969
-Time: 0935-1125
-Days: R
-Location: Architecture Building 508
-Professor: Babak Esfandiari 
-
-********************************************
-Computer Systems Foundations
-
-Lectures
--------------------
-Section: A
-CRN: 34958
-Time: 1435-1555
-Days: WF
-Location: Azrieli Theatre 102
-Professor: James Green 
-
-Labs
--------------------
-Section: A1
-CRN: 34959
-Time: 1435-1625
-Days: M
-Location: Canal Building 5109
-Professor: James Green 
-
-Section: A3
-CRN: 34961
-Time: 1135-1325
-Days: M
-Location: Canal Building 5109
-Professor: James Green 
-
-Section: A5
-CRN: 34963
-Time: 1135-1325
-Days: W
-Location: Canal Building 5109
-Professor: James Green 
-
-********************************************
-Multivariable Calculus for Engineering or Physics
-
-Lectures
--------------------
-Section: A
-CRN: 33700
-Time: 1605-1725
+CRN: 14831
+Time: 0835-0955
 Days: MW
-Location: Azrieli Theatre 301
-Professor: Angelo B. Mingarelli 
+Location: TBA
+Professor: Cheryl Joanne Schramm 
 
 Section: B
-CRN: 33706
-Time: 0835-0955
-Days: TR
-Location: Azrieli Theatre 101
-Professor: Ramon Cova 
-
-Section: C
-CRN: 33712
+CRN: 14832
 Time: 1605-1725
 Days: TR
-Location: Azrieli Theatre 301
-Professor: Mohammad-Reza Rafsanjani-Sadeghi 
-
-Section: D
-CRN: 33718
-Time: 0835-0955
-Days: TR
-Location: Loeb Building C164
-Professor: Mohammad-Reza Rafsanjani-Sadeghi 
-
-Tutorials
--------------------
-Section: A1/A2/A3/A4/A5
-CRN: 33701
-Time: 1035-1125
-Days: M
-Location: Southam Hall 316
-Professor: TBA
-
-Section: B1/B2/B3/B4/B5
-CRN: 33705
-Time: 1035-1125
-Days: M
-Location: Canal Building 3101
-Professor: TBA
-
-Section: C1/C2/C3/C4/C5
-CRN: 33711
-Time: 0835-0925
-Days: F
-Location: River Building 3202
-Professor: TBA
-
-Section: D1/D2/D3
-CRN: 33717
-Time: 1435-1525
-Days: M
-Location: Southam Hall 317
-Professor: TBA
-
-********************************************
-Circuits and Signals
-
-Lectures
--------------------
-Section: A
-CRN: 31935
-Time: 1435-1555
-Days: TR
-Location: Azrieli Theatre 302
-Professor: Tom Ray 
-
-Section: B
-CRN: 31936
-Time: 1305-1425
-Days: MW
-Location: Tory Building 360
-Professor: Tom Ray 
-
-Section: C
-CRN: 31937
-Time: 1005-1125
-Days: TR
-Location: Azrieli Theatre 302
-Professor: Tom Ray 
+Location: Tory Building 240
+Professor: Gabriel Wainer 
 
 Labs
 -------------------
 Section: L1
-CRN: 31938
-Time: 0835-1125
-Days: M
-Location: Tory Building 446
-Professor: Tom Ray 
+CRN: 14833
+Time: 1135-1325
+Days: W
+Location: TBA
+Professor: Cheryl Joanne Schramm 
 
 Section: L2
-CRN: 31939
-Time: 1135-1425
-Days: T
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
+CRN: 14834
+Time: 1435-1625
+Days: F
+Location: TBA
+Professor: Cheryl Joanne Schramm 
 
 Section: L3
-CRN: 31940
-Time: 0835-1125
+CRN: 14835
+Time: 0935-1125
 Days: F
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
+Location: TBA
+Professor: Cheryl Joanne Schramm 
 
 Section: L4
-CRN: 31941
-Time: 1435-1725
-Days: M
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
+CRN: 14836
+Time: 0935-1125
+Days: T
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer 
 
 Section: L5
-CRN: 31942
-Time: 1435-1725
-Days: F
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
+CRN: 14837
+Time: 1135-1325
+Days: T
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer 
 
 Section: L6
-CRN: 31943
-Time: 0835-1125
-Days: W
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
-
-Section: L7
-CRN: 31944
-Time: 1435-1725
-Days: W
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
-
-Section: L8
-CRN: 31945
-Time: 1135-1425
-Days: F
-Location: Mackenzie Building 3269
-Professor: Tom Ray 
+CRN: 14838
+Time: 1135-1325
+Days: R
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer 
 
 ********************************************
-Communication Skills for Engineering Students
+Algorithms and Data Structures
+SYSC2100
 
 Lectures
 -------------------
 Section: A
-CRN: 30759
-Time: 1135-1425
+CRN: 14856
+Time: 0835-0955
+Days: TR
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+Labs
+-------------------
+Section: L1
+CRN: 14857
+Time: 1135-1325
+Days: F
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+Section: L2
+CRN: 14858
+Time: 1135-1325
+Days: M
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+Section: L3
+CRN: 14859
+Time: 1135-1325
+Days: T
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+Section: L4
+CRN: 14860
+Time: 1435-1625
 Days: W
-Location: University Centre 280
-Professor: Kimberley Davis 
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+********************************************
+Switching Circuits
+ELEC2607
+
+Lectures
+-------------------
+Section: A
+CRN: 11966
+Time: 1135-1255
+Days: WF
+Location: Mackenzie Building 3380
+Professor: TBA
 
 Section: B
-CRN: 30760
-Time: 1435-1725
-Days: R
-Location: University Centre 376
-Professor: Ralph Calistro 
+CRN: 11967
+Time: 1305-1425
+Days: TR
+Location: University Centre 231
+Professor: Robert C. Gauthier 
 
 Section: C
-CRN: 30761
-Time: 1135-1425
-Days: F
-Location: Paterson Hall 215
-Professor: Janet Elisabeth Meyer 
+CRN: 11968
+Time: 1005-1125
+Days: MW
+Location: Minto Centre 5050
+Professor: TBA
 
-Section: D
-CRN: 30762
-Time: 1135-1425
-Days: R
-Location: University Centre 376
-Professor: Marlene R Lundy 
-
-Section: E
-CRN: 30763
+Labs
+-------------------
+Section: 11O
+CRN: 11962
 Time: 1435-1725
-Days: M
-Location: Paterson Hall 215
-Professor: Kimberley Davis 
+Days: T
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
-Section: F
-CRN: 30764
+Section: 12E
+CRN: 11963
+Time: 1435-1725
+Days: T
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: 13O
+CRN: 11964
+Time: 1435-1725
+Days: F
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: 14E
+CRN: 11965
+Time: 1435-1725
+Days: F
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L1O
+CRN: 11969
+Time: 1135-1425
+Days: M
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L2E
+CRN: 11970
+Time: 1135-1425
+Days: M
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L3O
+CRN: 11971
 Time: 0835-1125
 Days: F
-Location: University Centre 280
-Professor: Marlene R Lundy 
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
-Section: G
-CRN: 30765
-Time: 1135-1425
-Days: M
-Location: University Centre 280
-Professor: Janet Elisabeth Meyer 
+Section: L4E
+CRN: 11972
+Time: 0835-1125
+Days: F
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
-Section: H
-CRN: 30766
-Time: 1135-1425
-Days: T
-Location: University Centre 378
-Professor: Helen Marina Triantafellou 
-
-Section: I
-CRN: 30767
-Time: 1805-2055
-Days: T
-Location: Paterson Hall 215
-Professor: Cheryl Lynne Cundell 
-
-Section: V
-CRN: 30768
+Section: L5O
+CRN: 11973
 Time: 1435-1725
 Days: W
-Location: Paterson Hall 215
-Professor: Janet Elisabeth Meyer 
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
-Section: W
-CRN: 30769
+Section: L6E
+CRN: 11974
+Time: 1435-1725
+Days: W
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L7O
+CRN: 11975
+Time: 1435-1725
+Days: R
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L8E
+CRN: 11976
+Time: 1435-1725
+Days: R
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L9O
+CRN: 11977
 Time: 0835-1125
 Days: R
-Location: Southam Hall 309
-Professor: Kimberley Davis 
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
-Section: X
-CRN: 30770
-Time: 1805-2055
+Section: LOE
+CRN: 11978
+Time: 0835-1125
+Days: R
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+********************************************
+Discrete Structures I
+COMP1805
+
+Lectures
+-------------------
+Section: B
+CRN: 11213
+Time: 1005-1125
+Days: TR
+Location: Southam Hall KM-TH
+Professor: Michael Jason Hinek 
+
+Section: C
+CRN: 11217
+Time: 0835-0955
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Prosenjit Bose 
+
+Tutorials
+-------------------
+Section: B1
+CRN: 11214
+Time: 1635-1725
 Days: W
-Location: Tory Building 204
-Professor: Alex Myers 
+Location: Tory Building 240
+Professor: Michael Jason Hinek 
+
+Section: B2
+CRN: 11215
+Time: 1535-1625
+Days: W
+Location: Southam Hall 306
+Professor: Michael Jason Hinek 
+
+Section: B3
+CRN: 11216
+Time: 1435-1525
+Days: W
+Location: University Centre 282
+Professor: Michael Jason Hinek 
+
+Section: C1
+CRN: 11218
+Time: 1335-1425
+Days: R
+Location: Tory Building 447
+Professor: Prosenjit Bose 
+
+Section: C2
+CRN: 11219
+Time: 1135-1225
+Days: M
+Location: Tory Building 446
+Professor: Prosenjit Bose 
+
+Section: C3
+CRN: 11220
+Time: 1035-1125
+Days: T
+Location: University Centre 282
+Professor: Prosenjit Bose 
+
+********************************************
+Probability and Statistics
+STAT3502
+
+Lectures
+-------------------
+Section: A
+CRN: 14781
+Time: 1605-1725
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Ahmed Almaskut 
+
+Section: B
+CRN: 14786
+Time: 1005-1125
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Masoud Mollaalizadehnasari 
+
+Section: C
+CRN: 14791
+Time: 1135-1255
+Days: TR
+Location: Southam Hall 306
+Professor: Gang Li 
+
+Tutorials
+-------------------
+Section: A1/A2/A3/A4
+CRN: 14782
+Time: 1335-1425
+Days: W
+Location: Southam Hall 406
+Professor: TBA
+
+Section: B1/B2/B3/B4
+CRN: 14787
+Time: 1135-1225
+Days: M
+Location: Southam Hall 404
+Professor: TBA
+
+Section: C1/C2
+CRN: 14792
+Time: 1635-1725
+Days: R
+Location: St. Patrick's Building 435
+Professor: TBA
 
