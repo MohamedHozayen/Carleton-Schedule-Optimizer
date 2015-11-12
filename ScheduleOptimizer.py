@@ -16,7 +16,7 @@ class Course:
 		if self.tutorials == []:
 			self.tutorials.append(Section('Dummy Tutorial','','#','','','','',''))
 		if self.labs == []:
-			self.labs.append(Section('Dummy Lab','','','','','','',''))
+			self.labs.append(Section('Dummy Lab','','#','','','','',''))
 			
 	def ChangeTutorials(self, newtutorials):
 		self.tutorials = newtutorials
@@ -95,7 +95,7 @@ class Schedule:
 		self.friday = Day()
 		self.breaks = 10000
 		self.conflict = False
-
+		
 	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
 	def addSection(self, newsection):
 		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
@@ -138,9 +138,22 @@ class Schedule:
 	def getBreaks(self):
 		return self.breaks
 		
+	def __str__(self):
+		c = []
+		s = ''
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
+			for section in getattr(self,day).sections:
+				course = section.courseCode
+				if course not in c:
+					c.append(course)
+		for x in sorted(c):
+			s += x+', '
+		return s[:-2]
+					
 	# This method outputs the schedule, showing the total break time, conflict warning, and each class for each day
-	def outputSchedule(self):
-		print('Total break time for optimal schedule: '+str(self.breaks*30)+' minutes'+'\n')
+	def outputSchedule(self, numschedules):
+		print('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes')
+		print('Number of schedules with minimal break time: '+str(numschedules)+'\n')
 		# print('Conflicts: '+str(self.conflict)+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			print(day.capitalize())
@@ -310,8 +323,6 @@ def getSemesterData(term, subjects):
 			course = getCourseData(tag,subjects[str(i)][:4]+subjects[str(i)][4:])
 			semesterData.append(course)
 			
-		# Here we output the data to text and create a dump file
-		outputAllSectionData(semesterData)
 		with open('data.dump', 'wb') as output:
 			pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
 	else:
@@ -320,7 +331,7 @@ def getSemesterData(term, subjects):
 			semesterData = pickle.load(input) # protocol version is auto detected	
 	return semesterData
 
-def outputAllSectionData(semesterData):
+def outputSectionDataToText(semesterData):
 	# We open an output text file
 	text_file = open("Output.txt", "w")
 
@@ -362,18 +373,19 @@ def outputAllSectionData(semesterData):
 def getCombinations(semesterData):
 	combinations = 1
 	for course in semesterData:
-		# The tutorials go hand-in-hand with lectures so they are not taken into account
-		combinations = combinations*len(course.lectures) 
-		if len(course.labs) != 1: # There is always the dummy lab
-			combinations = combinations*len(course.labs)
-	print ('Possible schedules for the given courses: '+str(combinations))
+		# The tutorials go hand-in-hand with lectures
+		combinations = combinations*len(course.lectures)*len(course.labs)
+		if len(course.tutorials) != 1: # We don't use the dummy case
+			combinations = combinations*(len(course.tutorials)/len(course.lectures))
+	print ('Possible schedules for the given courses: '+str(int(combinations)))
 	
 def getOptimizedSchedule(semesterData):
 	firstpass = True
 	schedule = Schedule()
 	newschedule = Schedule()
+	optimalschedulecount = 0
 	
-	# The lectures, tutorials, and labs for all sections are checked
+	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
 	for lecture0 in semesterData[0].lectures:
 		for lab0 in semesterData[0].labs:
 			for tut0 in [x0 for x0 in semesterData[0].tutorials if (x0.GetSection()[0] == lecture0.GetSection()[0] or x0.GetSection() == '#')]:
@@ -406,17 +418,23 @@ def getOptimizedSchedule(semesterData):
 																newschedule.addSection(tut4)
 																if firstpass and not newschedule.getConflict():
 																	schedule = newschedule
+																	optimalschedulecount = 1
 																	firstpass = False
 																elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
 																	schedule = newschedule
+																	optimalschedulecount = 1
+																elif (newschedule.getBreaks() == schedule.getBreaks()) and not newschedule.getConflict():
+																	optimalschedulecount += 1
 																newschedule = Schedule()
-
+	
 	if firstpass:
+		getCombinations(semesterData)
 		print('There is no possible conflict-free schedule for the given courses')
 		return newschedule
 	else:
-		schedule.outputSchedule()
-		return schedule
+		print('Given courses: '+str(schedule))
+		getCombinations(semesterData)
+		schedule.outputSchedule(optimalschedulecount)
 	
 def main():
 	# These variables determine the courses we use for the schedule
@@ -425,11 +443,10 @@ def main():
 	semesterData = getSemesterData(term,subjects)
 	for course in semesterData:
 		course.CombineTutorials()
-	outputAllSectionData(semesterData)
-	getCombinations(semesterData)
+	outputSectionDataToText(semesterData)
 	schedule = getOptimizedSchedule(semesterData)
 	
 main()
 
-# Count the number of optimized schedules?
-# Fix the getCombinations function to account for tutorials
+# Make the combineTutorials method work for combining labs and lectures as well
+# Keep a list of all the optimized schedules
