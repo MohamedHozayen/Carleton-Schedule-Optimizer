@@ -93,6 +93,7 @@ class Schedule:
 		self.wednesday = Day()
 		self.thursday = Day()
 		self.friday = Day()
+		self.online = [] # This contains any online courses
 		self.breaks = 10000
 		self.conflict = False
 		
@@ -131,6 +132,8 @@ class Schedule:
 				self.breaks = self.breaks + self.friday.getBreaks()
 				if self.friday.conflict == True:
 					self.conflict = True
+			elif day == 'O': # This means the section is an online course
+				self.online.append(newsection.courseCode)
 	
 	def getConflict(self):
 		return self.conflict
@@ -146,6 +149,8 @@ class Schedule:
 				course = section.courseCode
 				if course not in c:
 					c.append(course)
+		for course in self.online:
+			c.append(course+'(online)')
 		for x in sorted(c):
 			s += x+', '
 		return s[:-2]
@@ -154,7 +159,6 @@ class Schedule:
 	def outputSchedule(self, numschedules):
 		print('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes')
 		print('Number of schedules with minimal break time: '+str(numschedules)+'\n')
-		# print('Conflicts: '+str(self.conflict)+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			print(day.capitalize())
 			daylist = []
@@ -262,6 +266,12 @@ def getCourseData(data, courseCode):
 				if j == 11 :
 					courseType = thing.replace('Schedule Type','').replace('Campus','').replace('Main','Lecture').strip('  ')
 					# Here we check if we are dealing with a lecture or not (shown as 'Main')
+					if 'Video' in thing: # If it's a video lecture we don't grab any info
+						courseTime = ''
+						courseDay = 'O'
+						courseLocation = ''
+						courseProf = ''
+						break
 					if 'Main' in thing:
 						typeIncrement = 2
 					else:
@@ -276,6 +286,12 @@ def getCourseData(data, courseCode):
 					elif 'pm' in time[0] and '12' in time[0]:
 						time[0] = time[0].strip('pm')
 					else:
+						if 'TBA' in time[0]: # This means it is a video lecture so we don't grab anything
+							courseTime = ''
+							courseDay = 'O'
+							courseLocation = ''
+							courseProf = ''
+							break
 						time[0] = str(int(time[0].strip('am')))
 						if int(time[0]) < 1000:
 							time[0] = '0'+time[0]					
@@ -301,7 +317,7 @@ def getCourseData(data, courseCode):
 		if counter == 2: 
 			section = Section(courseTitle,courseCode,courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf)
 			# The section is added to the corresponding list 	
-			if courseType == 'Laboratory':
+			if courseType == 'Laboratory' or (courseSection[0] == 'L' and courseSection[1].isdigit()):
 				labs.append(section)
 			elif courseType == 'Tutorial': 
 				tutorials.append(section)
@@ -440,6 +456,8 @@ def main():
 	# These variables determine the courses we use for the schedule
 	term = '201610'
 	subjects = {'1': 'SYSC2003', '2': 'SYSC2100', '3': 'ELEC2607', '4': 'COMP1805', '5': 'STAT3502', }
+	#term = '201530'
+	#subjects = {'1': 'MATH1104', '2': 'MATH1004', '3': 'ECOR1010', '4': 'CHEM1101', '5': 'CGSC1001', }
 	semesterData = getSemesterData(term,subjects)
 	for course in semesterData:
 		course.CombineTutorials()
@@ -450,3 +468,6 @@ main()
 
 # Make the combineTutorials method work for combining labs and lectures as well
 # Keep a list of all the optimized schedules
+
+# Online courses are taken into account correctly
+# Modified how labs are found: if the course section is L+(a digit) it counts as a lab

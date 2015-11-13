@@ -320,7 +320,7 @@ Section: C
 CRN: 14791
 Time: 1135-1255
 Days: TR
-Location: Southam Hall 306
+Location: Mackenzie Building 3275
 Professor: Gang Li 
 
 Tutorials
@@ -339,7 +339,7 @@ Days: M
 Location: Southam Hall 404
 Professor: TBA
 
-Section: C1/C2
+Section: C1/C2/C3
 CRN: 14792
 Time: 1635-1725
 Days: R
