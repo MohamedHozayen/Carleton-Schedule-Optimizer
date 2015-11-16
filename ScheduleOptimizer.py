@@ -21,6 +21,9 @@ class Course:
 	def ChangeTutorials(self, newtutorials):
 		self.tutorials = newtutorials
 
+	def ChangeLabs(self, newlabs):
+		self.labs = newlabs
+
 	def CombineTutorials(self):
 		if self.tutorials[0].title == 'Dummy Tutorial': # We don't do anything if the course has no tutorials
 			return
@@ -54,11 +57,46 @@ class Course:
 				sections = tutorial.GetSection()
 			i = i + 1
 		
-		# This step is skipped if there are no tutorials
-		if not self.tutorials == []:
-			# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
-			newtutorials.append(self.tutorials[x].ChangeSection(sections))
-			self.ChangeTutorials(newtutorials)
+		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
+		newtutorials.append(self.tutorials[x].ChangeSection(sections))
+		self.ChangeTutorials(newtutorials)
+			
+	def CombineLabs(self):
+		if self.labs[0].title == 'Dummy Lab': # We don't do anything if the course has no tutorials
+			return
+		sections = '' # This string will hold all the sections for a given lecture (A, B, etc.)
+		firsttime = ''
+		firstday = ''
+		newlabs = []
+		firstpass = True
+		i = 0 # i counts each tutorial in the list of tutorials
+		x = 0 # x keeps track of the index containing the first tutorial for a given section (A, B, etc.)
+		for lab in self.labs:
+			currenttime = lab.GetTime()
+			currentday = lab.GetDay()
+			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
+			if currenttime == firsttime and currentday == firstday:
+				sections = sections + '/' + lab.GetSection()
+			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list 
+			else:
+				firsttime = currenttime
+				firstday = currentday
+				if firstpass == True:
+					firstpass = False
+				else:
+					# Since we are not on the first pass, we must put the combined sections into the first tutorial of a given letter and then add it to the newtutorials list
+					if sections == self.labs[0].GetSection(): # This happens if the first pass had only one section
+						newlabs.append(self.labs[0])
+					else:
+						newlabs.append(self.labs[x].ChangeSection(sections))
+					x = i
+				# Here the sections string restarts, beginning with the current tutorial's section
+				sections = lab.GetSection()
+			i = i + 1
+		
+		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
+		newlabs.append(self.labs[x].ChangeSection(sections))
+		self.ChangeLabs(newlabs)
 		
 class Section:
 	# This class has 4 instance variables containing info on the listings
@@ -80,6 +118,9 @@ class Section:
 
 	def GetTime(self):
 		return self.time
+
+	def GetDay(self):
+		return self.day
 		
 	def ChangeSection(self, newsection):
 		self.section = newsection
@@ -461,13 +502,10 @@ def main():
 	semesterData = getSemesterData(term,subjects)
 	for course in semesterData:
 		course.CombineTutorials()
+		course.CombineLabs()
 	outputSectionDataToText(semesterData)
 	schedule = getOptimizedSchedule(semesterData)
 	
 main()
 
-# Make the combineTutorials method work for combining labs and lectures as well
 # Keep a list of all the optimized schedules
-
-# Online courses are taken into account correctly
-# Modified how labs are found: if the course section is L+(a digit) it counts as a lab

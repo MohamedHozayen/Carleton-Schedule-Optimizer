@@ -134,99 +134,50 @@ Professor: TBA
 
 Labs
 -------------------
-Section: 11O
+Section: 11O/12E
 CRN: 11962
 Time: 1435-1725
 Days: T
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: 12E
-CRN: 11963
-Time: 1435-1725
-Days: T
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: 13O
+Section: 13O/14E
 CRN: 11964
 Time: 1435-1725
 Days: F
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: 14E
-CRN: 11965
-Time: 1435-1725
-Days: F
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L1O
+Section: L1O/L2E
 CRN: 11969
 Time: 1135-1425
 Days: M
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: L2E
-CRN: 11970
-Time: 1135-1425
-Days: M
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L3O
+Section: L3O/L4E
 CRN: 11971
 Time: 0835-1125
 Days: F
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: L4E
-CRN: 11972
-Time: 0835-1125
-Days: F
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L5O
+Section: L5O/L6E
 CRN: 11973
 Time: 1435-1725
 Days: W
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: L6E
-CRN: 11974
-Time: 1435-1725
-Days: W
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L7O
+Section: L7O/L8E
 CRN: 11975
 Time: 1435-1725
 Days: R
 Location: Mackenzie Building 4275
 Professor: Robert C. Gauthier 
 
-Section: L8E
-CRN: 11976
-Time: 1435-1725
-Days: R
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L9O
+Section: L9O/LOE
 CRN: 11977
-Time: 0835-1125
-Days: R
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: LOE
-CRN: 11978
 Time: 0835-1125
 Days: R
 Location: Mackenzie Building 4275
