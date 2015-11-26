@@ -436,11 +436,12 @@ def getCombinations(semesterData):
 			combinations = combinations*(len(course.tutorials)/len(course.lectures))
 	print ('Possible schedules for the given courses: '+str(int(combinations)))
 	
-def getOptimizedSchedule(semesterData):
+def getOptimizedSchedules(semesterData):
+	maxschedules = 10
 	firstpass = True
+	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
-	optimalschedulecount = 0
 	
 	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
 	for lecture0 in semesterData[0].lectures:
@@ -475,23 +476,25 @@ def getOptimizedSchedule(semesterData):
 																newschedule.addSection(tut4)
 																if firstpass and not newschedule.getConflict():
 																	schedule = newschedule
-																	optimalschedulecount = 1
+																	schedules.append(newschedule)
 																	firstpass = False
 																elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
 																	schedule = newschedule
-																	optimalschedulecount = 1
+																	schedules = []
+																	schedules.append(newschedule)
 																elif (newschedule.getBreaks() == schedule.getBreaks()) and not newschedule.getConflict():
-																	optimalschedulecount += 1
+																	if len(schedules) <= maxschedules:
+																		schedules.append(newschedule)
 																newschedule = Schedule()
 	
+	print('Given courses: '+str(schedule))
+	getCombinations(semesterData)
 	if firstpass:
-		getCombinations(semesterData)
 		print('There is no possible conflict-free schedule for the given courses')
-		return newschedule
+		return schedules
 	else:
-		print('Given courses: '+str(schedule))
-		getCombinations(semesterData)
-		schedule.outputSchedule(optimalschedulecount)
+		schedule.outputSchedule(len(schedules))
+		return schedules
 	
 def main():
 	# These variables determine the courses we use for the schedule
@@ -504,7 +507,7 @@ def main():
 		course.CombineTutorials()
 		course.CombineLabs()
 	outputSectionDataToText(semesterData)
-	schedule = getOptimizedSchedule(semesterData)
+	schedules = getOptimizedSchedules(semesterData)
 	
 main()
 
