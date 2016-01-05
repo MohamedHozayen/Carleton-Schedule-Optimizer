@@ -184,15 +184,15 @@ class Schedule:
 		
 	def __str__(self):
 		c = []
-		s = ''
+		s = 'Courses and sections: '
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
 				if course not in c:
-					c.append(course)
+					c.append(course+section.section)
 		for course in self.online:
 			c.append(course+'(online)')
-		for x in sorted(c):
+		for x in sorted(set(c)):
 			s += x+', '
 		return s[:-2]
 					
@@ -210,14 +210,14 @@ class Schedule:
 			print('')
 
 		text_file = open("Optimized Schedule.txt", "w")
-		text_file.write('Given courses: '+str(self)+'\n')
+		text_file.write(str(self)+'\n')
 		text_file.write('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n')
 		text_file.write('Number of schedules with minimal break time: '+str(numschedules)+'\n'+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			text_file.write(day.capitalize()+'\n')
 			daylist = []
 			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+section.section)
+				daylist.append(section.time+": "+section.courseCode+section.section+' ('+section.CRN+')')
 			for section in sorted(daylist):
 				text_file.write(section+'\n')
 			text_file.write('\n')
@@ -501,7 +501,7 @@ def getOptimizedSchedules(semesterData):
 																		schedules.append(newschedule)
 																newschedule = Schedule()
 	
-	print('Given courses: '+str(schedule))
+	print(str(schedule))
 	getCombinations(semesterData)
 	if firstpass:
 		print('There is no possible conflict-free schedule for the given courses')
