@@ -1,0 +1,222 @@
+********************************************
+Engineering Project
+ELEC3907
+
+Lectures
+-------------------
+Section: A
+CRN: 11993
+Time: 1435-1525
+Days: TR
+Location: Mackenzie Building 3275
+Professor: Ralph Dickson Mason 
+
+Labs
+-------------------
+Section: A01
+CRN: 11994
+Time: 1135-1425
+Days: TR
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+Section: A02
+CRN: 11995
+Time: 0835-1125
+Days: MW
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+Section: A03
+CRN: 11996
+Time: 1135-1425
+Days: WF
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+********************************************
+Electromagnetic Waves
+ELEC3909
+
+Lectures
+-------------------
+Section: A
+CRN: 11999
+Time: 1435-1555
+Days: MW
+Location: Azrieli Theatre 301
+Professor: Jacques Albert 
+
+Labs
+-------------------
+Section: L1O/L2E
+CRN: 12000
+Time: 0835-1125
+Days: T
+Location: Mackenzie Building 4342
+Professor: Jacques Albert 
+
+Section: L3O
+CRN: 12002
+Time: 0835-1125
+Days: W
+Location: Southam Hall 501
+Professor: Jacques Albert 
+
+Section: L4E
+CRN: 12003
+Time: 0835-1125
+Days: F
+Location: Mackenzie Building 4342
+Professor: Jacques Albert 
+
+Section: L5E
+CRN: 12004
+Time: 1435-1725
+Days: F
+Location: Tory Building 236
+Professor: Jacques Albert 
+
+********************************************
+Probability and Statistics
+STAT3502
+
+Lectures
+-------------------
+Section: A
+CRN: 14781
+Time: 1605-1725
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Ahmed Almaskut 
+
+Section: B
+CRN: 14786
+Time: 1005-1125
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Masoud Mollaalizadehnasari 
+
+Section: C
+CRN: 14791
+Time: 1135-1255
+Days: TR
+Location: Mackenzie Building 4499
+Professor: Gang Li 
+
+Tutorials
+-------------------
+Section: A1/A2/A3/A4
+CRN: 14782
+Time: 1335-1425
+Days: W
+Location: Tory Building 210
+Professor: TBA
+
+Section: B1/B2/B3/B4
+CRN: 14787
+Time: 1135-1225
+Days: M
+Location: Southam Hall 404
+Professor: TBA
+
+Section: C1/C2/C3
+CRN: 14792
+Time: 1635-1725
+Days: R
+Location: Southam Hall 403
+Professor: TBA
+
+********************************************
+Mathematical Methods I
+MATH3705
+
+Lectures
+-------------------
+Section: A
+CRN: 13620
+Time: 1135-1255
+Days: WF
+Location: Azrieli Theatre 302
+Professor: Xinhou Hua 
+
+Section: B
+CRN: 13626
+Time: 0835-0955
+Days: TR
+Location: Azrieli Theatre 301
+Professor: Elena Devdariani 
+
+Section: C
+CRN: 13632
+Time: 1605-1725
+Days: WF
+Location: Tory Building 360
+Professor: Sam Melkonian 
+
+Section: D
+CRN: 13637
+Time: 1005-1125
+Days: TR
+Location: Azrieli Theatre 102
+Professor: Xinhou Hua 
+
+Tutorials
+-------------------
+Section: A1/A2/A3/A4
+CRN: 13621
+Time: 1335-1425
+Days: F
+Location: Southam Hall 415
+Professor: TBA
+
+Section: B1/B2/B3/B4/B5
+CRN: 13627
+Time: 1435-1525
+Days: R
+Location: Southam Hall 403
+Professor: TBA
+
+Section: C1/C2/C3/C4
+CRN: 13633
+Time: 1435-1525
+Days: W
+Location: Southam Hall 404
+Professor: TBA
+
+Section: D1/D2/D3/D4
+CRN: 13638
+Time: 1435-1525
+Days: T
+Location: Southam Hall 406
+Professor: TBA
+
+********************************************
+Integrated Circuit Design and Fabrication
+ELEC4609
+
+Lectures
+-------------------
+Section: A
+CRN: 12010
+Time: 1005-1125
+Days: MW
+Location: Canal Building 3101
+Professor: Garry Tarr 
+
+Labs
+-------------------
+Section: A1O
+CRN: 12011
+Time: 0835-1125
+Days: R
+Location: Minto Centre 6030
+Professor: Garry Tarr 
+
+Section: A2E
+CRN: 12012
+Time: 0835-1125
+Days: T
+Location: Minto Centre 6030
+Professor: Garry Tarr 
+

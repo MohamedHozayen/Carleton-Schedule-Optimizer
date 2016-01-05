@@ -196,7 +196,7 @@ class Schedule:
 			s += x+', '
 		return s[:-2]
 					
-	# This method outputs the schedule, showing the total break time, conflict warning, and each class for each day
+	# This method outputs the schedule to the terminal and a text file, showing the total break time, conflict warning, and each class for each day
 	def outputSchedule(self, numschedules):
 		print('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes')
 		print('Number of schedules with minimal break time: '+str(numschedules)+'\n')
@@ -208,6 +208,20 @@ class Schedule:
 			for section in sorted(daylist):
 				print(section)
 			print('')
+
+		text_file = open("Optimized Schedule.txt", "w")
+		text_file.write('Given courses: '+str(self)+'\n')
+		text_file.write('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n')
+		text_file.write('Number of schedules with minimal break time: '+str(numschedules)+'\n'+'\n')
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
+			text_file.write(day.capitalize()+'\n')
+			daylist = []
+			for section in getattr(self,day).sections:
+				daylist.append(section.time+": "+section.courseCode+section.section)
+			for section in sorted(daylist):
+				text_file.write(section+'\n')
+			text_file.write('\n')
+		text_file.close()
 
 class Day:
 	# This class has an attribute for sections, time slots, total breaks, and whether or not there is a conflict
@@ -390,7 +404,7 @@ def getSemesterData(term, subjects):
 
 def outputSectionDataToText(semesterData):
 	# We open an output text file
-	text_file = open("Output.txt", "w")
+	text_file = open("Detailed Course Data.txt", "w")
 
 	for course in semesterData:
 		text_file.write('********************************************\n')
@@ -499,7 +513,7 @@ def getOptimizedSchedules(semesterData):
 def main():
 	# These variables determine the courses we use for the schedule
 	term = '201610'
-	subjects = {'1': 'SYSC2003', '2': 'SYSC2100', '3': 'ELEC2607', '4': 'COMP1805', '5': 'STAT3502', }
+	subjects = {'1': 'ELEC3907', '2': 'ELEC3909', '3': 'STAT3502', '4': 'MATH3705', '5': 'ELEC4609', }
 	#term = '201530'
 	#subjects = {'1': 'MATH1104', '2': 'MATH1004', '3': 'ECOR1010', '4': 'CHEM1101', '5': 'CGSC1001', }
 	semesterData = getSemesterData(term,subjects)
