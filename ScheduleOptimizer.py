@@ -189,7 +189,7 @@ class Schedule:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
 				if course not in c:
-					c.append(course+section.section)
+					c.append(course+section.section+' ('+section.CRN+')')
 		for course in self.online:
 			c.append(course+'(online)')
 		for x in sorted(set(c)):
@@ -199,7 +199,8 @@ class Schedule:
 	# This method outputs the schedule to the terminal and a text file, showing the total break time, conflict warning, and each class for each day
 	def outputSchedule(self, numschedules):
 		print('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes')
-		print('Number of schedules with minimal break time: '+str(numschedules)+'\n')
+		print('Number of schedules with minimal break time: '+str(numschedules))
+		print(str(self)+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			print(day.capitalize())
 			daylist = []
@@ -210,14 +211,14 @@ class Schedule:
 			print('')
 
 		text_file = open("Optimized Schedule.txt", "w")
-		text_file.write(str(self)+'\n')
 		text_file.write('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n')
-		text_file.write('Number of schedules with minimal break time: '+str(numschedules)+'\n'+'\n')
+		text_file.write('Number of schedules with minimal break time: '+str(numschedules)+'\n')
+		text_file.write(str(self)+'\n'+'\n')
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			text_file.write(day.capitalize()+'\n')
 			daylist = []
 			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+section.section+' ('+section.CRN+')')
+				daylist.append(section.time+": "+section.courseCode+section.section)
 			for section in sorted(daylist):
 				text_file.write(section+'\n')
 			text_file.write('\n')
@@ -271,7 +272,8 @@ def getWebsiteData(term, subject, coursecode):
 	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
 	r = requests.post(url, data=params)
 	soup = BeautifulSoup(r.text, "html.parser", from_encoding='utf8')
-	return soup
+	tag = soup.body.contents[5].contents[13]
+	return tag
 
 def getCourseData(data, courseCode):
 	# These lists will contain all the sections of the corresponding type for the given course
@@ -388,12 +390,12 @@ def getSemesterData(term, subjects):
 	if True: # We're always grabbing new data
 	# if not os.path.isfile('data.dump'):
 		semesterData = []			
-		for i in range(1, len(subjects)+1): # We add each course's data to the semester data
-			soup = getWebsiteData(term, subjects[str(i)][:4], subjects[str(i)][4:])
-			tag = soup.body.contents[5].contents[13]
-			course = getCourseData(tag,subjects[str(i)][:4]+subjects[str(i)][4:])
+		for i in range(0, len(subjects)): # We add each course's data to the semester data
+			tag = getWebsiteData(term, subjects[i][:4], subjects[i][4:])
+			course = getCourseData(tag,subjects[i][:4]+subjects[i][4:])
+			course.CombineTutorials()
+			course.CombineLabs()
 			semesterData.append(course)
-			
 		with open('data.dump', 'wb') as output:
 			pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
 	else:
@@ -456,6 +458,7 @@ def getOptimizedSchedules(semesterData):
 	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
+	getCombinations(semesterData)
 	
 	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
 	for lecture0 in semesterData[0].lectures:
@@ -501,8 +504,6 @@ def getOptimizedSchedules(semesterData):
 																		schedules.append(newschedule)
 																newschedule = Schedule()
 	
-	print(str(schedule))
-	getCombinations(semesterData)
 	if firstpass:
 		print('There is no possible conflict-free schedule for the given courses')
 		return schedules
@@ -510,19 +511,14 @@ def getOptimizedSchedules(semesterData):
 		schedule.outputSchedule(len(schedules))
 		return schedules
 	
-def main():
+def scheduleOptimizer(term,subjects):
 	# These variables determine the courses we use for the schedule
-	term = '201610'
-	subjects = {'1': 'ELEC3907', '2': 'ELEC3909', '3': 'STAT3502', '4': 'MATH3705', '5': 'ELEC4609', }
-	#term = '201530'
-	#subjects = {'1': 'MATH1104', '2': 'MATH1004', '3': 'ECOR1010', '4': 'CHEM1101', '5': 'CGSC1001', }
 	semesterData = getSemesterData(term,subjects)
-	for course in semesterData:
-		course.CombineTutorials()
-		course.CombineLabs()
 	outputSectionDataToText(semesterData)
 	schedules = getOptimizedSchedules(semesterData)
-	
-main()
+
+term = '201610'
+subjects = ['SYSC2100','SYSC2003','ELEC2607','STAT3502','COMP1805']
+scheduleOptimizer(term,subjects)
 
 # Keep a list of all the optimized schedules

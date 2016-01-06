@@ -1,81 +1,187 @@
 ********************************************
-Engineering Project
-ELEC3907
+Algorithms and Data Structures
+SYSC2100
 
 Lectures
 -------------------
 Section: A
-CRN: 11993
-Time: 1435-1525
+CRN: 14856
+Time: 0835-0955
 Days: TR
-Location: Mackenzie Building 3275
-Professor: Ralph Dickson Mason 
+Location: Mackenzie Building 3380
+Professor: Eranga Ukwatta 
 
 Labs
 -------------------
-Section: A01
-CRN: 11994
-Time: 1135-1425
-Days: TR
-Location: Mackenzie Building 4195
-Professor: Qi-jun Zhang 
+Section: L1
+CRN: 14857
+Time: 1135-1325
+Days: F
+Location: Canal Building 5109
+Professor: Eranga Ukwatta 
 
-Section: A02
-CRN: 11995
-Time: 0835-1125
-Days: MW
-Location: Mackenzie Building 4195
-Professor: Qi-jun Zhang 
+Section: L2
+CRN: 14858
+Time: 1135-1325
+Days: M
+Location: Canal Building 5109
+Professor: Eranga Ukwatta 
 
-Section: A03
-CRN: 11996
-Time: 1135-1425
-Days: WF
-Location: Mackenzie Building 4195
-Professor: Qi-jun Zhang 
+Section: L3
+CRN: 14859
+Time: 1135-1325
+Days: T
+Location: Canal Building 5109
+Professor: Eranga Ukwatta 
+
+Section: L4
+CRN: 14860
+Time: 1435-1625
+Days: W
+Location: Canal Building 5109
+Professor: Eranga Ukwatta 
 
 ********************************************
-Electromagnetic Waves
-ELEC3909
+Introductory Real-Time Systems
+SYSC2003
 
 Lectures
 -------------------
 Section: A
-CRN: 11999
-Time: 1435-1555
+CRN: 14831
+Time: 0835-0955
 Days: MW
-Location: Azrieli Theatre 301
-Professor: Jacques Albert 
+Location: TBA
+Professor: Cheryl Joanne Schramm 
+
+Section: B
+CRN: 14832
+Time: 1605-1725
+Days: TR
+Location: Tory Building 240
+Professor: Gabriel Wainer 
 
 Labs
 -------------------
-Section: L1O/L2E
-CRN: 12000
-Time: 0835-1125
-Days: T
-Location: Mackenzie Building 4342
-Professor: Jacques Albert 
-
-Section: L3O
-CRN: 12002
-Time: 0835-1125
+Section: L1
+CRN: 14833
+Time: 1135-1325
 Days: W
-Location: Southam Hall 501
-Professor: Jacques Albert 
+Location: TBA
+Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
 
-Section: L4E
-CRN: 12003
-Time: 0835-1125
+Section: L2
+CRN: 14834
+Time: 1435-1625
 Days: F
-Location: Mackenzie Building 4342
-Professor: Jacques Albert 
+Location: TBA
+Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
 
-Section: L5E
-CRN: 12004
+Section: L3
+CRN: 14835
+Time: 0935-1125
+Days: F
+Location: TBA
+Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
+
+Section: L4
+CRN: 14836
+Time: 0935-1125
+Days: T
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
+
+Section: L5
+CRN: 14837
+Time: 1135-1325
+Days: T
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
+
+Section: L6
+CRN: 14838
+Time: 1135-1325
+Days: R
+Location: Mackenzie Building 4233
+Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
+
+********************************************
+Switching Circuits
+ELEC2607
+
+Lectures
+-------------------
+Section: A
+CRN: 11966
+Time: 1135-1255
+Days: WF
+Location: Mackenzie Building 3380
+Professor: Anthony Sidney Forzley (<abbr title="Primary">P</abbr>), Robert C. Gauthier </td>
+
+Section: B
+CRN: 11967
+Time: 1305-1425
+Days: TR
+Location: University Centre 231
+Professor: Robert C. Gauthier (<abbr title="Primary">P</abbr>), Anthony Sidney Forzley </td>
+
+Section: C
+CRN: 11968
+Time: 1005-1125
+Days: MW
+Location: Minto Centre 5050
+Professor: Robert C. Gauthier (<abbr title="Primary">P</abbr>), Anthony Sidney Forzley </td>
+
+Labs
+-------------------
+Section: 11O/12E
+CRN: 11962
+Time: 1435-1725
+Days: T
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: 13O/14E
+CRN: 11964
 Time: 1435-1725
 Days: F
-Location: Tory Building 236
-Professor: Jacques Albert 
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L1O/L2E
+CRN: 11969
+Time: 1135-1425
+Days: M
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L3O/L4E
+CRN: 11971
+Time: 0835-1125
+Days: F
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L5O/L6E
+CRN: 11973
+Time: 1435-1725
+Days: W
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L7O/L8E
+CRN: 11975
+Time: 1435-1725
+Days: R
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
+
+Section: L9O/LOE
+CRN: 11977
+Time: 0835-1125
+Days: R
+Location: Mackenzie Building 4275
+Professor: Robert C. Gauthier 
 
 ********************************************
 Probability and Statistics
@@ -128,95 +234,66 @@ Location: Southam Hall 403
 Professor: TBA
 
 ********************************************
-Mathematical Methods I
-MATH3705
+Discrete Structures I
+COMP1805
 
 Lectures
 -------------------
-Section: A
-CRN: 13620
-Time: 1135-1255
-Days: WF
-Location: Azrieli Theatre 302
-Professor: Xinhou Hua 
-
 Section: B
-CRN: 13626
-Time: 0835-0955
-Days: TR
-Location: Azrieli Theatre 301
-Professor: Elena Devdariani 
-
-Section: C
-CRN: 13632
-Time: 1605-1725
-Days: WF
-Location: Tory Building 360
-Professor: Sam Melkonian 
-
-Section: D
-CRN: 13637
+CRN: 11213
 Time: 1005-1125
 Days: TR
-Location: Azrieli Theatre 102
-Professor: Xinhou Hua 
+Location: Southam Hall KM-TH
+Professor: Michael Jason Hinek 
+
+Section: C
+CRN: 11217
+Time: 0835-0955
+Days: MW
+Location: Azrieli Theatre 101
+Professor: Prosenjit Bose 
 
 Tutorials
 -------------------
-Section: A1/A2/A3/A4
-CRN: 13621
-Time: 1335-1425
-Days: F
-Location: Southam Hall 415
-Professor: TBA
+Section: B1
+CRN: 11214
+Time: 1635-1725
+Days: W
+Location: Tory Building 240
+Professor: Michael Jason Hinek 
 
-Section: B1/B2/B3/B4/B5
-CRN: 13627
-Time: 1435-1525
-Days: R
-Location: Southam Hall 403
-Professor: TBA
+Section: B2
+CRN: 11215
+Time: 1535-1625
+Days: W
+Location: Southam Hall 306
+Professor: Michael Jason Hinek 
 
-Section: C1/C2/C3/C4
-CRN: 13633
+Section: B3
+CRN: 11216
 Time: 1435-1525
 Days: W
-Location: Southam Hall 404
-Professor: TBA
+Location: University Centre 282
+Professor: Michael Jason Hinek 
 
-Section: D1/D2/D3/D4
-CRN: 13638
-Time: 1435-1525
-Days: T
-Location: Southam Hall 406
-Professor: TBA
-
-********************************************
-Integrated Circuit Design and Fabrication
-ELEC4609
-
-Lectures
--------------------
-Section: A
-CRN: 12010
-Time: 1005-1125
-Days: MW
-Location: Canal Building 3101
-Professor: Garry Tarr 
-
-Labs
--------------------
-Section: A1O
-CRN: 12011
-Time: 0835-1125
+Section: C1
+CRN: 11218
+Time: 1335-1425
 Days: R
-Location: Minto Centre 6030
-Professor: Garry Tarr 
+Location: Tory Building 447
+Professor: Prosenjit Bose 
 
-Section: A2E
-CRN: 12012
-Time: 0835-1125
+Section: C2
+CRN: 11219
+Time: 1135-1225
+Days: M
+Location: Tory Building 446
+Professor: Prosenjit Bose 
+
+Section: C3
+CRN: 11220
+Time: 1035-1125
 Days: T
-Location: Minto Centre 6030
-Professor: Garry Tarr 
+Location: University Centre 282
+Professor: Prosenjit Bose 
 
