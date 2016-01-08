@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import requests
 import os.path
@@ -196,33 +198,27 @@ class Schedule:
 			s += x+', '
 		return s[:-2]
 					
-	# This method outputs the schedule to the terminal and a text file, showing the total break time, conflict warning, and each class for each day
+	# This method outputs the schedule to a text file and returns it as a string. It shows the total break time, conflict warning, and each class for each day
 	def outputSchedule(self, numschedules):
-		print('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes')
-		print('Number of schedules with minimal break time: '+str(numschedules))
-		print(str(self)+'\n')
+		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
+		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n'
+		s += str(self)+'\n'+'\n'
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
-			print(day.capitalize())
+			s += day.capitalize()+'\n'
 			daylist = []
 			for section in getattr(self,day).sections:
 				daylist.append(section.time+": "+section.courseCode+section.section)
+			if len(daylist) == 0:
+				s += 'No courses today!\n'
 			for section in sorted(daylist):
-				print(section)
-			print('')
+				s += section+'\n'
+			s += '\n'
+		s = s[:-2] # We want to remove the excess newline characters
 
 		text_file = open("Optimized Schedule.txt", "w")
-		text_file.write('Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n')
-		text_file.write('Number of schedules with minimal break time: '+str(numschedules)+'\n')
-		text_file.write(str(self)+'\n'+'\n')
-		for day in ['monday','tuesday','wednesday','thursday','friday']:
-			text_file.write(day.capitalize()+'\n')
-			daylist = []
-			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+section.section)
-			for section in sorted(daylist):
-				text_file.write(section+'\n')
-			text_file.write('\n')
-		text_file.close()
+		text_file.write(s)
+		text_file.close()					
+		return s
 
 class Day:
 	# This class has an attribute for sections, time slots, total breaks, and whether or not there is a conflict
@@ -505,20 +501,22 @@ def getOptimizedSchedules(semesterData):
 																newschedule = Schedule()
 	
 	if firstpass:
-		print('There is no possible conflict-free schedule for the given courses')
-		return schedules
+		return 'There is no possible conflict-free schedule for the given courses'
+		# print('There is no possible conflict-free schedule for the given courses')
+		# return schedules		
 	else:
-		schedule.outputSchedule(len(schedules))
-		return schedules
+		return schedule.outputSchedule(len(schedules))
+		# schedule.outputSchedule(len(schedules))
+		# return schedules
 	
 def scheduleOptimizer(term,subjects):
 	# These variables determine the courses we use for the schedule
 	semesterData = getSemesterData(term,subjects)
 	outputSectionDataToText(semesterData)
-	schedules = getOptimizedSchedules(semesterData)
+	return getOptimizedSchedules(semesterData)
 
 term = '201610'
-subjects = ['SYSC2100','SYSC2003','ELEC2607','STAT3502','COMP1805']
-scheduleOptimizer(term,subjects)
+subjects = ['ELEC3909','ELEC3907','ELEC3500','STAT3502','SYSC3501']
+print(scheduleOptimizer(term,subjects))
 
 # Keep a list of all the optimized schedules

@@ -1,187 +1,138 @@
 ********************************************
-Algorithms and Data Structures
-SYSC2100
+Electromagnetic Waves
+ELEC3909
 
 Lectures
 -------------------
 Section: A
-CRN: 14856
-Time: 0835-0955
-Days: TR
-Location: Mackenzie Building 3380
-Professor: Eranga Ukwatta 
+CRN: 11999
+Time: 1435-1555
+Days: MW
+Location: Azrieli Theatre 301
+Professor: Jacques Albert 
 
 Labs
 -------------------
-Section: L1
-CRN: 14857
-Time: 1135-1325
-Days: F
-Location: Canal Building 5109
-Professor: Eranga Ukwatta 
-
-Section: L2
-CRN: 14858
-Time: 1135-1325
-Days: M
-Location: Canal Building 5109
-Professor: Eranga Ukwatta 
-
-Section: L3
-CRN: 14859
-Time: 1135-1325
+Section: L1O/L2E
+CRN: 12000
+Time: 0835-1125
 Days: T
-Location: Canal Building 5109
-Professor: Eranga Ukwatta 
+Location: Mackenzie Building 4342
+Professor: Jacques Albert 
 
-Section: L4
-CRN: 14860
-Time: 1435-1625
+Section: L3O
+CRN: 12002
+Time: 0835-1125
 Days: W
-Location: Canal Building 5109
-Professor: Eranga Ukwatta 
+Location: Southam Hall 501
+Professor: Jacques Albert 
+
+Section: L4E
+CRN: 12003
+Time: 0835-1125
+Days: F
+Location: Mackenzie Building 4342
+Professor: Jacques Albert 
+
+Section: L5E
+CRN: 12004
+Time: 1435-1725
+Days: F
+Location: Tory Building 236
+Professor: Jacques Albert 
 
 ********************************************
-Introductory Real-Time Systems
-SYSC2003
+Engineering Project
+ELEC3907
 
 Lectures
 -------------------
 Section: A
-CRN: 14831
-Time: 0835-0955
-Days: MW
-Location: TBA
-Professor: Cheryl Joanne Schramm 
+CRN: 11993
+Time: 1435-1525
+Days: TR
+Location: Mackenzie Building 3275
+Professor: Ralph Dickson Mason 
 
+Labs
+-------------------
+Section: A01
+CRN: 11994
+Time: 1135-1425
+Days: TR
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+Section: A02
+CRN: 11995
+Time: 0835-1125
+Days: MW
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+Section: A03
+CRN: 11996
+Time: 1135-1425
+Days: WF
+Location: Mackenzie Building 4195
+Professor: Qi-jun Zhang 
+
+********************************************
+Digital Electronics
+ELEC3500
+
+Lectures
+-------------------
 Section: B
-CRN: 14832
+CRN: 11986
 Time: 1605-1725
 Days: TR
-Location: Tory Building 240
-Professor: Gabriel Wainer 
+Location: Minto Centre 2000
+Professor: Maitham Shams 
 
 Labs
 -------------------
-Section: L1
-CRN: 14833
-Time: 1135-1325
+Section: B1
+CRN: 11987
+Time: 0835-1125
 Days: W
-Location: TBA
-Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
+Location: Mackenzie Building 4166
+Professor: Maitham Shams 
 
-Section: L2
-CRN: 14834
-Time: 1435-1625
-Days: F
-Location: TBA
-Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
-
-Section: L3
-CRN: 14835
-Time: 0935-1125
-Days: F
-Location: TBA
-Professor: Cheryl Joanne Schramm (<abbr title="Primary">P</abbr>), Gabriel Wainer </td>
-
-Section: L4
-CRN: 14836
-Time: 0935-1125
-Days: T
-Location: Mackenzie Building 4233
-Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
-
-Section: L5
-CRN: 14837
-Time: 1135-1325
-Days: T
-Location: Mackenzie Building 4233
-Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
-
-Section: L6
-CRN: 14838
-Time: 1135-1325
-Days: R
-Location: Mackenzie Building 4233
-Professor: Gabriel Wainer (<abbr title="Primary">P</abbr>), Cheryl Joanne Schramm </td>
-
-********************************************
-Switching Circuits
-ELEC2607
-
-Lectures
--------------------
-Section: A
-CRN: 11966
-Time: 1135-1255
-Days: WF
-Location: Mackenzie Building 3380
-Professor: Anthony Sidney Forzley (<abbr title="Primary">P</abbr>), Robert C. Gauthier </td>
-
-Section: B
-CRN: 11967
-Time: 1305-1425
-Days: TR
-Location: University Centre 231
-Professor: Robert C. Gauthier (<abbr title="Primary">P</abbr>), Anthony Sidney Forzley </td>
-
-Section: C
-CRN: 11968
-Time: 1005-1125
-Days: MW
-Location: Minto Centre 5050
-Professor: Robert C. Gauthier (<abbr title="Primary">P</abbr>), Anthony Sidney Forzley </td>
-
-Labs
--------------------
-Section: 11O/12E
-CRN: 11962
-Time: 1435-1725
-Days: T
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: 13O/14E
-CRN: 11964
-Time: 1435-1725
-Days: F
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L1O/L2E
-CRN: 11969
+Section: B2
+CRN: 11988
 Time: 1135-1425
 Days: M
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
+Location: Mackenzie Building 4166
+Professor: Maitham Shams 
 
-Section: L3O/L4E
-CRN: 11971
+Section: B3
+CRN: 11989
+Time: 0835-1125
+Days: R
+Location: Mackenzie Building 4166
+Professor: Maitham Shams 
+
+Section: B4
+CRN: 11990
 Time: 0835-1125
 Days: F
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
+Location: Mackenzie Building 4166
+Professor: Maitham Shams 
 
-Section: L5O/L6E
-CRN: 11973
+Section: B5
+CRN: 11991
 Time: 1435-1725
-Days: W
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
+Days: F
+Location: Mackenzie Building 4166
+Professor: Maitham Shams 
 
-Section: L7O/L8E
-CRN: 11975
-Time: 1435-1725
-Days: R
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
-
-Section: L9O/LOE
-CRN: 11977
+Section: B6
+CRN: 11992
 Time: 0835-1125
-Days: R
-Location: Mackenzie Building 4275
-Professor: Robert C. Gauthier 
+Days: T
+Location: Mackenzie Building 4166
+Professor: Ralph Dickson Mason 
 
 ********************************************
 Probability and Statistics
@@ -234,66 +185,66 @@ Location: Southam Hall 403
 Professor: TBA
 
 ********************************************
-Discrete Structures I
-COMP1805
+Communication Theory
+SYSC3501
 
 Lectures
 -------------------
-Section: B
-CRN: 11213
-Time: 1005-1125
+Section: A
+CRN: 14870
+Time: 1305-1425
 Days: TR
-Location: Southam Hall KM-TH
-Professor: Michael Jason Hinek 
+Location: Mackenzie Building 3380
+Professor: Ioannis Lambadaris 
 
-Section: C
-CRN: 11217
+Section: B
+CRN: 14871
 Time: 0835-0955
 Days: MW
-Location: Azrieli Theatre 101
-Professor: Prosenjit Bose 
+Location: Tory Building 340
+Professor: Ioannis Lambadaris 
 
-Tutorials
+Labs
 -------------------
-Section: B1
-CRN: 11214
-Time: 1635-1725
+Section: L1E/L1O
+CRN: 14872
+Time: 0835-1125
+Days: F
+Location: Mackenzie Building 4485
+Professor: Ioannis Lambadaris 
+
+Section: L2E
+CRN: 14874
+Time: 1435-1725
+Days: F
+Location: Mackenzie Building 4485
+Professor: Ioannis Lambadaris 
+
+Section: L3O/L4E
+CRN: 14875
+Time: 1435-1725
 Days: W
-Location: Tory Building 240
-Professor: Michael Jason Hinek 
+Location: Mackenzie Building 4485
+Professor: Ioannis Lambadaris 
 
-Section: B2
-CRN: 11215
-Time: 1535-1625
-Days: W
-Location: Southam Hall 306
-Professor: Michael Jason Hinek 
+Section: L5O
+CRN: 14877
+Time: 1435-1725
+Days: F
+Location: Minto Centre 6045
+Professor: Ioannis Lambadaris 
 
-Section: B3
-CRN: 11216
-Time: 1435-1525
-Days: W
-Location: University Centre 282
-Professor: Michael Jason Hinek 
-
-Section: C1
-CRN: 11218
-Time: 1335-1425
-Days: R
-Location: Tory Building 447
-Professor: Prosenjit Bose 
-
-Section: C2
-CRN: 11219
-Time: 1135-1225
+Section: L6E
+CRN: 14878
+Time: 1135-1425
 Days: M
-Location: Tory Building 446
-Professor: Prosenjit Bose 
+Location: Minto Centre 6045
+Professor: Ioannis Lambadaris 
 
-Section: C3
-CRN: 11220
-Time: 1035-1125
-Days: T
-Location: University Centre 282
-Professor: Prosenjit Bose 
+Section: L9O
+CRN: 14881
+Time: 1135-1425
+Days: W
+Location: Mackenzie Building 4485
+Professor: Ioannis Lambadaris 
 
