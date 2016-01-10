@@ -220,9 +220,9 @@ class Schedule:
 			s += '\n'
 		s = s[:-2] # We want to remove the excess newline characters
 
-		text_file = open("Optimized Schedule.txt", "w")
-		text_file.write(s)
-		text_file.close()					
+		# text_file = open("Optimized Schedule.txt", "w")
+		# text_file.write(s)
+		# text_file.close()					
 		return s
 
 class Day:
@@ -275,7 +275,7 @@ def getWebsiteData(term, subject, coursecode):
 	r = requests.post(url, data=params)
 	soup = BeautifulSoup(r.text, "html.parser", from_encoding='utf8')
 	if len(soup.body.contents) < 10:
-		return subject+coursecode+' was not a valid course for the given term.\n'
+		return subject+coursecode+' was not a valid course for the given semester.\n'
 	tag = soup.body.contents[5].contents[13]
 	return tag
 
@@ -407,11 +407,11 @@ def getSemesterData(term, subjects):
 					semesterData.append(course)
 				else:
 					invalidcourses += tag
-		with open('data.dump', 'wb') as output:
-			pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
-	else: # Here we just load the data from the dump file
-		with open('data.dump', 'rb') as input:
-			semesterData = pickle.load(input) # protocol version is auto detected	
+		# with open('data.dump', 'wb') as output:
+		# 	pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
+	# else: # Here we just load the data from the dump file
+		# with open('data.dump', 'rb') as input:
+		# 	semesterData = pickle.load(input) # protocol version is auto detected	
 	if len(invalidcourses) > 7: # Here one or more of the given courses was invalid
 		return invalidcourses[:-1]
 	return semesterData
@@ -470,7 +470,7 @@ def getOptimizedSchedules(semesterData):
 	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
-	getCombinations(semesterData)
+	# getCombinations(semesterData)
 	
 	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
 	for lecture0 in semesterData[0].lectures:
@@ -526,15 +526,17 @@ def getOptimizedSchedules(semesterData):
 		# return schedules
 	
 def scheduleOptimizer(term,subjects):
+	if term == '':
+		return 'Error:\nNo term selected'
 	# These variables determine the courses we use for the schedule
 	semesterData = getSemesterData(term,subjects)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
-	outputSectionDataToText(semesterData)
+	# outputSectionDataToText(semesterData)
 	return getOptimizedSchedules(semesterData)
 
-term = '201610'
-subjects = ['ELEC2607','SYSC2100','SYSC2003','','']
-print(scheduleOptimizer(term,subjects))
+# term = '201610'
+# subjects = ['ELEC2607','SYSC2100','SYSC2003','','']
+# print(scheduleOptimizer(term,subjects))
 
 # Keep a list of all the optimized schedules
