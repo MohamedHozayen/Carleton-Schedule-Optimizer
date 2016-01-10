@@ -10,11 +10,16 @@ class Course:
 	# This class has attributes containing the course title and the sections for each of the lectures, labs, and tutorials
 	def __init__(self, title, lectures, labs, tutorials):
 		self.title = title
-		self.courseCode = lectures[0].GetCourseCode()
+		if lectures:
+			self.courseCode = lectures[0].GetCourseCode() 
+		else: # Here we have a dummy course
+			self.courseCode = ''
 		self.lectures = lectures
 		self.labs = labs
 		self.tutorials = tutorials
 		# If there are no tutorials or labs, we append dummy sections to those lists
+		if self.lectures == []:
+			self.lectures.append(Section('Dummy Lecture','','#','','','','',''))
 		if self.tutorials == []:
 			self.tutorials.append(Section('Dummy Tutorial','','#','','','','',''))
 		if self.labs == []:
@@ -191,7 +196,7 @@ class Schedule:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
 				if course not in c:
-					c.append(course+section.section+' ('+section.CRN+')')
+					c.append(course+' '+section.section+' ('+section.CRN+')')
 		for course in self.online:
 			c.append(course+'(online)')
 		for x in sorted(set(c)):
@@ -207,7 +212,7 @@ class Schedule:
 			s += day.capitalize()+'\n'
 			daylist = []
 			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+section.section)
+				daylist.append(section.time+": "+section.courseCode+' '+section.section)
 			if len(daylist) == 0:
 				s += 'No courses today!\n'
 			for section in sorted(daylist):
@@ -264,10 +269,13 @@ class Day:
 		return self.timeSlots
 		
 def getWebsiteData(term, subject, coursecode):
+	# This function returns the relevant html data for the given course or returns an error string if the course is invalid
 	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
 	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
 	r = requests.post(url, data=params)
 	soup = BeautifulSoup(r.text, "html.parser", from_encoding='utf8')
+	if len(soup.body.contents) < 10:
+		return subject+coursecode+' was not a valid course for the given term.\n'
 	tag = soup.body.contents[5].contents[13]
 	return tag
 
@@ -385,19 +393,27 @@ def getSemesterData(term, subjects):
 	# Check if the dump is present. If so, open the dump to get the data. If not we must produce the data and then dump it.
 	if True: # We're always grabbing new data
 	# if not os.path.isfile('data.dump'):
-		semesterData = []			
+		semesterData = []
+		invalidcourses = 'Error:\n'			
 		for i in range(0, len(subjects)): # We add each course's data to the semester data
-			tag = getWebsiteData(term, subjects[i][:4], subjects[i][4:])
-			course = getCourseData(tag,subjects[i][:4]+subjects[i][4:])
-			course.CombineTutorials()
-			course.CombineLabs()
-			semesterData.append(course)
+			if subjects[i] == '': # Here we are adding a dummy course
+				semesterData.append(Course('',[],[],[]))
+			else:
+				tag = getWebsiteData(term, subjects[i][:4], subjects[i][4:])
+				if 'not a valid course' not in tag:
+					course = getCourseData(tag,subjects[i][:4]+subjects[i][4:])
+					course.CombineTutorials()
+					course.CombineLabs()
+					semesterData.append(course)
+				else:
+					invalidcourses += tag
 		with open('data.dump', 'wb') as output:
 			pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
-	else:
-		# Here we just load the data from the dump file
+	else: # Here we just load the data from the dump file
 		with open('data.dump', 'rb') as input:
 			semesterData = pickle.load(input) # protocol version is auto detected	
+	if len(invalidcourses) > 7: # Here one or more of the given courses was invalid
+		return invalidcourses[:-1]
 	return semesterData
 
 def outputSectionDataToText(semesterData):
@@ -512,11 +528,13 @@ def getOptimizedSchedules(semesterData):
 def scheduleOptimizer(term,subjects):
 	# These variables determine the courses we use for the schedule
 	semesterData = getSemesterData(term,subjects)
+	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
+		return semesterData
 	outputSectionDataToText(semesterData)
 	return getOptimizedSchedules(semesterData)
 
 term = '201610'
-subjects = ['ELEC3909','ELEC3907','ELEC3500','STAT3502','SYSC3501']
+subjects = ['ELEC2607','SYSC2100','SYSC2003','','']
 print(scheduleOptimizer(term,subjects))
 
 # Keep a list of all the optimized schedules
