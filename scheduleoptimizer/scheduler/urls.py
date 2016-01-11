@@ -1,0 +1,8 @@
+from django.conf.urls import url
+
+from . import views
+
+app_name = 'scheduler'
+urlpatterns = [
+    url(r'^$', views.scheduler, name='index'),
+]

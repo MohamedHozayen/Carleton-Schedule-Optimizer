@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<p> Submit each of your courses in the text boxes below to find an optimal schedule. Input them in the format 'SYSC1000'.</p>
+
+<form action="/scheduler/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% if result %}
+	<pre>
+		<p><strong>Optimal Schedule</strong><br><br>{{ result }}</p>
+	</pre>
+{% endif %}
