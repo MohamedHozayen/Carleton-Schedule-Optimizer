@@ -1,0 +1,9 @@
+body {
+    background-color: #EFEFEF;
+}
+
+#sides { 
+	background-color: #B40D25;
+	opacity: 1; 
+	min-height: 100%;
+}
