@@ -11,11 +11,12 @@ def scheduler(request):
         # check whether it's valid:
         if form.is_valid():
             term = form.cleaned_data['semester']
-            c1 = form.cleaned_data['c1']
-            c2 = form.cleaned_data['c2']
-            c3 = form.cleaned_data['c3']
-            c4 = form.cleaned_data['c4']
-            c5 = form.cleaned_data['c5']
+            c1 = form.cleaned_data['c1'].upper()
+            c2 = form.cleaned_data['c2'].upper()
+            c3 = form.cleaned_data['c3'].upper()
+            c4 = form.cleaned_data['c4'].upper()
+            c5 = form.cleaned_data['c5'].upper()
+            # c6 = form.cleaned_data['c6'].upper()
             subjects = [c1,c2,c3,c4,c5]
             result = scheduleOptimizer(term,subjects)
 

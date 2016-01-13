@@ -4,16 +4,29 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-<p> Submit each of your courses in the text boxes below to find an optimal schedule. Input them in the format 'SYSC1000'.</p>
+<head>
+	<title>Carleton Schedule Optimizer</title>
+</head>
 
-<form action="/scheduler/" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+<div class='container'>
+	<p>Welcome to the Carleton Schedule Optimizer! This web app grabs course data from Carleton University's website and uses it to build an "optimal" schedule. Optimal in this case means a schedule with the fewest number of breaks between classes.
+	Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code.</p>
 
-{% if result %}
-	<pre>
-		<p><strong>Optimal Schedule</strong><br><br>{{ result }}</p>
-	</pre>
-{% endif %}
+    <div class="row">
+        <div class="col-md-3">
+        	<br>
+			<form action="/scheduler/" method="post">
+			    {% csrf_token %}
+			    {{ form.as_p }}
+			    <input type="submit" value="Submit" />
+			</form>
+        </div>
+        <div class="col-md-9">
+			{% if result %}
+				<pre>
+					<p><strong>Optimal Schedule Results</strong><br><br>{{ result }}</p>
+				</pre>
+			{% endif %}
+        </div>
+    </div>
+</div>
