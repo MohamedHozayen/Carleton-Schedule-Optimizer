@@ -1,7 +1,6 @@
 from django.shortcuts import render
-
-from .forms import ScheduleForm
 from ScheduleOptimizer import *
+from .forms import ScheduleForm
 
 def scheduler(request):
     # if this is a POST request we need to process the form data

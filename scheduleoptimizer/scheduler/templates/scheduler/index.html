@@ -30,9 +30,10 @@
 			        </div>
 			        <div class="col-md-8">
 						{% if result %}
-							<pre>
-								<p><strong>Optimal Schedule Results</strong><br><br>{{ result }}</p>
-							</pre>
+							<!-- <pre> -->
+								<p><strong>Optimal Schedule Results</strong><p>
+								<div style="overflow-y: scroll; height:400px;">{{ result|linebreaksbr }}</div>
+							<!-- </pre> -->
 						{% endif %}
 			        </div>
 			    </div>
