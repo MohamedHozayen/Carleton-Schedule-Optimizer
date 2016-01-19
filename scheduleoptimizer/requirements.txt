@@ -10,4 +10,5 @@ requests==2.9.1
 six==1.5.2
 virtualenv==13.1.2
 wheel==0.26.0
+whitenoise==2.0.6
 yarg==0.1.9

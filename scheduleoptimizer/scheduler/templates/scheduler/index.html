@@ -3,7 +3,7 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-<link rel="stylesheet" type="text/css" href="{% static 'scheduler/mycss.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/schedulerstyles.css' %}" />
 
 <head>
 	<title>Carleton Schedule Optimizer</title>
@@ -32,11 +32,12 @@
 						{% if result %}
 							<!-- <pre> -->
 								<p><strong>Optimal Schedule Results</strong><p>
-								<div style="overflow-y: scroll; height:400px;">{{ result|linebreaksbr }}</div>
+								<div style="overflow-y: scroll; height:600px;">{{ result|linebreaksbr }}</div>
 							<!-- </pre> -->
 						{% endif %}
 			        </div>
 			    </div>
+			    <div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
 			</div>
 			
 			<div class="col-md-2" id='sides'></div>

@@ -1,5 +1,5 @@
 """
-WSGI config for scheduleoptimizer project.
+WSGI config for scheduler project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
