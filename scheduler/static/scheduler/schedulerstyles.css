@@ -1,3 +1,25 @@
+@media all and (max-width: 1000px) {
+  #wrap {
+  	height: 220%;
+  	width: 133.5%;
+  	margin-top: -2.2%;
+  }
+
+  #sides {
+    display: none;
+  }
+
+  #middle {
+   	height: 220%;
+  	width: 133.5%;
+  	margin-top: -2.2%;  	
+  }
+
+  #results {
+  	/*height: 20%;*/
+  }
+}
+
 #wrap {
 	margin: 0 auto;
 }
