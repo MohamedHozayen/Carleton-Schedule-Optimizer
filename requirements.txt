@@ -3,7 +3,7 @@ chardet==2.2.1
 Django==1.9.1
 django-bootstrap3==6.2.2
 docopt==0.6.2
-gunicorn=19.4.5
+gunicorn==19.4.5
 pipreqs==0.3.7
 pycurl==7.19.3
 pygobject==3.12.0
