@@ -11,7 +11,7 @@
 
 <body>
 
-	<div class='row'>
+	<div class='row' id='wrap'>
 			<div class="col-md-2" id='sides'></div>
 
 			<div class="col-md-8" id='middle'>
@@ -32,7 +32,7 @@
 						{% if result %}
 							<!-- <pre> -->
 								<p><strong>Optimal Schedule Results</strong><p>
-								<div style="overflow-y: scroll; height:600px;">{{ result|linebreaksbr }}</div>
+								<div style="overflow-y: scroll" id='results'>{{ result|linebreaksbr }}</div>
 							<!-- </pre> -->
 						{% endif %}
 			        </div>
