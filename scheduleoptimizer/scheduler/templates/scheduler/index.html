@@ -9,6 +9,42 @@
 	<title>Carleton Schedule Optimizer</title>
 </head>
 
+<script>
+function post(path) {
+    method = "post";
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("semester", "201610");
+    form.appendChild(hiddenField);
+
+    hiddenField = document.createElement("input");
+    hiddenField.setAttribute("c1", "SYSC2100");
+    form.appendChild(hiddenField);
+
+    hiddenField = document.createElement("input");
+    hiddenField.setAttribute("c2", "SYSC2003");
+    form.appendChild(hiddenField);
+
+    hiddenField = document.createElement("input");
+    hiddenField.setAttribute("c3", "ELEC2607");
+    form.appendChild(hiddenField);
+
+    hiddenField = document.createElement("input");
+    hiddenField.setAttribute("c4", "COMP1805");
+    form.appendChild(hiddenField);
+    
+    hiddenField = document.createElement("input");
+    hiddenField.setAttribute("c5", "STAT3502");
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+    }
+</script>
+
 <body>
 
 	<div class='row' id='wrap'>
@@ -17,7 +53,7 @@
 			<div class="col-md-8" id='middle'>
 				<h3 align="center">Carleton Schedule Optimizer</h3>
 				<p>Welcome to the Carleton Schedule Optimizer! This web app grabs course data from Carleton University's website and uses it to build an "optimal" schedule. Optimal in this case means a schedule with the fewest number of breaks between classes.
-				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code.</p>
+				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code. Default values will be used if you submit an empty form.</p>
 
 			    <div class="row">
 			        <div class="col-md-4">
