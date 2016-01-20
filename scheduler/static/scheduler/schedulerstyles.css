@@ -1,21 +1,15 @@
 @media all and (max-width: 1000px) {
-  #wrap {
-  	height: 220%;
-  	width: 133.5%;
-  }
-
   #sides {
     display: none;
   }
 
-  #middle {
-   	height: 220%;
-  	width: 133.5%;
+  #footer {
+    display: none;
   }
+}
 
-  #results {
-  	/*height: 20%;*/
-  }
+body {
+  background-color: #EFEFEF;
 }
 
 #wrap {
@@ -23,7 +17,6 @@
 }
 
 #middle {
-    background-color: #EFEFEF;
     color: rgb(51, 51, 51);
     height: 100%;
     width: 75%;
