@@ -15,10 +15,11 @@ def scheduler(request):
             c3 = form.cleaned_data['c3'].upper()
             c4 = form.cleaned_data['c4'].upper()
             c5 = form.cleaned_data['c5'].upper()
+            subjects = [c1,c2,c3,c4,c5]
 
             if term=='' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='':
                 term = '201610'
-                subjects = ['SYSC2003','SYSC2100','COMP1805','ELEC2607','STAT3502']
+                subjects = ['SYSC2003','SYSC2100','COMP1805','ELEC2607','']
                 data = {'term': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4]}
                 form = ScheduleForm(data, initial=data)
 
