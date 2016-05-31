@@ -5,13 +5,13 @@ import requests
 import os.path
 import pickle
 from bs4 import BeautifulSoup
-	
+
 class Course:
 	# This class has attributes containing the course title and the sections for each of the lectures, labs, and tutorials
 	def __init__(self, title, lectures, labs, tutorials):
 		self.title = title
 		if lectures:
-			self.courseCode = lectures[0].GetCourseCode() 
+			self.courseCode = lectures[0].GetCourseCode()
 		else: # Here we have a dummy course
 			self.courseCode = ''
 		self.lectures = lectures
@@ -19,12 +19,12 @@ class Course:
 		self.tutorials = tutorials
 		# If there are no tutorials or labs, we append dummy sections to those lists
 		if self.lectures == []:
-			self.lectures.append(Section('Dummy Lecture','','#','','','','',''))
+			self.lectures.append(Section('Dummy Lecture','','#','','','','','',''))
 		if self.tutorials == []:
-			self.tutorials.append(Section('Dummy Tutorial','','#','','','','',''))
+			self.tutorials.append(Section('Dummy Tutorial','','#','','','','','',''))
 		if self.labs == []:
-			self.labs.append(Section('Dummy Lab','','#','','','','',''))
-			
+			self.labs.append(Section('Dummy Lab','','#','','','','','',''))
+
 	def ChangeTutorials(self, newtutorials):
 		self.tutorials = newtutorials
 
@@ -47,7 +47,7 @@ class Course:
 			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
 			if currentletter == firstletter and currenttime == firsttime:
 				sections = sections + '/' + tutorial.GetSection()
-			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list 
+			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list
 			else:
 				firstletter = currentletter
 				firsttime = currenttime
@@ -63,11 +63,11 @@ class Course:
 				# Here the sections string restarts, beginning with the current tutorial's section
 				sections = tutorial.GetSection()
 			i = i + 1
-		
+
 		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
 		newtutorials.append(self.tutorials[x].ChangeSection(sections))
 		self.ChangeTutorials(newtutorials)
-			
+
 	def CombineLabs(self):
 		if self.labs[0].title == 'Dummy Lab': # We don't do anything if the course has no tutorials
 			return
@@ -84,7 +84,7 @@ class Course:
 			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
 			if currenttime == firsttime and currentday == firstday:
 				sections = sections + '/' + lab.GetSection()
-			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list 
+			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list
 			else:
 				firsttime = currenttime
 				firstday = currentday
@@ -100,14 +100,14 @@ class Course:
 				# Here the sections string restarts, beginning with the current tutorial's section
 				sections = lab.GetSection()
 			i = i + 1
-		
+
 		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
 		newlabs.append(self.labs[x].ChangeSection(sections))
 		self.ChangeLabs(newlabs)
-		
+
 class Section:
 	# This class has 4 instance variables containing info on the listings
-	def __init__(self, title, courseCode, section, CRN, time, day, location, prof):
+	def __init__(self, title, courseCode, section, CRN, time, day, location, prof, courseType):
 		self.title = title
 		self.courseCode = courseCode
 		self.section = section
@@ -116,10 +116,11 @@ class Section:
 		self.day = day
 		self.location = location
 		self.prof = prof
+		self.courseType = courseType
 
 	def GetCourseCode(self):
 		return self.courseCode
-		
+
 	def GetSection(self):
 		return self.section
 
@@ -128,7 +129,7 @@ class Section:
 
 	def GetDay(self):
 		return self.day
-		
+
 	def ChangeSection(self, newsection):
 		self.section = newsection
 		return self
@@ -144,7 +145,7 @@ class Schedule:
 		self.online = [] # This contains any online courses
 		self.breaks = 10000
 		self.conflict = False
-		
+
 	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
 	def addSection(self, newsection):
 		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
@@ -182,37 +183,39 @@ class Schedule:
 					self.conflict = True
 			elif day == 'O': # This means the section is an online course
 				self.online.append(newsection.courseCode)
-	
+
 	def getConflict(self):
 		return self.conflict
-		
+
 	def getBreaks(self):
 		return self.breaks
-		
+
 	def __str__(self):
 		c = []
-		s = 'Courses and sections: '
+		s = 'Courses and sections for optimal schedule:\n'
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
+				title = section.title
 				if course not in c:
-					c.append(course+' '+section.section+' ('+section.CRN+')')
+					c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
 		for course in self.online:
 			c.append(course+'(online)')
 		for x in sorted(set(c)):
-			s += x+', '
+			# s += x+', '
+			s += x
 		return s[:-2]
-					
+
 	# This method outputs the schedule to a text file and returns it as a string. It shows the total break time, conflict warning, and each class for each day
 	def outputSchedule(self, numschedules):
 		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
-		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n'
+		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
 		s += str(self)+'\n'+'\n'
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			s += day.capitalize()+'\n'
 			daylist = []
 			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+' '+section.section)
+				daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
 			if len(daylist) == 0:
 				s += 'No courses today!\n'
 			for section in sorted(daylist):
@@ -222,7 +225,7 @@ class Schedule:
 
 		# text_file = open("Optimized Schedule.txt", "w")
 		# text_file.write(s)
-		# text_file.close()					
+		# text_file.close()
 		return s
 
 class Day:
@@ -232,7 +235,7 @@ class Day:
 		self.conflict = False
 		self.breaks = 0
 		self.timeSlots = {'0835': 0,'0905': 0,'0935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'1305': 0,'1335': 0,'1405': 0,'1435': 0,'1505': 0,'1535': 0,'1605': 0,'1635': 0,'1705': 0,'1735': 0,'1805': 0,'1835': 0,'1905': 0,'1935': 0,'2005': 0,'2035': 0}
-	
+
 	# This method adds a class section to the day, incrementing its corresponding time slots. If a time slot has more than one course in it, the conflict boolean is assigned True
 	def addClass(self, section):
 		times = section.time.split('-')
@@ -247,7 +250,7 @@ class Day:
 			self.conflict = True
 		self.sections.append(section)
 		self.calculateBreaks() # After appending a section, the total break time is calculated
-	
+
 	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
 	def calculateBreaks(self):
 		values = ''
@@ -261,13 +264,13 @@ class Day:
 				newvalues = newvalues + '0'
 		values = newvalues
 		self.breaks = values.count('0') - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
-		
+
 	def getBreaks(self):
 		return self.breaks
 
 	def getTimeSlots(self):
 		return self.timeSlots
-		
+
 def getWebsiteData(term, subject, coursecode):
 	# This function returns the relevant html data for the given course or returns an error string if the course is invalid
 	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
@@ -284,19 +287,19 @@ def getCourseData(data, courseCode):
 	lectures = []
 	labs = []
 	tutorials = []
-	
+
 	# These strings are replaced when found in the professor list
 	r1 = '(<abbr title="Primary">P</abbr>)</td>'
 	r2 = '<abbr title="To Be Announced">'
 	r3 = '</abbr></td>'
-	
+
 	# Here we make a list containing all the sections and all their details
 	lis = []
 	for child in data.children:
 		for item in child:
 			if item != '\n':
 				lis.append(item)
-	
+
 	# When the flag is true, we are grabbing the section title. When the flag is false, we are grabbing the section details. When the counter is at 2, we have all the data needed to record a sectioon
 	sectionflag = True
 	firstSectionGrab = True
@@ -305,22 +308,22 @@ def getCourseData(data, courseCode):
 	for child in lis:
 		child = str(child)
 		sectionflag = not sectionflag
-		
+
 		# Here we gather the section letter and CRN for each section
 		if sectionflag:
 			crnAndSection = child[114:].strip('</a></th>').partition(' - ')[2]
 			courseCRN = crnAndSection.partition(' - ')[0]
 			courseSection = crnAndSection.partition(' - ')[2].partition(' - ')[2]
-			
+
 			# On the first pass we grab the course title
 			if firstSectionGrab:
 				courseTitle = child[114:].strip('</a></th>').partition(' - ')[0]
 				firstSectionGrab = not firstSectionGrab
 			else:
 				counter = counter+1
-			
+
 		# Here we gather the details for the current section
-		else:	
+		else:
 			j = 1
 			typeIncrement = 0
 			for thing in child.splitlines():
@@ -355,46 +358,46 @@ def getCourseData(data, courseCode):
 							break
 						time[0] = str(int(time[0].strip('am')))
 						if int(time[0]) < 1000:
-							time[0] = '0'+time[0]					
+							time[0] = '0'+time[0]
 					if 'pm' in time[1] and ('12' not in time[1] or len(time[1]) < 6):
 						time[1] = str(int(time[1].strip('pm'))+1200)
 					elif 'pm' in time[1] and '12' in time[1]:
-						time[1] = time[1].strip('pm')					
+						time[1] = time[1].strip('pm')
 					else:
 						time[1] = str(int(time[1].strip('am')))
 						if int(time[1]) < 1000:
-							time[1] = '0'+time[1]	
-					courseTime = time[0]+'-'+time[1]					
+							time[1] = '0'+time[1]
+					courseTime = time[0]+'-'+time[1]
 				if j == (29 + typeIncrement):
 					courseDay = thing[22:].strip('</td>')
 				if j == (30 + typeIncrement):
 					courseLocation = thing[22:].strip('</td>').replace('abbr title="To Be Announced">','').replace('</abbr','')
 				if j == (33 + typeIncrement):
 					courseProf = thing[22:].replace(r1,'').replace(r2,'').replace(r3,'').replace('   ',' ').replace('  ',' ')
-				j += 1	
+				j += 1
 			counter = counter+1
 
-		# Here we make an instance of the section class and add it to the corresponding list			
-		if counter == 2: 
-			section = Section(courseTitle,courseCode,courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf)
-			# The section is added to the corresponding list 	
-			if courseType == 'Laboratory' or (courseSection[0] == 'L' and courseSection[1].isdigit()):
+		# Here we make an instance of the section class and add it to the corresponding list
+		if counter == 2:
+			section = Section(courseTitle,courseCode,courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf,courseType)
+			# The section is added to the corresponding list
+			if courseType == 'Laboratory' or (courseSection[0] == 'L' and len(courseSection) > 1 and courseSection[1].isdigit()):
 				labs.append(section)
-			elif courseType == 'Tutorial': 
+			elif courseType == 'Tutorial':
 				tutorials.append(section)
 			else:
 				lectures.append(section)
 			counter = 0 # Reset the counter
-			
+
 	course = Course(courseTitle, lectures, labs, tutorials)
 	return course
-	
+
 def getSemesterData(term, subjects):
 	# Check if the dump is present. If so, open the dump to get the data. If not we must produce the data and then dump it.
 	if True: # We're always grabbing new data
 	# if not os.path.isfile('data.dump'):
 		semesterData = []
-		invalidcourses = 'Error:\n'			
+		invalidcourses = 'Error:\n'
 		for i in range(0, len(subjects)): # We add each course's data to the semester data
 			if subjects[i] == '': # Here we are adding a dummy course
 				semesterData.append(Course('',[],[],[]))
@@ -411,7 +414,7 @@ def getSemesterData(term, subjects):
 		# 	pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
 	# else: # Here we just load the data from the dump file
 		# with open('data.dump', 'rb') as input:
-		# 	semesterData = pickle.load(input) # protocol version is auto detected	
+		# 	semesterData = pickle.load(input) # protocol version is auto detected
 	if len(invalidcourses) > 7: # Here one or more of the given courses was invalid
 		return invalidcourses[:-1]
 	return semesterData
@@ -424,7 +427,7 @@ def outputSectionDataToText(semesterData):
 		text_file.write('********************************************\n')
 		text_file.write(course.title+'\n')
 		text_file.write(course.courseCode+'\n\n')
-		
+
 		if len(course.lectures) > 0:
 			text_file.write('Lectures\n-------------------\n')
 			for lecture in course.lectures:
@@ -452,9 +455,9 @@ def outputSectionDataToText(semesterData):
 				text_file.write('Days: '+tutorial.day+'\n')
 				text_file.write('Location: '+tutorial.location+'\n')
 				text_file.write('Professor: '+tutorial.prof+'\n\n')
-			
+
 	text_file.close()
-	
+
 def getCombinations(semesterData):
 	combinations = 1
 	for course in semesterData:
@@ -463,7 +466,7 @@ def getCombinations(semesterData):
 		if len(course.tutorials) != 1: # We don't use the dummy case
 			combinations = combinations*(len(course.tutorials)/len(course.lectures))
 	print ('Possible schedules for the given courses: '+str(int(combinations)))
-	
+
 def getOptimizedSchedules(semesterData):
 	maxschedules = 10
 	firstpass = True
@@ -471,7 +474,7 @@ def getOptimizedSchedules(semesterData):
 	schedule = Schedule()
 	newschedule = Schedule()
 	# getCombinations(semesterData)
-	
+
 	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
 	for lecture0 in semesterData[0].lectures:
 		for lab0 in semesterData[0].labs:
@@ -515,16 +518,16 @@ def getOptimizedSchedules(semesterData):
 																	if len(schedules) <= maxschedules:
 																		schedules.append(newschedule)
 																newschedule = Schedule()
-	
+
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
 		# print('There is no possible conflict-free schedule for the given courses')
-		# return schedules		
+		# return schedules
 	else:
 		return schedule.outputSchedule(len(schedules))
 		# schedule.outputSchedule(len(schedules))
 		# return schedules
-	
+
 def scheduleOptimizer(term,subjects):
 	if term == '':
 		return 'Error:\nNo term selected'
