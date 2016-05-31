@@ -419,6 +419,7 @@ def getSemesterData(term, subjects):
 		return invalidcourses[:-1]
 	return semesterData
 
+# Archaic function
 def outputSectionDataToText(semesterData):
 	# We open an output text file
 	text_file = open("Detailed Course Data.txt", "w")
@@ -458,6 +459,7 @@ def outputSectionDataToText(semesterData):
 
 	text_file.close()
 
+# Archaic function
 def getCombinations(semesterData):
 	combinations = 1
 	for course in semesterData:
@@ -491,33 +493,39 @@ def getOptimizedSchedules(semesterData):
 													for lecture4 in semesterData[4].lectures:
 														for lab4 in semesterData[4].labs:
 															for tut4 in [x4 for x4 in semesterData[4].tutorials if (x4.GetSection()[0] == lecture4.GetSection()[0] or x4.GetSection() == '#')]:
-																newschedule.addSection(lecture0)
-																newschedule.addSection(lab0)
-																newschedule.addSection(tut0)
-																newschedule.addSection(lecture1)
-																newschedule.addSection(lab1)
-																newschedule.addSection(tut1)
-																newschedule.addSection(lecture2)
-																newschedule.addSection(lab2)
-																newschedule.addSection(tut2)
-																newschedule.addSection(lecture3)
-																newschedule.addSection(lab3)
-																newschedule.addSection(tut3)
-																newschedule.addSection(lecture4)
-																newschedule.addSection(lab4)
-																newschedule.addSection(tut4)
-																if firstpass and not newschedule.getConflict():
-																	schedule = newschedule
-																	schedules.append(newschedule)
-																	firstpass = False
-																elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
-																	schedule = newschedule
-																	schedules = []
-																	schedules.append(newschedule)
-																elif (newschedule.getBreaks() == schedule.getBreaks()) and not newschedule.getConflict():
-																	if len(schedules) <= maxschedules:
-																		schedules.append(newschedule)
-																newschedule = Schedule()
+																for lecture5 in semesterData[5].lectures:
+																	for lab5 in semesterData[5].labs:
+																		for tut5 in [x5 for x5 in semesterData[5].tutorials if (x5.GetSection()[0] == lecture5.GetSection()[0] or x5.GetSection() == '#')]:
+																			newschedule.addSection(lecture0)
+																			newschedule.addSection(lab0)
+																			newschedule.addSection(tut0)
+																			newschedule.addSection(lecture1)
+																			newschedule.addSection(lab1)
+																			newschedule.addSection(tut1)
+																			newschedule.addSection(lecture2)
+																			newschedule.addSection(lab2)
+																			newschedule.addSection(tut2)
+																			newschedule.addSection(lecture3)
+																			newschedule.addSection(lab3)
+																			newschedule.addSection(tut3)
+																			newschedule.addSection(lecture4)
+																			newschedule.addSection(lab4)
+																			newschedule.addSection(tut4)
+																			newschedule.addSection(lecture5)
+																			newschedule.addSection(lab5)
+																			newschedule.addSection(tut5)
+																			if firstpass and not newschedule.getConflict():
+																				schedule = newschedule
+																				schedules.append(newschedule)
+																				firstpass = False
+																			elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
+																				schedule = newschedule
+																				schedules = []
+																				schedules.append(newschedule)
+																			elif (newschedule.getBreaks() == schedule.getBreaks()) and not newschedule.getConflict():
+																				if len(schedules) <= maxschedules:
+																					schedules.append(newschedule)
+																			newschedule = Schedule()
 
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
