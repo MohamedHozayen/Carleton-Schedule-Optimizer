@@ -24,7 +24,7 @@ def scheduler(request):
                 data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5]}
                 form = ScheduleForm(data, initial=data)
 
-            result = scheduleOptimizer(term,subjects)
+            result = scheduleOptimizer(subjects, term)
             return render(request, 'scheduler/index.html', {
                 'form': form,
                 'result': result,

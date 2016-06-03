@@ -4,3 +4,4 @@ The schedule optimizer is a web application written in python using the Django f
 Things to do:
 1) Properly account for biweekly labs
 2) Let the user choose from the list of optimal schedules
+3) Recognize online courses

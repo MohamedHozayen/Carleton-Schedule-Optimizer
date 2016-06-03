@@ -1,247 +1,44 @@
 #!/usr/bin/env python3
 
-import sys
-import requests
-import os.path
-import pickle
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import json
 
-class Course:
-	# This class has attributes containing the course title and the sections for each of the lectures, labs, and tutorials
-	def __init__(self, title, lectures, labs, tutorials):
-		self.title = title
-		if lectures:
-			self.courseCode = lectures[0].GetCourseCode()
-		else: # Here we have a dummy course
-			self.courseCode = ''
-		self.lectures = lectures
-		self.labs = labs
-		self.tutorials = tutorials
-		# If there are no tutorials or labs, we append dummy sections to those lists
-		if self.lectures == []:
-			self.lectures.append(Section('Dummy Lecture','','#','','','','','',''))
-		if self.tutorials == []:
-			self.tutorials.append(Section('Dummy Tutorial','','#','','','','','',''))
-		if self.labs == []:
-			self.labs.append(Section('Dummy Lab','','#','','','','','',''))
-
-	def ChangeTutorials(self, newtutorials):
-		self.tutorials = newtutorials
-
-	def ChangeLabs(self, newlabs):
-		self.labs = newlabs
-
-	def CombineTutorials(self):
-		if self.tutorials[0].title == 'Dummy Tutorial': # We don't do anything if the course has no tutorials
-			return
-		sections = '' # This string will hold all the sections for a given lecture (A, B, etc.)
-		firstletter = ''
-		firsttime = ''
-		newtutorials = []
-		firstpass = True
-		i = 0 # i counts each tutorial in the list of tutorials
-		x = 0 # x keeps track of the index containing the first tutorial for a given section (A, B, etc.)
-		for tutorial in self.tutorials:
-			currentletter = tutorial.GetSection()[0]
-			currenttime = tutorial.GetTime()
-			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
-			if currentletter == firstletter and currenttime == firsttime:
-				sections = sections + '/' + tutorial.GetSection()
-			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list
-			else:
-				firstletter = currentletter
-				firsttime = currenttime
-				if firstpass == True:
-					firstpass = False
-				else:
-					# Since we are not on the first pass, we must put the combined sections into the first tutorial of a given letter and then add it to the newtutorials list
-					if sections == self.tutorials[0].GetSection(): # This happens if the first pass had only one section
-						newtutorials.append(self.tutorials[0])
-					else:
-						newtutorials.append(self.tutorials[x].ChangeSection(sections))
-					x = i
-				# Here the sections string restarts, beginning with the current tutorial's section
-				sections = tutorial.GetSection()
-			i = i + 1
-
-		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
-		newtutorials.append(self.tutorials[x].ChangeSection(sections))
-		self.ChangeTutorials(newtutorials)
-
-	def CombineLabs(self):
-		if self.labs[0].title == 'Dummy Lab': # We don't do anything if the course has no tutorials
-			return
-		sections = '' # This string will hold all the sections for a given lecture (A, B, etc.)
-		firsttime = ''
-		firstday = ''
-		newlabs = []
-		firstpass = True
-		i = 0 # i counts each tutorial in the list of tutorials
-		x = 0 # x keeps track of the index containing the first tutorial for a given section (A, B, etc.)
-		for lab in self.labs:
-			currenttime = lab.GetTime()
-			currentday = lab.GetDay()
-			# Here we are not at the first tutorial for a given lecture section, so we add the current section to the growing sections string
-			if currenttime == firsttime and currentday == firstday:
-				sections = sections + '/' + lab.GetSection()
-			# Here we are at the first tutorial for a given lecture section, so we assign the first letter. If we are not on the first pass, then we have hit the end of a section's tutorials and must add the previous letter's combined tutorial to the newtutorial list
-			else:
-				firsttime = currenttime
-				firstday = currentday
-				if firstpass == True:
-					firstpass = False
-				else:
-					# Since we are not on the first pass, we must put the combined sections into the first tutorial of a given letter and then add it to the newtutorials list
-					if sections == self.labs[0].GetSection(): # This happens if the first pass had only one section
-						newlabs.append(self.labs[0])
-					else:
-						newlabs.append(self.labs[x].ChangeSection(sections))
-					x = i
-				# Here the sections string restarts, beginning with the current tutorial's section
-				sections = lab.GetSection()
-			i = i + 1
-
-		# Here we put the combined sections into the first tutorial of the last letter and add it to the newtutorials list. We then change the tutorials in the object to the new combined ones.
-		newlabs.append(self.labs[x].ChangeSection(sections))
-		self.ChangeLabs(newlabs)
-
+# This class is used for each section of a given course, and contains all the
+# corresponding lectures and labs/tutorials
 class Section:
-	# This class has 4 instance variables containing info on the listings
-	def __init__(self, title, courseCode, section, CRN, time, day, location, prof, courseType):
+	def __init__(self, title, courseCode, section, CRN, time, day, room, prof, courseType):
 		self.title = title
 		self.courseCode = courseCode
 		self.section = section
 		self.CRN = CRN
 		self.time = time
 		self.day = day
-		self.location = location
+		self.room = room
 		self.prof = prof
 		self.courseType = courseType
 
-	def GetCourseCode(self):
-		return self.courseCode
+	# This adds a list of all the lab and tutorial sections for the given
+	# lecture section
+	def addLabsOrTuts(self, labstuts):
+		self.labstuts = labstuts
 
-	def GetSection(self):
-		return self.section
-
-	def GetTime(self):
-		return self.time
-
-	def GetDay(self):
-		return self.day
-
-	def ChangeSection(self, newsection):
-		self.section = newsection
-		return self
-
-class Schedule:
-	# This class has an attribute for each day of the week
-	def __init__(self):
-		self.monday = Day()
-		self.tuesday = Day()
-		self.wednesday = Day()
-		self.thursday = Day()
-		self.friday = Day()
-		self.online = [] # This contains any online courses
-		self.breaks = 10000
-		self.conflict = False
-
-	# This method adds a section to the schedule. It checks which days to add the section to and then adds them using the addClass method. After adding, we check if the day has a conflict
-	def addSection(self, newsection):
-		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
-			self.breaks = 0
-		for day in newsection.day: # section.day is a string storing the days the class is held
-			if 'M' in day:
-				self.breaks = self.breaks - self.monday.getBreaks()
-				self.monday.addClass(newsection)
-				self.breaks = self.breaks + self.monday.getBreaks()
-				if self.monday.conflict == True:
-					self.conflict = True
-			elif 'T' in day:
-				self.breaks = self.breaks - self.tuesday.getBreaks()
-				self.tuesday.addClass(newsection)
-				self.breaks = self.breaks + self.tuesday.getBreaks()
-				if self.tuesday.conflict == True:
-					self.conflict = True
-			elif 'W' in day:
-				self.breaks = self.breaks - self.wednesday.getBreaks()
-				self.wednesday.addClass(newsection)
-				self.breaks = self.breaks + self.wednesday.getBreaks()
-				if self.wednesday.conflict == True:
-					self.conflict = True
-			elif 'R' in day:
-				self.breaks = self.breaks - self.thursday.getBreaks()
-				self.thursday.addClass(newsection)
-				self.breaks = self.breaks + self.thursday.getBreaks()
-				if self.thursday.conflict == True:
-					self.conflict = True
-			elif 'F' in day:
-				self.breaks = self.breaks - self.friday.getBreaks()
-				self.friday.addClass(newsection)
-				self.breaks = self.breaks + self.friday.getBreaks()
-				if self.friday.conflict == True:
-					self.conflict = True
-			elif day == 'O': # This means the section is an online course
-				self.online.append(newsection.courseCode)
-
-	def getConflict(self):
-		return self.conflict
-
-	def getBreaks(self):
-		return self.breaks
-
-	def __str__(self):
-		c = []
-		s = 'Courses and sections for optimal schedule:\n'
-		for day in ['monday','tuesday','wednesday','thursday','friday']:
-			for section in getattr(self,day).sections:
-				course = section.courseCode
-				title = section.title
-				if course not in c:
-					c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
-		for course in self.online:
-			c.append(course+'(online)')
-		for x in sorted(set(c)):
-			# s += x+', '
-			s += x
-		return s[:-2]
-
-	# This method outputs the schedule to a text file and returns it as a string. It shows the total break time, conflict warning, and each class for each day
-	def outputSchedule(self, numschedules):
-		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
-		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
-		s += str(self)+'\n'+'\n'
-		for day in ['monday','tuesday','wednesday','thursday','friday']:
-			s += day.capitalize()+'\n'
-			daylist = []
-			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
-			if len(daylist) == 0:
-				s += 'No courses today!\n'
-			for section in sorted(daylist):
-				s += section+'\n'
-			s += '\n'
-		s = s[:-2] # We want to remove the excess newline characters
-
-		# text_file = open("Optimized Schedule.txt", "w")
-		# text_file.write(s)
-		# text_file.close()
-		return s
-
+# This class keeps track of sections, time slots, total breaks, and conflict
+# for a given day
 class Day:
-	# This class has an attribute for sections, time slots, total breaks, and whether or not there is a conflict
 	def __init__(self):
 		self.sections = []
 		self.conflict = False
 		self.breaks = 0
 		self.timeSlots = {'0835': 0,'0905': 0,'0935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'1305': 0,'1335': 0,'1405': 0,'1435': 0,'1505': 0,'1535': 0,'1605': 0,'1635': 0,'1705': 0,'1735': 0,'1805': 0,'1835': 0,'1905': 0,'1935': 0,'2005': 0,'2035': 0}
 
-	# This method adds a class section to the day, incrementing its corresponding time slots. If a time slot has more than one course in it, the conflict boolean is assigned True
+	# This method adds a class section to the day, incrementing its corresponding
+	#time slots. If a time slot contains more than one course, the conflict is set
 	def addClass(self, section):
 		times = section.time.split('-')
 		startTime = int(times[0])
 		endTime = int(times[1])
-		# We go through each timeslot and increment ones where the current section overlaps
+		# We go through each timeslot and increment section overlaps
 		for key in self.timeSlots:
 			if (int(key) >= startTime and int(key) < endTime):
 				self.timeSlots[key] = self.timeSlots[key] + 1
@@ -265,209 +62,201 @@ class Day:
 		values = newvalues
 		self.breaks = values.count('0') - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
 
-	def getBreaks(self):
-		return self.breaks
+# This class keeps track of every section for day of the week
+class Schedule:
+	def __init__(self):
+		self.monday = Day()
+		self.tuesday = Day()
+		self.wednesday = Day()
+		self.thursday = Day()
+		self.friday = Day()
+		self.breaks = 10000
+		self.conflict = False
 
-	def getTimeSlots(self):
-		return self.timeSlots
+	# This method adds a section to the schedule. It checks which days to add
+	# the section to and then adds them using the addClass method. After adding,
+	# we check if the day has a conflict
+	def addSection(self, newsection):
+		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
+			self.breaks = 0
+		for day in newsection.day: # section.day is a string storing the days the class is held
+			if 'M' in day:
+				self.breaks = self.breaks - self.monday.breaks
+				self.monday.addClass(newsection)
+				self.breaks = self.breaks + self.monday.breaks
+				if self.monday.conflict == True:
+					self.conflict = True
+			elif 'T' in day:
+				self.breaks = self.breaks - self.tuesday.breaks
+				self.tuesday.addClass(newsection)
+				self.breaks = self.breaks + self.tuesday.breaks
+				if self.tuesday.conflict == True:
+					self.conflict = True
+			elif 'W' in day:
+				self.breaks = self.breaks - self.wednesday.breaks
+				self.wednesday.addClass(newsection)
+				self.breaks = self.breaks + self.wednesday.breaks
+				if self.wednesday.conflict == True:
+					self.conflict = True
+			elif 'R' in day:
+				self.breaks = self.breaks - self.thursday.breaks
+				self.thursday.addClass(newsection)
+				self.breaks = self.breaks + self.thursday.breaks
+				if self.thursday.conflict == True:
+					self.conflict = True
+			elif 'F' in day:
+				self.breaks = self.breaks - self.friday.breaks
+				self.friday.addClass(newsection)
+				self.breaks = self.breaks + self.friday.breaks
+				if self.friday.conflict == True:
+					self.conflict = True
+			elif day == 'O': # This means the section is an online course
+				self.online.append(newsection.courseCode)
 
-def getWebsiteData(term, subject, coursecode):
-	# This function returns the relevant html data for the given course or returns an error string if the course is invalid
-	url = 'https://central.carleton.ca/prod/bwckschd.p_get_crse_unsec'
-	params = 'term_in='+term+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+subject+'&sel_crse='+coursecode+'&sel_title=&sel_schd=%25&sel_from_cred=&sel_to_cred=&sel_levl=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
-	r = requests.post(url, data=params)
-	soup = BeautifulSoup(r.text, "html.parser", from_encoding='utf8')
-	if len(soup.body.contents) < 10:
-		return subject+coursecode+' was not a valid course for the given semester.\n'
-	tag = soup.body.contents[5].contents[13]
-	return tag
+	def __str__(self):
+		c = []
+		s = 'Courses and sections for optimal schedule:\n'
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
+			for section in getattr(self,day).sections:
+				course = section.courseCode
+				title = section.title
+				if course not in c:
+					c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
+		# for course in self.online:
+		# 	c.append(course+'(online)')
+		for x in sorted(set(c)):
+			# s += x+', '
+			s += x
+		return s[:-1]
 
-def getCourseData(data, courseCode):
-	# These lists will contain all the sections of the corresponding type for the given course
-	lectures = []
-	labs = []
-	tutorials = []
+	# This method returns the schedule as a string. It shows the total break time
+	# and each class for each day
+	def outputSchedule(self, numschedules):
+		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
+		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
+		s += str(self)+'\n'+'\n'
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
+			s += day.capitalize()+'\n'
+			daylist = []
+			for section in getattr(self,day).sections:
+				daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
+			if len(daylist) == 0:
+				s += 'No courses today!\n'
+			for section in sorted(daylist):
+				s += section+'\n'
+			s += '\n'
+		s = s[:-2] # We want to remove the excess newline characters
 
-	# These strings are replaced when found in the professor list
-	r1 = '(<abbr title="Primary">P</abbr>)</td>'
-	r2 = '<abbr title="To Be Announced">'
-	r3 = '</abbr></td>'
+		return s
 
-	# Here we make a list containing all the sections and all their details
-	lis = []
-	for child in data.children:
-		for item in child:
-			if item != '\n':
-				lis.append(item)
+# This function goes through the list of courses and gathers all the data for
+# all of them, returning the data in a list of lists of course sections
+def getSemesterData(courses, term):
+	# Each element in semesterData is a course, whose first element is a list of the lectures
+	# and whose second element is a list of the tutorials or labs
+	semesterData = []
+	for course in courses:
+		if course != '':
+			courseData = getCourseData(course, term)
+			if courseData == 'invalid':
+				return ''+course+' was an invalid course'
+			semesterData.append(courseData)
 
-	# When the flag is true, we are grabbing the section title. When the flag is false, we are grabbing the section details. When the counter is at 2, we have all the data needed to record a sectioon
-	sectionflag = True
-	firstSectionGrab = True
-	counter = 0
-
-	for child in lis:
-		child = str(child)
-		sectionflag = not sectionflag
-
-		# Here we gather the section letter and CRN for each section
-		if sectionflag:
-			crnAndSection = child[114:].strip('</a></th>').partition(' - ')[2]
-			courseCRN = crnAndSection.partition(' - ')[0]
-			courseSection = crnAndSection.partition(' - ')[2].partition(' - ')[2]
-
-			# On the first pass we grab the course title
-			if firstSectionGrab:
-				courseTitle = child[114:].strip('</a></th>').partition(' - ')[0]
-				firstSectionGrab = not firstSectionGrab
-			else:
-				counter = counter+1
-
-		# Here we gather the details for the current section
-		else:
-			j = 1
-			typeIncrement = 0
-			for thing in child.splitlines():
-				if j == 11 :
-					courseType = thing.replace('Schedule Type','').replace('Campus','').replace('Main','Lecture').strip('  ')
-					# Here we check if we are dealing with a lecture or not (shown as 'Main')
-					if 'Video' in thing: # If it's a video lecture we don't grab any info
-						courseTime = ''
-						courseDay = 'O'
-						courseLocation = ''
-						courseProf = ''
-						break
-					if 'Main' in thing:
-						typeIncrement = 2
-					else:
-						typeIncrement = 0
-				# The increment depends on the type of section we are looking at and is determined earlier
-				if j == (28 + typeIncrement):
-					time = thing[22:].strip('</td>').replace(' ','').replace(':','')
-					time = time.split('-')
-					# We translate the 12 hour time to 24 hour time
-					if 'pm' in time[0] and ('12' not in time[0] or len(time[0]) < 6):
-						time[0] = str(int(time[0].strip('pm'))+1200)
-					elif 'pm' in time[0] and '12' in time[0]:
-						time[0] = time[0].strip('pm')
-					else:
-						if 'TBA' in time[0]: # This means it is a video lecture so we don't grab anything
-							courseTime = ''
-							courseDay = 'O'
-							courseLocation = ''
-							courseProf = ''
-							break
-						time[0] = str(int(time[0].strip('am')))
-						if int(time[0]) < 1000:
-							time[0] = '0'+time[0]
-					if 'pm' in time[1] and ('12' not in time[1] or len(time[1]) < 6):
-						time[1] = str(int(time[1].strip('pm'))+1200)
-					elif 'pm' in time[1] and '12' in time[1]:
-						time[1] = time[1].strip('pm')
-					else:
-						time[1] = str(int(time[1].strip('am')))
-						if int(time[1]) < 1000:
-							time[1] = '0'+time[1]
-					courseTime = time[0]+'-'+time[1]
-				if j == (29 + typeIncrement):
-					courseDay = thing[22:].strip('</td>')
-				if j == (30 + typeIncrement):
-					courseLocation = thing[22:].strip('</td>').replace('abbr title="To Be Announced">','').replace('</abbr','')
-				if j == (33 + typeIncrement):
-					courseProf = thing[22:].replace(r1,'').replace(r2,'').replace(r3,'').replace('   ',' ').replace('  ',' ')
-				j += 1
-			counter = counter+1
-
-		# Here we make an instance of the section class and add it to the corresponding list
-		if counter == 2:
-			section = Section(courseTitle,courseCode,courseSection,courseCRN,courseTime,courseDay,courseLocation,courseProf,courseType)
-			# The section is added to the corresponding list
-			if courseType == 'Laboratory' or (courseSection[0] == 'L' and len(courseSection) > 1 and courseSection[1].isdigit()):
-				labs.append(section)
-			elif courseType == 'Tutorial':
-				tutorials.append(section)
-			else:
-				lectures.append(section)
-			counter = 0 # Reset the counter
-
-	course = Course(courseTitle, lectures, labs, tutorials)
-	return course
-
-def getSemesterData(term, subjects):
-	# Check if the dump is present. If so, open the dump to get the data. If not we must produce the data and then dump it.
-	if True: # We're always grabbing new data
-	# if not os.path.isfile('data.dump'):
-		semesterData = []
-		invalidcourses = 'Error:\n'
-		for i in range(0, len(subjects)): # We add each course's data to the semester data
-			if subjects[i] == '': # Here we are adding a dummy course
-				semesterData.append(Course('',[],[],[]))
-			else:
-				tag = getWebsiteData(term, subjects[i][:4], subjects[i][4:])
-				if 'not a valid course' not in tag:
-					course = getCourseData(tag,subjects[i][:4]+subjects[i][4:])
-					course.CombineTutorials()
-					course.CombineLabs()
-					semesterData.append(course)
-				else:
-					invalidcourses += tag
-		# with open('data.dump', 'wb') as output:
-		# 	pickle.dump(semesterData, output, pickle.HIGHEST_PROTOCOL)
-	# else: # Here we just load the data from the dump file
-		# with open('data.dump', 'rb') as input:
-		# 	semesterData = pickle.load(input) # protocol version is auto detected
-	if len(invalidcourses) > 7: # Here one or more of the given courses was invalid
-		return invalidcourses[:-1]
+	# We fill up the list with dummy courses to make the huge scheduleOptimizer work
+	while(len(semesterData) < 6):
+		dummy = Section('', '', '', '', '', '', '', '', '')
+		dummy.addLabsOrTuts([Section('', '', '', '', '', '', '', '', '')])
+		semesterData.append([dummy])
 	return semesterData
 
-# Archaic function
-def outputSectionDataToText(semesterData):
-	# We open an output text file
-	text_file = open("Detailed Course Data.txt", "w")
+# This function uses the Carleton API to grab all the section data for the given
+# course, returning a list of every available section
+def getCourseData(course, term):
+	# The sections will be defined as tutorials or labs when they are constructed
+	# Each course can only have either tutorials or labs
+	sections = []
 
-	for course in semesterData:
-		text_file.write('********************************************\n')
-		text_file.write(course.title+'\n')
-		text_file.write(course.courseCode+'\n\n')
+	# Here we get the json data from the Carleton course API and clean it up a bit
+	url = 'http://at.eng.carleton.ca/engsched/wishlist.php?&courses='+course+'&term='+term+'&list='
+	html = urlopen(url).read()
+	soup = BeautifulSoup(html, 'html.parser')
+	for script in soup(["script", "style"]):
+		script.extract()
+		text = soup.get_text()
+		lines = (line.strip() for line in text.splitlines())
+		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+		text = '\n'.join(chunk for chunk in chunks if chunk)[:-37]
 
-		if len(course.lectures) > 0:
-			text_file.write('Lectures\n-------------------\n')
-			for lecture in course.lectures:
-				text_file.write('Section: '+lecture.section+'\n')
-				text_file.write('CRN: '+lecture.CRN+'\n')
-				text_file.write('Time: '+lecture.time+'\n')
-				text_file.write('Days: '+lecture.day+'\n')
-				text_file.write('Location: '+lecture.location+'\n')
-				text_file.write('Professor: '+lecture.prof+'\n\n')
-		if len(course.labs) > 1:
-			text_file.write('Labs\n-------------------\n')
-			for lab in course.labs:
-				text_file.write('Section: '+lab.section+'\n')
-				text_file.write('CRN: '+lab.CRN+'\n')
-				text_file.write('Time: '+lab.time+'\n')
-				text_file.write('Days: '+lab.day+'\n')
-				text_file.write('Location: '+lab.location+'\n')
-				text_file.write('Professor: '+lab.prof+'\n\n')
-		if len(course.tutorials) > 1:
-			text_file.write('Tutorials\n-------------------\n')
-			for tutorial in course.tutorials:
-				text_file.write('Section: '+tutorial.section+'\n')
-				text_file.write('CRN: '+tutorial.CRN+'\n')
-				text_file.write('Time: '+tutorial.time+'\n')
-				text_file.write('Days: '+tutorial.day+'\n')
-				text_file.write('Location: '+tutorial.location+'\n')
-				text_file.write('Professor: '+tutorial.prof+'\n\n')
+	# Check if the given course is valid
+	if len(text) < 10:
+		return 'invalid'
 
-	text_file.close()
+	# Here we grab the course data from the JSON data
+	courseData = json.loads(text)[1][0]
 
-# Archaic function
-def getCombinations(semesterData):
-	combinations = 1
-	for course in semesterData:
-		# The tutorials go hand-in-hand with lectures
-		combinations = combinations*len(course.lectures)*len(course.labs)
-		if len(course.tutorials) != 1: # We don't use the dummy case
-			combinations = combinations*(len(course.tutorials)/len(course.lectures))
-	print ('Possible schedules for the given courses: '+str(int(combinations)))
+	# We go through each section of the given course
+	numberOfSections = len(json.loads(text)[1][0])
+	# print('Number of sections: '+str(numberOfSections))
+	for section in courseData:
+		# Here we grab the lecture info from the JSON data and instantiate the section
+		courseTitle = section['title']
+		courseSection = section['section']
+		courseCRN = section['crn']
+		courseDays = section['days']
+		courseTime = section['start'][:-3]+'-'+section['end'][:-3]
+		courseTime = courseTime.replace(':','')
+		courseRoom = section['room']
+		courseProf = section['timeslots'][0]['prof']
+		# print('\n'+courseTitle+'\n'+course+' '+courseSection+'\nCRN: '+courseCRN)
+		# print('Days: '+courseDays+'\nTime: '+courseTime+'\nRoom: '+courseRoom)
+		# print('Prof: '+courseProf)
+		currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture')
+
+		# If there are no labs or tutorials, we are done with the current course
+		numberOfLabsOrTutorials = len(section['labs'])
+		if numberOfLabsOrTutorials == 0:
+			labstuts = [Section('', '', '', '', '', '', '', '', '')]
+			# print('There were no labs or tutorials for this course')
+		# Here we have labs or tutorials, so we deal with all of them
+		else:
+			# I am assuming that all tutorials have the link_id T# and all labs have the link_id L#
+			# This might cause errors in the future if a tutorial does not have the assumed ID
+			labOrTutorial = section['labs'][0][0]['link_id']
+			if labOrTutorial[0] == 'T':
+				labOrTutorial = 'Tutorial'
+			elif labOrTutorial[0] == 'L':
+				labOrTutorial = 'Lab'
+			# If we end up here then my link_id assumption is wrong
+			else:
+				pass
+
+			# print('Lab or Tutorial: '+labOrTutorial)
+			# print('Number of labs/tutorials: '+str(len(section['labs'][0])))
+
+			# Here we gather the data for each lab/tutorial section and add them
+			# to the list labstuts. This list will be added to the course section
+			labstuts = []
+			for labtut in section['labs'][0]:
+				# print(labtut.keys())
+				ltSection = labtut['section']
+				ltCRN = labtut['crn']
+				ltDay = labtut['days']
+				ltTime = labtut['start'][:-3]+'-'+labtut['end'][:-3]
+				ltTime = ltTime.replace(':','')
+				ltRoom = labtut['room']
+				# print('Lab/Tutorial Section: '+ltSection)
+				# print('CRN: '+ltCRN)
+				# print('Day: '+ltDay)
+				# print('Time: '+ltTime)
+				# print('Room: '+ltRoom)
+				labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial))
+
+		currentSection.addLabsOrTuts(labstuts)
+		# The current section of the course is added to the list of sections
+		sections.append(currentSection)
+
+	# We return the list of all the sections for the given course
+	return sections
 
 def getOptimizedSchedules(semesterData):
 	maxschedules = 10
@@ -475,57 +264,44 @@ def getOptimizedSchedules(semesterData):
 	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
-	# getCombinations(semesterData)
 
-	# The lectures, tutorials, and labs for all sections are checked. For tutorials, we only check ones that match the current lecture section (they have the same first letter)
-	for lecture0 in semesterData[0].lectures:
-		for lab0 in semesterData[0].labs:
-			for tut0 in [x0 for x0 in semesterData[0].tutorials if (x0.GetSection()[0] == lecture0.GetSection()[0] or x0.GetSection() == '#')]:
-				for lecture1 in semesterData[1].lectures:
-					for lab1 in semesterData[1].labs:
-						for tut1 in [x1 for x1 in semesterData[1].tutorials if (x1.GetSection()[0] == lecture1.GetSection()[0] or x1.GetSection() == '#')]:
-							for lecture2 in semesterData[2].lectures:
-								for lab2 in semesterData[2].labs:
-									for tut2 in [x2 for x2 in semesterData[2].tutorials if (x2.GetSection()[0] == lecture2.GetSection()[0] or x2.GetSection() == '#')]:
-										for lecture3 in semesterData[3].lectures:
-											for lab3 in semesterData[3].labs:
-												for tut3 in [x3 for x3 in semesterData[3].tutorials if (x3.GetSection()[0] == lecture3.GetSection()[0] or x3.GetSection() == '#')]:
-													for lecture4 in semesterData[4].lectures:
-														for lab4 in semesterData[4].labs:
-															for tut4 in [x4 for x4 in semesterData[4].tutorials if (x4.GetSection()[0] == lecture4.GetSection()[0] or x4.GetSection() == '#')]:
-																for lecture5 in semesterData[5].lectures:
-																	for lab5 in semesterData[5].labs:
-																		for tut5 in [x5 for x5 in semesterData[5].tutorials if (x5.GetSection()[0] == lecture5.GetSection()[0] or x5.GetSection() == '#')]:
-																			newschedule.addSection(lecture0)
-																			newschedule.addSection(lab0)
-																			newschedule.addSection(tut0)
-																			newschedule.addSection(lecture1)
-																			newschedule.addSection(lab1)
-																			newschedule.addSection(tut1)
-																			newschedule.addSection(lecture2)
-																			newschedule.addSection(lab2)
-																			newschedule.addSection(tut2)
-																			newschedule.addSection(lecture3)
-																			newschedule.addSection(lab3)
-																			newschedule.addSection(tut3)
-																			newschedule.addSection(lecture4)
-																			newschedule.addSection(lab4)
-																			newschedule.addSection(tut4)
-																			newschedule.addSection(lecture5)
-																			newschedule.addSection(lab5)
-																			newschedule.addSection(tut5)
-																			if firstpass and not newschedule.getConflict():
-																				schedule = newschedule
-																				schedules.append(newschedule)
-																				firstpass = False
-																			elif (newschedule.getBreaks() < schedule.getBreaks()) and not newschedule.getConflict():
-																				schedule = newschedule
-																				schedules = []
-																				schedules.append(newschedule)
-																			elif (newschedule.getBreaks() == schedule.getBreaks()) and not newschedule.getConflict():
-																				if len(schedules) <= maxschedules:
-																					schedules.append(newschedule)
-																			newschedule = Schedule()
+	# The lectures and tutorials/labs for all sections are checked.
+	for lec1 in semesterData[0]:
+		for lt1 in lec1.labstuts:
+			for lec2 in semesterData[1]:
+				for lt2 in lec2.labstuts:
+					for lec3 in semesterData[2]:
+						for lt3 in lec3.labstuts:
+							for lec4 in semesterData[3]:
+								for lt4 in lec4.labstuts:
+									for lec5 in semesterData[4]:
+										for lt5 in lec5.labstuts:
+											for lec6 in semesterData[5]:
+												for lt6 in lec6.labstuts:
+													newschedule.addSection(lec1)
+													newschedule.addSection(lt1)
+													newschedule.addSection(lec2)
+													newschedule.addSection(lt2)
+													newschedule.addSection(lec3)
+													newschedule.addSection(lt3)
+													newschedule.addSection(lec4)
+													newschedule.addSection(lt4)
+													newschedule.addSection(lec5)
+													newschedule.addSection(lt5)
+													newschedule.addSection(lec6)
+													newschedule.addSection(lt6)
+													if firstpass and not newschedule.conflict:
+														schedule = newschedule
+														schedules.append(newschedule)
+														firstpass = False
+													elif (newschedule.breaks < schedule.breaks) and not newschedule.conflict:
+														schedule = newschedule
+														schedules = []
+														schedules.append(newschedule)
+													elif (newschedule.breaks == schedule.breaks) and not newschedule.conflict:
+														if len(schedules) <= maxschedules:
+															schedules.append(newschedule)
+													newschedule = Schedule()
 
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
@@ -536,18 +312,19 @@ def getOptimizedSchedules(semesterData):
 		# schedule.outputSchedule(len(schedules))
 		# return schedules
 
-def scheduleOptimizer(term,subjects):
+# This function collects the semester data, ensures the courses were valid,
+# and then runs the getOptimizedSchedules function
+def scheduleOptimizer(subjects, term):
 	if term == '':
 		return 'Error:\nNo term selected'
-	# These variables determine the courses we use for the schedule
-	semesterData = getSemesterData(term,subjects)
+
+	semesterData = getSemesterData(subjects, term)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
 	# outputSectionDataToText(semesterData)
 	return getOptimizedSchedules(semesterData)
 
-# term = '201610'
-# subjects = ['ELEC2607','SYSC2100','SYSC2003','','']
-# print(scheduleOptimizer(term,subjects))
-
-# Keep a list of all the optimized schedules
+term = '201630'
+courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
+# courses = ['MATH2004']
+print(scheduleOptimizer(courses,term))
