@@ -17,11 +17,18 @@ class Section:
 		self.room = room
 		self.prof = prof
 		self.courseType = courseType
+		self.specialFlag = False
 
 	# This adds a list of all the lab and tutorial sections for the given
 	# lecture section
 	def addLabsOrTuts(self, labstuts):
 		self.labstuts = labstuts
+
+	# This adds extra lecture sections that are separate from the regular lectures
+	# This applies mainly to ECOR1010 with its TSE lectures
+	def addSpecial(self, special):
+		self.special = special
+		self.specialFlag = True
 
 # This class keeps track of sections, time slots, total breaks, and conflict
 # for a given day
@@ -42,11 +49,14 @@ class Day:
 		for key in self.timeSlots:
 			if (int(key) >= startTime and int(key) < endTime):
 				self.timeSlots[key] = self.timeSlots[key] + 1
-		# The conflict flag is raised if any timeslot has 2 courses at once
+		self.sections.append(section)
+
+	# The conflict flag is raised if any timeslot has 2 courses at once
+	def checkForConflicts(self):
 		if any(count > 1 for count in self.timeSlots.values()):
 			self.conflict = True
-		self.sections.append(section)
-		self.calculateBreaks() # After appending a section, the total break time is calculated
+			return True
+		return False
 
 	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
 	def calculateBreaks(self):
@@ -61,6 +71,7 @@ class Day:
 				newvalues = newvalues + '0'
 		values = newvalues
 		self.breaks = values.count('0') - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
+		return self.breaks
 
 # This class keeps track of every section for day of the week
 class Schedule:
@@ -70,48 +81,37 @@ class Schedule:
 		self.wednesday = Day()
 		self.thursday = Day()
 		self.friday = Day()
-		self.breaks = 10000
+		# self.breaks = 10000
+		self.breaks = 0
 		self.conflict = False
 
 	# This method adds a section to the schedule. It checks which days to add
-	# the section to and then adds them using the addClass method. After adding,
-	# we check if the day has a conflict
+	# the section to and then adds them using the addClass method.
 	def addSection(self, newsection):
-		if self.breaks == 10000: # The break time is reinitialized to 0 when we initially add a section
-			self.breaks = 0
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
-				self.breaks = self.breaks - self.monday.breaks
 				self.monday.addClass(newsection)
-				self.breaks = self.breaks + self.monday.breaks
-				if self.monday.conflict == True:
-					self.conflict = True
 			elif 'T' in day:
-				self.breaks = self.breaks - self.tuesday.breaks
 				self.tuesday.addClass(newsection)
-				self.breaks = self.breaks + self.tuesday.breaks
-				if self.tuesday.conflict == True:
-					self.conflict = True
 			elif 'W' in day:
-				self.breaks = self.breaks - self.wednesday.breaks
 				self.wednesday.addClass(newsection)
-				self.breaks = self.breaks + self.wednesday.breaks
-				if self.wednesday.conflict == True:
-					self.conflict = True
 			elif 'R' in day:
-				self.breaks = self.breaks - self.thursday.breaks
 				self.thursday.addClass(newsection)
-				self.breaks = self.breaks + self.thursday.breaks
-				if self.thursday.conflict == True:
-					self.conflict = True
 			elif 'F' in day:
-				self.breaks = self.breaks - self.friday.breaks
 				self.friday.addClass(newsection)
-				self.breaks = self.breaks + self.friday.breaks
-				if self.friday.conflict == True:
-					self.conflict = True
-			elif day == 'O': # This means the section is an online course
-				self.online.append(newsection.courseCode)
+		if newsection.specialFlag:
+			self.addSection(newsection.special)
+
+	# This method iterates over every day, calling their own checkForConflicts methods
+	def checkForConflicts(self):
+		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
+			if day.checkForConflicts():
+				self.conflict = True
+
+	# This method iterates over every day, calculating their total break times
+	def calculateBreaks(self):
+		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
+			self.breaks += day.calculateBreaks()
 
 	def __str__(self):
 		c = []
@@ -122,10 +122,7 @@ class Schedule:
 				title = section.title
 				if course not in c:
 					c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
-		# for course in self.online:
-		# 	c.append(course+'(online)')
 		for x in sorted(set(c)):
-			# s += x+', '
 			s += x
 		return s[:-1]
 
@@ -146,7 +143,6 @@ class Schedule:
 				s += section+'\n'
 			s += '\n'
 		s = s[:-2] # We want to remove the excess newline characters
-
 		return s
 
 # This function goes through the list of courses and gathers all the data for
@@ -194,29 +190,33 @@ def getCourseData(course, term):
 	# Here we grab the course data from the JSON data
 	courseData = json.loads(text)[1][0]
 
-	# We go through each section of the given course
-	numberOfSections = len(json.loads(text)[1][0])
-	# print('Number of sections: '+str(numberOfSections))
 	for section in courseData:
+		# This flag keeps track of sections with extra lectures (e.g. ECOR1010)
+		specialFlag = False
+
 		# Here we grab the lecture info from the JSON data and instantiate the section
 		courseTitle = section['title']
 		courseSection = section['section']
 		courseCRN = section['crn']
-		courseDays = section['days']
-		courseTime = section['start'][:-3]+'-'+section['end'][:-3]
-		courseTime = courseTime.replace(':','')
+		# If there is a comma, then we have the special extra lecture
+		if ',' in section['days']:
+			courseDays = section['days'].split(',')[0]
+			specialDays = section['days'].split(',')[1]
+			specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
+			specialFlag = True
+		else:
+			courseDays = section['days']
+		courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
 		courseRoom = section['room']
 		courseProf = section['timeslots'][0]['prof']
-		# print('\n'+courseTitle+'\n'+course+' '+courseSection+'\nCRN: '+courseCRN)
-		# print('Days: '+courseDays+'\nTime: '+courseTime+'\nRoom: '+courseRoom)
-		# print('Prof: '+courseProf)
 		currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture')
+		if specialFlag:
+			currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture'))
 
 		# If there are no labs or tutorials, we are done with the current course
 		numberOfLabsOrTutorials = len(section['labs'])
 		if numberOfLabsOrTutorials == 0:
 			labstuts = [Section('', '', '', '', '', '', '', '', '')]
-			# print('There were no labs or tutorials for this course')
 		# Here we have labs or tutorials, so we deal with all of them
 		else:
 			# I am assuming that all tutorials have the link_id T# and all labs have the link_id L#
@@ -230,25 +230,16 @@ def getCourseData(course, term):
 			else:
 				pass
 
-			# print('Lab or Tutorial: '+labOrTutorial)
-			# print('Number of labs/tutorials: '+str(len(section['labs'][0])))
-
 			# Here we gather the data for each lab/tutorial section and add them
 			# to the list labstuts. This list will be added to the course section
 			labstuts = []
 			for labtut in section['labs'][0]:
-				# print(labtut.keys())
 				ltSection = labtut['section']
 				ltCRN = labtut['crn']
 				ltDay = labtut['days']
 				ltTime = labtut['start'][:-3]+'-'+labtut['end'][:-3]
 				ltTime = ltTime.replace(':','')
 				ltRoom = labtut['room']
-				# print('Lab/Tutorial Section: '+ltSection)
-				# print('CRN: '+ltCRN)
-				# print('Day: '+ltDay)
-				# print('Time: '+ltTime)
-				# print('Room: '+ltRoom)
 				labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial))
 
 		currentSection.addLabsOrTuts(labstuts)
@@ -290,6 +281,8 @@ def getOptimizedSchedules(semesterData):
 													newschedule.addSection(lt5)
 													newschedule.addSection(lec6)
 													newschedule.addSection(lt6)
+													newschedule.checkForConflicts()
+													newschedule.calculateBreaks()
 													if firstpass and not newschedule.conflict:
 														schedule = newschedule
 														schedules.append(newschedule)
@@ -305,8 +298,6 @@ def getOptimizedSchedules(semesterData):
 
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
-		# print('There is no possible conflict-free schedule for the given courses')
-		# return schedules
 	else:
 		return schedule.outputSchedule(len(schedules))
 		# schedule.outputSchedule(len(schedules))
@@ -317,14 +308,15 @@ def getOptimizedSchedules(semesterData):
 def scheduleOptimizer(subjects, term):
 	if term == '':
 		return 'Error:\nNo term selected'
-
 	semesterData = getSemesterData(subjects, term)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
-	# outputSectionDataToText(semesterData)
 	return getOptimizedSchedules(semesterData)
 
-term = '201630'
-courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
-# courses = ['MATH2004']
-print(scheduleOptimizer(courses,term))
+# term = '201630'
+# courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
+# courses = ['SYSC2004','SYSC2001','CCDP2100','MATH2004','ELEC2501']
+# courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
+# courses = ['ECOR1010','MATH1104','MATH1004']
+# # courses = ['MATH2004']
+# print(scheduleOptimizer(courses,term))
