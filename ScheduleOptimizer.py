@@ -3,6 +3,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
+import copy
 
 # This class is used for each section of a given course, and contains all the
 # corresponding lectures and labs/tutorials
@@ -35,26 +36,38 @@ class Section:
 class Day:
 	def __init__(self):
 		self.sections = []
-		self.conflict = False
+		# self.conflict = False
 		self.breaks = 0
 		self.timeSlots = {'0835': 0,'0905': 0,'0935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'1305': 0,'1335': 0,'1405': 0,'1435': 0,'1505': 0,'1535': 0,'1605': 0,'1635': 0,'1705': 0,'1735': 0,'1805': 0,'1835': 0,'1905': 0,'1935': 0,'2005': 0,'2035': 0}
 
-	# This method adds a class section to the day, incrementing its corresponding
-	#time slots. If a time slot contains more than one course, the conflict is set
-	def addClass(self, section):
+	# This method adds a course section to the day, incrementing its corresponding
+	# time slots.
+	def addSection(self, section):
 		times = section.time.split('-')
 		startTime = int(times[0])
 		endTime = int(times[1])
 		# We go through each timeslot and increment section overlaps
 		for key in self.timeSlots:
 			if (int(key) >= startTime and int(key) < endTime):
-				self.timeSlots[key] = self.timeSlots[key] + 1
+				self.timeSlots[key] += 1
 		self.sections.append(section)
+
+	# This method removes a given course section from the day, decrementing its
+	# time slots
+	def removeSection(self, section):
+		times = section.time.split('-')
+		startTime = int(times[0])
+		endTime = int(times[1])
+		# We go through each timeslot and increment section overlaps
+		for key in self.timeSlots:
+			if (int(key) >= startTime and int(key) < endTime):
+				self.timeSlots[key] -= 1
+		self.sections.remove(section)
 
 	# The conflict flag is raised if any timeslot has 2 courses at once
 	def checkForConflicts(self):
 		if any(count > 1 for count in self.timeSlots.values()):
-			self.conflict = True
+			# self.conflict = True
 			return True
 		return False
 
@@ -81,35 +94,53 @@ class Schedule:
 		self.wednesday = Day()
 		self.thursday = Day()
 		self.friday = Day()
-		# self.breaks = 10000
 		self.breaks = 0
-		self.conflict = False
+		# self.conflict = False
 
 	# This method adds a section to the schedule. It checks which days to add
-	# the section to and then adds them using the addClass method.
+	# the section to and then adds them using the Day addSection() method
 	def addSection(self, newsection):
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
-				self.monday.addClass(newsection)
+				self.monday.addSection(newsection)
 			elif 'T' in day:
-				self.tuesday.addClass(newsection)
+				self.tuesday.addSection(newsection)
 			elif 'W' in day:
-				self.wednesday.addClass(newsection)
+				self.wednesday.addSection(newsection)
 			elif 'R' in day:
-				self.thursday.addClass(newsection)
+				self.thursday.addSection(newsection)
 			elif 'F' in day:
-				self.friday.addClass(newsection)
+				self.friday.addSection(newsection)
 		if newsection.specialFlag:
 			self.addSection(newsection.special)
+
+	# This method removes a section from the schedule.
+	def removeSection(self, newsection):
+		for day in newsection.day: # section.day is a string storing the days the class is held
+			if 'M' in day:
+				self.monday.removeSection(newsection)
+			elif 'T' in day:
+				self.tuesday.removeSection(newsection)
+			elif 'W' in day:
+				self.wednesday.removeSection(newsection)
+			elif 'R' in day:
+				self.thursday.removeSection(newsection)
+			elif 'F' in day:
+				self.friday.removeSection(newsection)
+		if newsection.specialFlag:
+			self.removeSection(newsection.special)
 
 	# This method iterates over every day, calling their own checkForConflicts methods
 	def checkForConflicts(self):
 		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
 			if day.checkForConflicts():
-				self.conflict = True
+				# self.conflict = True
+				return True
+		return False
 
 	# This method iterates over every day, calculating their total break times
 	def calculateBreaks(self):
+		self.breaks = 0
 		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
 			self.breaks += day.calculateBreaks()
 
@@ -256,45 +287,92 @@ def getOptimizedSchedules(semesterData):
 	schedule = Schedule()
 	newschedule = Schedule()
 
-	# The lectures and tutorials/labs for all sections are checked.
+	# The lectures and tutorials/labs for all sections are added in for each loops,
+	# and we check for conflicts after each addition. If a conflict is found, then
+	# we do not proceed deeper into the loop.
 	for lec1 in semesterData[0]:
+		newschedule.addSection(lec1)
 		for lt1 in lec1.labstuts:
-			for lec2 in semesterData[1]:
-				for lt2 in lec2.labstuts:
-					for lec3 in semesterData[2]:
-						for lt3 in lec3.labstuts:
-							for lec4 in semesterData[3]:
-								for lt4 in lec4.labstuts:
-									for lec5 in semesterData[4]:
-										for lt5 in lec5.labstuts:
-											for lec6 in semesterData[5]:
-												for lt6 in lec6.labstuts:
-													newschedule.addSection(lec1)
-													newschedule.addSection(lt1)
-													newschedule.addSection(lec2)
-													newschedule.addSection(lt2)
-													newschedule.addSection(lec3)
-													newschedule.addSection(lt3)
+			newschedule.addSection(lt1)
+			if newschedule.checkForConflicts():
+				newschedule.removeSection(lt1)
+			else:
+				for lec2 in semesterData[1]:
+					newschedule.addSection(lec2)
+					if newschedule.checkForConflicts():
+						newschedule.removeSection(lec2)
+					else:
+						for lt2 in lec2.labstuts:
+							newschedule.addSection(lt2)
+							if newschedule.checkForConflicts():
+								newschedule.removeSection(lt2)
+							else:
+								for lec3 in semesterData[2]:
+									newschedule.addSection(lec3)
+									if newschedule.checkForConflicts():
+										newschedule.removeSection(lec3)
+									else:
+										for lt3 in lec3.labstuts:
+											newschedule.addSection(lt3)
+											if newschedule.checkForConflicts():
+												newschedule.removeSection(lt3)
+											else:
+												for lec4 in semesterData[3]:
 													newschedule.addSection(lec4)
-													newschedule.addSection(lt4)
-													newschedule.addSection(lec5)
-													newschedule.addSection(lt5)
-													newschedule.addSection(lec6)
-													newschedule.addSection(lt6)
-													newschedule.checkForConflicts()
-													newschedule.calculateBreaks()
-													if firstpass and not newschedule.conflict:
-														schedule = newschedule
-														schedules.append(newschedule)
-														firstpass = False
-													elif (newschedule.breaks < schedule.breaks) and not newschedule.conflict:
-														schedule = newschedule
-														schedules = []
-														schedules.append(newschedule)
-													elif (newschedule.breaks == schedule.breaks) and not newschedule.conflict:
-														if len(schedules) <= maxschedules:
-															schedules.append(newschedule)
-													newschedule = Schedule()
+													if newschedule.checkForConflicts():
+														newschedule.removeSection(lec4)
+													else:
+														for lt4 in lec4.labstuts:
+															newschedule.addSection(lt4)
+															if newschedule.checkForConflicts():
+																newschedule.removeSection(lt4)
+															else:
+																for lec5 in semesterData[4]:
+																	newschedule.addSection(lec5)
+																	if newschedule.checkForConflicts():
+																		newschedule.removeSection(lec5)
+																	else:
+																		for lt5 in lec5.labstuts:
+																			newschedule.addSection(lt5)
+																			if newschedule.checkForConflicts():
+																				newschedule.removeSection(lt5)
+																			else:
+																				for lec6 in semesterData[5]:
+																					newschedule.addSection(lec6)
+																					if newschedule.checkForConflicts():
+																						newschedule.removeSection(lec6)
+																					else:
+																						for lt6 in lec6.labstuts:
+																							newschedule.addSection(lt6)
+																							if newschedule.checkForConflicts():
+																								newschedule.removeSection(lt6)
+																							else:
+																								newschedule.calculateBreaks()
+																								# Here we found the first conflict-free schedule
+																								if firstpass:
+																									schedule = copy.deepcopy(newschedule)
+																									schedules = [schedule]
+																									firstpass = False
+																								# Here we found a schedule with smaller breaks than the previous best schedule
+																								elif newschedule.breaks < schedule.breaks:
+																									schedule = copy.deepcopy(newschedule)
+																									schedules = [schedule]
+																								# Here we found a schedule with the same amount of breaks as the previous best
+																								elif newschedule.breaks == schedule.breaks:
+																									if len(schedules) < maxschedules:
+																										schedules.append(copy.deepcopy(newschedule))
+																								newschedule.removeSection(lt6)
+																						newschedule.removeSection(lec6)
+																				newschedule.removeSection(lt5)
+																		newschedule.removeSection(lec5)
+																newschedule.removeSection(lt4)
+														newschedule.removeSection(lec4)
+												newschedule.removeSection(lt3)
+										newschedule.removeSection(lec3)
+								newschedule.removeSection(lt2)
+						newschedule.removeSection(lec2)
+				newschedule.removeSection(lt1)
+		newschedule.removeSection(lec1)
 
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
