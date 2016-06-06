@@ -18,17 +18,39 @@ def scheduler(request):
             c6 = form.cleaned_data['c6'].upper()
             subjects = [c1,c2,c3,c4,c5,c6]
 
-            if term=='' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
+            if c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
                 term = '201630'
                 subjects = ['ECOR3800','COMP3005','SYSC4001','SYSC3110','SYSC3303','']
                 data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5]}
                 form = ScheduleForm(data, initial=data)
 
+            # Here at least one course was entered incorrectly
+            elif any( (len(y) < 8) for y in [x for x in [c1,c2,c3,c4,c5,c6] if x != '']):
+                return render(request, 'scheduler/index.html', {
+                    'form': form,
+                    'result': 'Error: courses must be entered in the format XXXX1000, where XXXX is the department code and 1000 is the course code',
+                })
+
+            # Here one or more of the inputs were duplicates
+            elif len(set([x for x in [c1,c2,c3,c4,c5,c6] if x != ''])) < len([x for x in [c1,c2,c3,c4,c5,c6] if x != '']):
+                return render(request, 'scheduler/index.html', {
+                    'form': form,
+                    'result': 'Error: duplicate courses submitted',
+                })
+
+            # Result will be a string if there was an invalid course or a schedule could not be found
             result = scheduleOptimizer(subjects, term)
-            return render(request, 'scheduler/index.html', {
-                'form': form,
-                'result': result,
-            })
+            if isinstance(result, str):
+                return render(request, 'scheduler/index.html', {
+                    'form': form,
+                    'result': result,
+                })
+            else:
+                return render(request, 'scheduler/index.html', {
+                    'form': form,
+                    'result': result[0].outputSchedule(len(result)),
+                    # 'result': result,
+                })
 
     # if a GET (or any other method) we'll create a blank form
     else:

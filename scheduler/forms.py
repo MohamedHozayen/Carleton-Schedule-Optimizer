@@ -2,7 +2,7 @@ from django import forms
 from scheduler.choices import *
 
 class ScheduleForm(forms.Form):
-	semester = forms.ChoiceField(choices = [('', '')]+SEMESTER_CHOICES, label = 'Semester', widget = forms.Select(), required = False)
+	semester = forms.ChoiceField(choices = SEMESTER_CHOICES, label = 'Semester', widget = forms.Select(), required = False)
 	c1 = forms.CharField(label='Course 1', max_length=8, required = False)
 	c2 = forms.CharField(label='Course 2', max_length=8, required = False)
 	c3 = forms.CharField(label='Course 3', max_length=8, required = False)

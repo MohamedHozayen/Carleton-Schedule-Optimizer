@@ -36,7 +36,6 @@ class Section:
 class Day:
 	def __init__(self):
 		self.sections = []
-		# self.conflict = False
 		self.breaks = 0
 		self.timeSlots = {'0835': 0,'0905': 0,'0935': 0,'1005': 0,'1035': 0,'1105': 0,'1135': 0,'1205': 0,'1235': 0,'1305': 0,'1335': 0,'1405': 0,'1435': 0,'1505': 0,'1535': 0,'1605': 0,'1635': 0,'1705': 0,'1735': 0,'1805': 0,'1835': 0,'1905': 0,'1935': 0,'2005': 0,'2035': 0}
 
@@ -67,12 +66,15 @@ class Day:
 	# The conflict flag is raised if any timeslot has 2 courses at once
 	def checkForConflicts(self):
 		if any(count > 1 for count in self.timeSlots.values()):
-			# self.conflict = True
 			return True
 		return False
 
 	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
 	def calculateBreaks(self):
+		# If there is one course or two courses for the day, then there are no breaks
+		if len(self.sections) < 2:
+			self.breaks = 0
+			return 0
 		values = ''
 		for key in sorted(self.timeSlots):
 			values = values+str(self.timeSlots[key])
@@ -95,7 +97,6 @@ class Schedule:
 		self.thursday = Day()
 		self.friday = Day()
 		self.breaks = 0
-		# self.conflict = False
 
 	# This method adds a section to the schedule. It checks which days to add
 	# the section to and then adds them using the Day addSection() method
@@ -134,7 +135,6 @@ class Schedule:
 	def checkForConflicts(self):
 		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
 			if day.checkForConflicts():
-				# self.conflict = True
 				return True
 		return False
 
@@ -281,7 +281,7 @@ def getCourseData(course, term):
 	return sections
 
 def getOptimizedSchedules(semesterData):
-	maxschedules = 10
+	maxschedules = 50
 	firstpass = True
 	schedules = []
 	schedule = Schedule()
@@ -377,9 +377,9 @@ def getOptimizedSchedules(semesterData):
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
 	else:
-		return schedule.outputSchedule(len(schedules))
+		# return schedule.outputSchedule(len(schedules))
 		# schedule.outputSchedule(len(schedules))
-		# return schedules
+		return schedules
 
 # This function collects the semester data, ensures the courses were valid,
 # and then runs the getOptimizedSchedules function
@@ -392,9 +392,10 @@ def scheduleOptimizer(subjects, term):
 	return getOptimizedSchedules(semesterData)
 
 # term = '201630'
+# term = '201710'
 # courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
 # courses = ['SYSC2004','SYSC2001','CCDP2100','MATH2004','ELEC2501']
 # courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
 # courses = ['ECOR1010','MATH1104','MATH1004']
-# # courses = ['MATH2004']
+# courses = ['ELEC2501']
 # print(scheduleOptimizer(courses,term))

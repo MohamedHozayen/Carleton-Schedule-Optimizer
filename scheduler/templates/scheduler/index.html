@@ -67,9 +67,12 @@ function post(path) {
 			        <div class="col-md-8">
 						{% if result %}
 							<!-- <pre> -->
-								<p><strong>Optimal Schedule Results</strong><p>
+								<p><strong>Optimal Schedule Results:</strong><p>
 								<div style="overflow-y: scroll" id='results'>{{ result|linebreaksbr }}</div>
 							<!-- </pre> -->
+							<!-- {% for schedule in result %} -->
+								<!-- <div style="overflow-y: scroll" id='results'>{{ schedule|linebreaksbr }}</div> -->
+							<!-- {% endfor %} -->
 						{% endif %}
 			        </div>
 			    </div>
