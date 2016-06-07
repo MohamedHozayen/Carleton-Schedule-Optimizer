@@ -3,46 +3,40 @@
 
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+<link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/schedulerstyles.css' %}" />
+<script src="{% static 'fullcalendar/lib/jquery.min.js' %}"></script>
+<script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
+<script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
 <head>
 	<title>Carleton Schedule Optimizer</title>
 </head>
 
 <script>
-function post(path) {
-    method = "post";
-    var form = document.createElement("form");
-    form.setAttribute("method", method);
-    form.setAttribute("action", path);
+$(document).ready(function() {
+    // page is now ready, initialize the calendar...
 
-    var hiddenField = document.createElement("input");
-    hiddenField.setAttribute("semester", "201610");
-    form.appendChild(hiddenField);
+    $('#calendar').fullCalendar({
+				header: {
+					left:   '',
+			    center: '',
+			    right:  '',
+				},
+				columnFormat: {
+				    month: 'ddd',
+				    week: 'ddd',
+				    day: 'dddd M/d'
+				},
+				defaultView: 'agendaWeek',
+				weekends: false,
+				allDaySlot: false,
+				minTime: "8:00",
+				maxTime: "22:00",
+				contentHeight: 'auto',
+    })
 
-    hiddenField = document.createElement("input");
-    hiddenField.setAttribute("c1", "SYSC2100");
-    form.appendChild(hiddenField);
-
-    hiddenField = document.createElement("input");
-    hiddenField.setAttribute("c2", "SYSC2003");
-    form.appendChild(hiddenField);
-
-    hiddenField = document.createElement("input");
-    hiddenField.setAttribute("c3", "ELEC2607");
-    form.appendChild(hiddenField);
-
-    hiddenField = document.createElement("input");
-    hiddenField.setAttribute("c4", "COMP1805");
-    form.appendChild(hiddenField);
-
-    hiddenField = document.createElement("input");
-    hiddenField.setAttribute("c5", "STAT3502");
-    form.appendChild(hiddenField);
-
-    document.body.appendChild(form);
-    form.submit();
-    }
+});
 </script>
 
 <body>
@@ -66,16 +60,19 @@ function post(path) {
 			        </div>
 			        <div class="col-md-8">
 						{% if result %}
-							<!-- <pre> -->
 								<p><strong>Optimal Schedule Results:</strong><p>
-								<div style="overflow-y: scroll" id='results'>{{ result|linebreaksbr }}</div>
-							<!-- </pre> -->
-							<!-- {% for schedule in result %} -->
-								<!-- <div style="overflow-y: scroll" id='results'>{{ schedule|linebreaksbr }}</div> -->
-							<!-- {% endfor %} -->
+								<div id="result">{{ result|linebreaksbr }}</div>
+						{% endif %}
+						{% if error %}
+							<p><strong>{{ error|safe}}</strong><p>
 						{% endif %}
 			        </div>
 			    </div>
+
+					{% if result %}
+						<div id='calendar'></div>
+					{% endif %}
+
 			    <div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
 			</div>
 

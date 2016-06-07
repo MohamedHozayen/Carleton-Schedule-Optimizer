@@ -186,7 +186,13 @@ def getSemesterData(courses, term):
 		if course != '':
 			courseData = getCourseData(course, term)
 			if courseData == 'invalid':
-				return ''+course+' was an invalid course'
+				if term[-2:] == '10':
+					season = 'winter'
+				elif term[-2:] == '20':
+					season = 'summer'
+				else:
+					season = 'fall'
+				return 'Error: '+course+' is not offered in the '+season+' of '+term[:4]
 			semesterData.append(courseData)
 
 	# We fill up the list with dummy courses to make the huge scheduleOptimizer work
@@ -384,8 +390,6 @@ def getOptimizedSchedules(semesterData):
 # This function collects the semester data, ensures the courses were valid,
 # and then runs the getOptimizedSchedules function
 def scheduleOptimizer(subjects, term):
-	if term == '':
-		return 'Error:\nNo term selected'
 	semesterData = getSemesterData(subjects, term)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData

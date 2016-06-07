@@ -28,22 +28,24 @@ def scheduler(request):
             elif any( (len(y) < 8) for y in [x for x in [c1,c2,c3,c4,c5,c6] if x != '']):
                 return render(request, 'scheduler/index.html', {
                     'form': form,
-                    'result': 'Error: courses must be entered in the format XXXX1000, where XXXX is the department code and 1000 is the course code',
+                    'error': 'Error: courses must be entered in the format XXXX1000, where XXXX is the department code and 1000 is the course code',
                 })
 
             # Here one or more of the inputs were duplicates
             elif len(set([x for x in [c1,c2,c3,c4,c5,c6] if x != ''])) < len([x for x in [c1,c2,c3,c4,c5,c6] if x != '']):
                 return render(request, 'scheduler/index.html', {
                     'form': form,
-                    'result': 'Error: duplicate courses submitted',
+                    'error': 'Error: duplicate courses submitted',
                 })
 
             # Result will be a string if there was an invalid course or a schedule could not be found
             result = scheduleOptimizer(subjects, term)
+
+            # If the result is a string, then one of the courses was invalid
             if isinstance(result, str):
                 return render(request, 'scheduler/index.html', {
                     'form': form,
-                    'result': result,
+                    'error': result,
                 })
             else:
                 return render(request, 'scheduler/index.html', {

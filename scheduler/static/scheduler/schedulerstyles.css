@@ -22,7 +22,7 @@ body {
     width: 75%;
 }
 
-#sides { 
+#sides {
 	background-color: #B40D25;
 	height: 100%;
 	width: 12.5%;
@@ -34,7 +34,13 @@ body {
 	right: 0;
 }
 
-#results {
+#result {
 	width: 100%;
-	height: 60%;
+	height: 40%;
+  overflow-y: scroll;
+}
+
+/*This is for the calendar*/
+.fc-today {
+  background: #EFEFEF !important;
 }
