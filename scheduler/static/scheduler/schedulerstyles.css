@@ -1,13 +1,3 @@
-@media all and (max-width: 1000px) {
-  #sides {
-    display: none;
-  }
-
-  #footer {
-    display: none;
-  }
-}
-
 body {
   background-color: #EFEFEF;
 }
@@ -24,14 +14,14 @@ body {
 
 #sides {
 	background-color: #B40D25;
-	height: 100%;
+	height: 185%;
 	width: 12.5%;
 }
 
 #footer {
-	position: absolute;
-	bottom: 0;
-	right: 0;
+  top: 10px;
+  position: relative;;
+  float: right;
 }
 
 #result {
@@ -43,4 +33,23 @@ body {
 /*This is for the calendar*/
 .fc-today {
   background: #EFEFEF !important;
+}
+
+/*This block is for viewing the page on mobile*/
+@media all and (max-width: 1000px) {
+  #middle {
+    width: 100%;
+  }
+
+  /*#result {
+    width: 50%;
+  }*/
+
+  #sides {
+    display: none;
+  }
+
+  #footer {
+    display: none;
+  }
 }

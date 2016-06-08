@@ -50,14 +50,13 @@ $(document).ready(function() {
 				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code. Submit an empty form to see the results for an example semester.</p>
 
 			    <div class="row">
-			        <div class="col-md-4">
-			        	<!-- <br> -->
-						<form action="" method="post">
-						    {% csrf_token %}
-						    {{ form.as_p }}
-						    <input type="submit" value="Submit" />
-						</form>
-			        </div>
+			      <div class="col-md-4" id="form">
+							<form action="" method="post">
+							    {% csrf_token %}
+							    {{ form.as_p }}
+							    <input type="submit" value="Submit" />
+							</form>
+			      </div>
 			        <div class="col-md-8">
 						{% if result %}
 								<p><strong>Optimal Schedule Results:</strong><p>
@@ -69,9 +68,10 @@ $(document).ready(function() {
 			        </div>
 			    </div>
 
-					{% if result %}
+					<div id='calendar'></div>
+					<!-- {% if result %}
 						<div id='calendar'></div>
-					{% endif %}
+					{% endif %} -->
 
 			    <div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
 			</div>
