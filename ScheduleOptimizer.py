@@ -163,17 +163,17 @@ class Schedule:
 		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
 		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
 		s += str(self)+'\n'+'\n'
-		for day in ['monday','tuesday','wednesday','thursday','friday']:
-			s += day.capitalize()+'\n'
-			daylist = []
-			for section in getattr(self,day).sections:
-				daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
-			if len(daylist) == 0:
-				s += 'No courses today!\n'
-			for section in sorted(daylist):
-				s += section+'\n'
-			s += '\n'
-		s = s[:-2] # We want to remove the excess newline characters
+		# for day in ['monday','tuesday','wednesday','thursday','friday']:
+		# 	s += day.capitalize()+'\n'
+		# 	daylist = []
+		# 	for section in getattr(self,day).sections:
+		# 		daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
+		# 	if len(daylist) == 0:
+		# 		s += 'No courses today!\n'
+		# 	for section in sorted(daylist):
+		# 		s += section+'\n'
+		# 	s += '\n'
+		# s = s[:-2] # We want to remove the excess newline characters
 		return s
 
 # This function goes through the list of courses and gathers all the data for
