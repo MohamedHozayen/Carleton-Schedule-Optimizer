@@ -51,7 +51,7 @@ def scheduler(request):
                 return render(request, 'scheduler/index.html', {
                     'form': form,
                     'result': result[0].outputSchedule(len(result)),
-                    # 'result': result,
+                    'djangoJSON': result[0].getJSON(),
                 })
 
     # if a GET (or any other method) we'll create a blank form

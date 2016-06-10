@@ -26,30 +26,44 @@
 
 			    <div class="row">
 			      <div class="col-md-4" id="form">
+
 							<form action="" method="post">
 							    {% csrf_token %}
 							    {{ form.as_p }}
 							    <input type="submit" value="Submit" />
 							</form>
-			      </div>
-			        <div class="col-md-8">
-						{% if result %}
-								<p><strong>Optimal Schedule Results:</strong><p>
-								<div id="result">{{ result|linebreaksbr }}</div>
-						{% endif %}
-						{% if error %}
-							<p><strong>{{ error|safe}}</strong><p>
-						{% endif %}
-			        </div>
-			    </div>
 
-					{% if result %}
-						<script>
-							$(document).ready(function() {
-							  addCalanderEvent('Test', '10:00', '11:30', [ 2, 4 ]);
-							});
-						</script>
-					{% endif %}
+						</div>
+			        <div class="col-md-8">
+
+								{% if result %}
+										<p><strong>Optimal Schedule Results:</strong><p>
+										<div id="result">{{ result|linebreaksbr }}</div>
+
+										<script>
+											$(document).ready(function() {
+												var sections = {{ djangoJSON|safe }};
+												var section;
+
+												for (section in sections) {
+													title = sections[section].title;
+													courseCode = sections[section].courseCode+'\n'+title;
+													start = sections[section].start;
+													end = sections[section].end;
+													day = sections[section].day;
+													addCalanderEvent(courseCode, start, end, [day], 'green' )
+												}
+											});
+										</script>
+
+								{% endif %}
+
+								{% if error %}
+									<p><strong>{{ error|safe}}</strong><p>
+								{% endif %}
+
+							</div>
+			    </div>
 
 					<div id='calendar'></div>
 

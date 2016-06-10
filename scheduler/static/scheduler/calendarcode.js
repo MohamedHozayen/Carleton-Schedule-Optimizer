@@ -20,13 +20,14 @@ $(document).ready(function() {
     })
 });
 
-function addCalanderEvent(title, start, end, days)
+function addCalanderEvent(title, start, end, days, color)
 {
 		var eventObject = {
 		title: title,
 		start: start,
 		end: end,
 		dow: days,
+    color: color,
 		};
 
 		$('#calendar').fullCalendar('renderEvent', eventObject, true);

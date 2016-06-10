@@ -176,6 +176,27 @@ class Schedule:
 		# s = s[:-2] # We want to remove the excess newline characters
 		return s
 
+	def getJSON(self):
+		data = []
+		i = 1
+		for day in ['monday','tuesday','wednesday','thursday','friday']:
+			for section in getattr(self,day).sections:
+				sectionData = {}
+				sectionData['title'] = section.title
+				sectionData['courseCode'] = section.courseCode+' '+section.section
+				sectionData['CRN'] = section.CRN
+				sectionData['courseType'] = section.courseType
+				sectionData['day'] = i
+				sectionData['start'] = section.time[:2]+':'+section.time[2:4]
+				sectionData['end'] = section.time[-4:-2]+':'+section.time[-2:]
+				sectionData['prof'] = section.prof
+				sectionData['room'] = section.room
+				data.append(sectionData)
+			i+=1
+
+		print (json.dumps(data, indent=4, sort_keys=True))
+		return json.dumps(data)
+
 # This function goes through the list of courses and gathers all the data for
 # all of them, returning the data in a list of lists of course sections
 def getSemesterData(courses, term):
@@ -402,4 +423,5 @@ def scheduleOptimizer(subjects, term):
 # courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
 # courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['ELEC2501']
-# print(scheduleOptimizer(courses,term))
+# schedules = scheduleOptimizer(courses,term)
+# schedules[0].getJSON()

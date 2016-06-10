@@ -35,6 +35,10 @@ body {
   background: #EFEFEF !important;
 }
 
+.fc-time{
+   display : none;
+}
+
 /*This block is for viewing the page on mobile*/
 @media all and (max-width: 1000px) {
   #middle {
