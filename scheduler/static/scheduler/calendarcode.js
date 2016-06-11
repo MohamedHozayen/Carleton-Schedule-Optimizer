@@ -16,20 +16,31 @@ $(document).ready(function() {
 				minTime: "8:00",
 				maxTime: "22:00",
 				contentHeight: 'auto',
-				color: 'red',
+        timeFormat: '',
     })
 });
 
-function addCalanderEvent(title, start, end, days, color)
-{
+// Colour > color
+function addCalanderEvent(title, start, end, days, colour) {
 		var eventObject = {
 		title: title,
 		start: start,
 		end: end,
 		dow: days,
-    color: color,
+    color: colour,
 		};
 
 		$('#calendar').fullCalendar('renderEvent', eventObject, true);
 		return eventObject;
+}
+
+// 5 minutes are added to the end time of a section. The end time always ends in 5
+function addFiveMinutes(time) {
+    // if (time.substring(3,5) == '25') {
+    //   time = time.substring(0,3)+'30';
+    // }
+    // else { // Here the end time is XX:55
+    //   time = time.
+    // }
+    return time;
 }

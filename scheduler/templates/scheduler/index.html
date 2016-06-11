@@ -47,11 +47,36 @@
 
 												for (section in sections) {
 													title = sections[section].title;
-													courseCode = sections[section].courseCode+'\n'+title;
+													courseCode = sections[section].courseCode;
 													start = sections[section].start;
 													end = sections[section].end;
+													// end = addFiveMinutes.call(end);
 													day = sections[section].day;
-													addCalanderEvent(courseCode, start, end, [day], 'green' )
+													courseType = sections[section].courseType;
+													room = sections[section].room;
+													prof = sections[section].prof;
+
+													if (prof === '') {
+														prof = 'Prof TBA'
+													}
+													if (room === '') {
+														room = 'Room TBA'
+													}
+
+													// courseCode = courseCode+' '+courseType+'\n'+title+'\n'+room;
+													if (courseType == 'Lecture') {
+														colour = 'blue';
+														courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+													}
+													else if (courseType == 'Lab') {
+														colour = 'red';
+														courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+													}
+													else { // Here we have a tutorial
+														colour = 'green';
+														courseCode = courseCode+' '+courseType+'\n'+room;
+													}
+													addCalanderEvent(courseCode, start, end, [day], colour);
 												}
 											});
 										</script>

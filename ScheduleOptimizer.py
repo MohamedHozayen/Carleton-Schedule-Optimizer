@@ -146,7 +146,8 @@ class Schedule:
 
 	def __str__(self):
 		c = []
-		s = 'Courses and sections for optimal schedule:\n'
+		s = ''
+		# s = 'Courses and sections for optimal schedule:\n'
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
@@ -194,7 +195,7 @@ class Schedule:
 				data.append(sectionData)
 			i+=1
 
-		print (json.dumps(data, indent=4, sort_keys=True))
+		# print (json.dumps(data, indent=4, sort_keys=True))
 		return json.dumps(data)
 
 # This function goes through the list of courses and gathers all the data for
