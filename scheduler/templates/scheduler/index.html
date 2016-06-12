@@ -48,9 +48,30 @@
 												for (section in sections) {
 													title = sections[section].title;
 													courseCode = sections[section].courseCode;
-													start = sections[section].start;
-													end = sections[section].end;
-													// end = addFiveMinutes.call(end);
+													start = (
+														function () {
+															var time = sections[section].start;
+															if (time.substring(3,5) == '05') {
+													      time = time.substring(0,3)+'00';
+													    }
+													    else { // Here the start time is XX:35
+													      time = time.substring(0,3)+'30';
+													    }
+													    return time;
+														}
+													)();
+													end = (
+														function () {
+															var time = sections[section].end;
+															if (time.substring(3,5) == '25') {
+													      time = time.substring(0,3)+'30';
+													    }
+													    else { // Here the end time is XX:55
+													      time = ''+(parseInt(time.substring(0,2))+1)+':00';
+													    }
+													    return time;
+														}
+													)();
 													day = sections[section].day;
 													courseType = sections[section].courseType;
 													room = sections[section].room;
@@ -63,7 +84,6 @@
 														room = 'Room TBA'
 													}
 
-													// courseCode = courseCode+' '+courseType+'\n'+title+'\n'+room;
 													if (courseType == 'Lecture') {
 														colour = 'blue';
 														courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
