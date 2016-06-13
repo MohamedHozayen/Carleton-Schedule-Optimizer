@@ -42,10 +42,10 @@
 										<div id="result">{{ result|linebreaksbr }}</div>
 
 										<script>
-											$(document).ready(function() {
-												var sections = {{ djangoJSON|safe }};
-												addSectionsToCalendar(sections);
-											});
+										$(document).ready(function() {
+											var sections = {{ djangoJSON|safe }};
+											addSectionsToCalendar(sections);
+										});
 										</script>
 
 								{% endif %}
