@@ -1,3 +1,4 @@
+// This function initializes the calendar
 $(document).ready(function() {
     var calendar = $('#calendar').fullCalendar({
 				header: {
@@ -20,7 +21,29 @@ $(document).ready(function() {
     })
 });
 
-// Colour > color
+// This function pads the start time, making it five minutes earlier
+function getStartTime(time) {
+  if (time.substring(3,5) == '05') {
+    time = time.substring(0,3)+'00';
+  }
+  else { // Here the start time is XX:35
+    time = time.substring(0,3)+'30';
+  }
+  return time;
+}
+
+// This function pads the end time, making it five minutes later
+function getEndTime(time) {
+  if (time.substring(3,5) == '25') {
+    time = time.substring(0,3)+'30';
+  }
+  else { // Here the end time is XX:55
+    time = ''+(parseInt(time.substring(0,2))+1)+':00';
+  }
+  return time;
+}
+
+// Colour > color.
 function addCalanderEvent(title, start, end, days, colour) {
 		var eventObject = {
 		title: title,
@@ -34,15 +57,39 @@ function addCalanderEvent(title, start, end, days, colour) {
 		return eventObject;
 }
 
-// // 5 minutes are added to the end time of a section. The end time always ends in 5
-// function addFiveMinutes(time) {
-//     if (time.substring(3,5) == '25') {
-//       time = time.substring(0,3)+'30';
-//     }
-//     else { // Here the end time is XX:55
-//       time = time.
-//     }
-//     return time;
-//     // var value = '16:00';
-//     return '17:00';
-// }
+// This function takes a JSON list of sections, adding them one by one to the calendar
+function addSectionsToCalendar(sections) {
+  var section;
+
+  for (section in sections) {
+    title = sections[section].title;
+    courseCode = sections[section].courseCode;
+    start = getStartTime(sections[section].start);
+    end = getEndTime(sections[section].end);
+    day = sections[section].day;
+    courseType = sections[section].courseType;
+    room = sections[section].room;
+    prof = sections[section].prof;
+
+    if (prof === '') {
+      prof = 'Prof TBA'
+    }
+    if (room === '') {
+      room = 'Room TBA'
+    }
+
+    if (courseType == 'Lecture') {
+      colour = 'blue';
+      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+    }
+    else if (courseType == 'Lab') {
+      colour = 'red';
+      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+    }
+    else { // Here we have a tutorial
+      colour = 'green';
+      courseCode = courseCode+' '+courseType+'\n'+room;
+    }
+    addCalanderEvent(courseCode, start, end, [day], colour);
+  }
+}

@@ -1,16 +1,17 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
 
+<script src="{% static 'fullcalendar/lib/jquery.min.js' %}"></script>
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/schedulerstyles.css' %}" />
-<script src="{% static 'fullcalendar/lib/jquery.min.js' %}"></script>
 <script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
 <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 <script src="{% static 'scheduler/calendarcode.js' %}"></script>
 
 <head>
+	<link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
 	<title>Carleton Schedule Optimizer</title>
 </head>
 
@@ -43,61 +44,7 @@
 										<script>
 											$(document).ready(function() {
 												var sections = {{ djangoJSON|safe }};
-												var section;
-
-												for (section in sections) {
-													title = sections[section].title;
-													courseCode = sections[section].courseCode;
-													start = (
-														function () {
-															var time = sections[section].start;
-															if (time.substring(3,5) == '05') {
-													      time = time.substring(0,3)+'00';
-													    }
-													    else { // Here the start time is XX:35
-													      time = time.substring(0,3)+'30';
-													    }
-													    return time;
-														}
-													)();
-													end = (
-														function () {
-															var time = sections[section].end;
-															if (time.substring(3,5) == '25') {
-													      time = time.substring(0,3)+'30';
-													    }
-													    else { // Here the end time is XX:55
-													      time = ''+(parseInt(time.substring(0,2))+1)+':00';
-													    }
-													    return time;
-														}
-													)();
-													day = sections[section].day;
-													courseType = sections[section].courseType;
-													room = sections[section].room;
-													prof = sections[section].prof;
-
-													if (prof === '') {
-														prof = 'Prof TBA'
-													}
-													if (room === '') {
-														room = 'Room TBA'
-													}
-
-													if (courseType == 'Lecture') {
-														colour = 'blue';
-														courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
-													}
-													else if (courseType == 'Lab') {
-														colour = 'red';
-														courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
-													}
-													else { // Here we have a tutorial
-														colour = 'green';
-														courseCode = courseCode+' '+courseType+'\n'+room;
-													}
-													addCalanderEvent(courseCode, start, end, [day], colour);
-												}
+												addSectionsToCalendar(sections);
 											});
 										</script>
 
