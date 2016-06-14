@@ -177,6 +177,7 @@ class Schedule:
 		# s = s[:-2] # We want to remove the excess newline characters
 		return s
 
+	# This method gathers all the sections for the schedule into a JSON object
 	def getJSON(self):
 		data = []
 		i = 1
@@ -194,9 +195,14 @@ class Schedule:
 				sectionData['room'] = section.room
 				data.append(sectionData)
 			i+=1
+		return data
 
-		# print (json.dumps(data, indent=4, sort_keys=True))
-		return json.dumps(data)
+# This function goes through a list of schedules, consolidating the data into a JSON object
+def getJSONData(schedules):
+	data = []
+	for schedule in schedules:
+		data.append(schedule.getJSON())
+	return json.dumps(data)
 
 # This function goes through the list of courses and gathers all the data for
 # all of them, returning the data in a list of lists of course sections
@@ -425,4 +431,5 @@ def scheduleOptimizer(subjects, term):
 # courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['ELEC2501']
 # schedules = scheduleOptimizer(courses,term)
+# getJSONData(schedules)
 # schedules[0].getJSON()

@@ -43,8 +43,9 @@
 
 										<script>
 										$(document).ready(function() {
-											var sections = {{ djangoJSON|safe }};
-											addSectionsToCalendar(sections);
+											// schedules is a JSON file containing all of the returned schedules
+											var schedules = {{ djangoJSON|safe }};
+											addSectionsToCalendar(schedules[0]);
 										});
 										</script>
 
