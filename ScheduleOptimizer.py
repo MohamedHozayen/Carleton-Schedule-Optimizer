@@ -42,6 +42,9 @@ class Day:
 	# This method adds a course section to the day, incrementing its corresponding
 	# time slots.
 	def addSection(self, section):
+		if section.courseType == 'Online Course':
+			self.sections.append(section)
+			return
 		times = section.time.split('-')
 		startTime = int(times[0])
 		endTime = int(times[1])
@@ -72,7 +75,7 @@ class Day:
 	# This method counts up all the 30 minute block breaks in the day and stores it in the breaks attribute
 	def calculateBreaks(self):
 		# If there is one course or two courses for the day, then there are no breaks
-		if len(self.sections) < 2:
+		if len(self.sections) - sum(x.courseType == 'Online Course' for x in self.sections	) < 2:
 			self.breaks = 0
 			return 0
 		values = ''
@@ -101,6 +104,9 @@ class Schedule:
 	# This method adds a section to the schedule. It checks which days to add
 	# the section to and then adds them using the Day addSection() method
 	def addSection(self, newsection):
+		if newsection.day == 'Online':
+			self.monday.addSection(newsection)
+			return
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
 				self.monday.addSection(newsection)
@@ -153,7 +159,11 @@ class Schedule:
 				course = section.courseCode
 				title = section.title
 				if course not in c:
-					c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
+					if section.courseType == 'Online Course':
+						c.append(title+' '+course+' '+section.section+' (Online Course) ('+section.CRN+')\n')
+					else:
+						c.append(title+' '+course+' '+section.section+' ('+section.CRN+')\n')
+
 		for x in sorted(set(c)):
 			s += x
 		return s[:-1]
@@ -207,8 +217,8 @@ def getJSONData(schedules):
 # This function goes through the list of courses and gathers all the data for
 # all of them, returning the data in a list of lists of course sections
 def getSemesterData(courses, term):
-	# Each element in semesterData is a course, whose first element is a list of the lectures
-	# and whose second element is a list of the tutorials or labs
+	# Each element in semesterData is a list of course sections. Each course section
+	# has its own list of the available tutorials or labs
 	semesterData = []
 	for course in courses:
 		if course != '':
@@ -263,25 +273,31 @@ def getCourseData(course, term):
 		courseTitle = section['title']
 		courseSection = section['section']
 		courseCRN = section['crn']
-		# If there is a comma, then we have the special extra lecture
-		if ',' in section['days']:
-			courseDays = section['days'].split(',')[0]
-			specialDays = section['days'].split(',')[1]
-			specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
-			specialFlag = True
-		else:
-			courseDays = section['days']
-		courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
-		courseRoom = section['room']
 		courseProf = section['timeslots'][0]['prof']
-		currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture')
+
+		# Here we have an online course
+		if section['link_id'] == 'AV':
+			currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course')
+		else:
+			# If there is a comma, then we have the special extra lecture
+			if ',' in section['days']:
+				courseDays = section['days'].split(',')[0]
+				specialDays = section['days'].split(',')[1]
+				specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
+				specialFlag = True
+			else:
+				courseDays = section['days']
+			courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
+			courseRoom = section['room']
+			currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture')
 		if specialFlag:
 			currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture'))
 
 		# If there are no labs or tutorials, we are done with the current course
 		numberOfLabsOrTutorials = len(section['labs'])
-		if numberOfLabsOrTutorials == 0:
+		if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0:
 			labstuts = [Section('', '', '', '', '', '', '', '', '')]
+
 		# Here we have labs or tutorials, so we deal with all of them
 		else:
 			# I am assuming that all tutorials have the link_id T# and all labs have the link_id L#
@@ -429,7 +445,8 @@ def scheduleOptimizer(subjects, term):
 # courses = ['SYSC2004','SYSC2001','CCDP2100','MATH2004','ELEC2501']
 # courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
 # courses = ['ECOR1010','MATH1104','MATH1004']
-# courses = ['ELEC2501']
+# courses = ['TSES3001']
+# getCourseData('TSES3001',term)
 # schedules = scheduleOptimizer(courses,term)
 # getJSONData(schedules)
 # schedules[0].getJSON()
