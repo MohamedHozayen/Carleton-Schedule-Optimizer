@@ -31,24 +31,16 @@
 							<form action="" method="post">
 							    {% csrf_token %}
 							    {{ form.as_p }}
-							    <input type="submit" value="Submit" />
+							    <input type="submit" value="Find Optimal Schedules" />
 							</form>
 
 						</div>
 			        <div class="col-md-8">
 
 								{% if result %}
-										<p><strong>Optimal Schedule Results:</strong><p>
-										<div id="result">{{ result|linebreaksbr }}</div>
-
-										<script>
-										$(document).ready(function() {
-											// schedules is a JSON file containing all of the returned schedules
-											var schedules = {{ djangoJSON|safe }};
-											addSectionsToCalendar(schedules[0]);
-										});
-										</script>
-
+										<p><strong>{{ result|linebreaksbr }}</strong><p>
+										<div id="scheduleNumber"></div>
+										<div id="scheduleInfo"></div>
 								{% endif %}
 
 								{% if error %}
@@ -58,6 +50,81 @@
 							</div>
 			    </div>
 
+					{% if result %}
+						<script>
+						$(document).ready(function() {
+							var currentSchedule = 0;
+
+							// schedules is a JSON file containing all of the returned schedules
+							var schedules = {{ djangoJSON|safe }};
+							addSectionsToCalendar(schedules[currentSchedule]);
+
+							var previous = document.getElementById('previous');
+							var next = document.getElementById('next');
+							var scheduleInfo = document.getElementById('scheduleInfo');
+							var scheduleNumber = document.getElementById('scheduleNumber');
+							scheduleInfo.innerHTML = updateScheduleInfo();
+							updateCurrentSchedule();
+
+							function updateCurrentSchedule() {
+								scheduleNumber.innerHTML = '<p><strong>Current optimal schedule: '+(currentSchedule+1)+' of '+schedules.length+'</strong><p>';
+							}
+
+							function updateScheduleInfo() {
+								crns = [];
+								courseInfos = [];
+								for (section in schedules[currentSchedule]) {
+									courseCRN = schedules[currentSchedule][section].CRN;
+									if ($.inArray(courseCRN, crns) == -1) {
+										crns.push(courseCRN);
+										title = schedules[currentSchedule][section].title;
+								    courseCode = schedules[currentSchedule][section].courseCode;
+								    courseType = schedules[currentSchedule][section].courseType;
+										s = ''+title+' '+courseCode+' '+courseType+' ('+courseCRN+')<br>';
+										courseInfos.push(s);
+									}
+								}
+								s = '';
+								courseInfos = courseInfos.sort();
+								for (info in courseInfos) {
+									s += courseInfos[info];
+								}
+								return s;
+							};
+
+							previous.onclick = function() {
+								if (currentSchedule > 0) {
+									currentSchedule -= 1;
+								}
+								else {
+									currentSchedule = schedules.length - 1;
+								}
+								$('#calendar').fullCalendar('removeEvents');
+							  addSectionsToCalendar(schedules[currentSchedule]);
+								scheduleInfo.innerHTML = updateScheduleInfo();
+								updateCurrentSchedule();
+							};
+							next.onclick = function() {
+								if (currentSchedule < schedules.length - 1) {
+									currentSchedule += 1;
+								}
+								else {
+									currentSchedule = 0;
+								}
+								$('#calendar').fullCalendar('removeEvents');
+							  addSectionsToCalendar(schedules[currentSchedule]);
+								scheduleInfo.innerHTML = updateScheduleInfo();
+								updateCurrentSchedule();
+							};
+
+						});
+						</script>
+					{% endif %}
+
+					<div id='buttons' style='text-align:center'>
+						<input id="previous" type="button" value="Previous Schedule" />
+						<input id="next" type="button" value="Next Schedule" />
+					</div>
 					<div id='calendar'></div>
 
 			    <div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>

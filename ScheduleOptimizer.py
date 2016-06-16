@@ -171,9 +171,10 @@ class Schedule:
 	# This method returns the schedule as a string. It shows the total break time
 	# and each class for each day
 	def outputSchedule(self, numschedules):
-		s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
-		s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
-		s += str(self)+'\n'+'\n'
+		s = 'The minimal possible break time for these courses is '+str(self.breaks*30)+' minutes'
+		# s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
+		# s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
+		# s += str(self)+'\n'+'\n'
 		# for day in ['monday','tuesday','wednesday','thursday','friday']:
 		# 	s += day.capitalize()+'\n'
 		# 	daylist = []

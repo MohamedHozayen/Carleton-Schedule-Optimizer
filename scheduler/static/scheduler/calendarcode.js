@@ -93,3 +93,9 @@ function addSectionsToCalendar(sections) {
     addCalanderEvent(courseCode, start, end, [day], colour);
   }
 }
+
+function displayNewSchedule(scheduleNumber) {
+  $('#calendar').fullCalendar('removeEvents');
+  currentSchedule.Value += 1;
+  addSectionsToCalendar(schedules[currentSchedule.Value]);
+}
