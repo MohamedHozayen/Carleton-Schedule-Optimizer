@@ -95,8 +95,67 @@ function addSectionsToCalendar(sections) {
   }
 }
 
+// This function refreshes the schedule on the calendar, showing the new schedule
 function displayNewSchedule(scheduleNumber) {
   $('#calendar').fullCalendar('removeEvents');
   currentSchedule.Value += 1;
   addSectionsToCalendar(schedules[currentSchedule.Value]);
+}
+
+// This function updates the text with all of the current schedule's courses and information
+function updateScheduleInfo(schedules, currentSchedule) {
+  crns = [];
+  courseInfos = [];
+  for (section in schedules[currentSchedule]) {
+    courseCRN = schedules[currentSchedule][section].CRN;
+    if ($.inArray(courseCRN, crns) == -1) {
+      crns.push(courseCRN);
+      title = schedules[currentSchedule][section].title;
+      courseCode = schedules[currentSchedule][section].courseCode;
+      courseType = schedules[currentSchedule][section].courseType;
+      s = ''+title+' '+courseCode+' '+courseType+' (CRN: '+courseCRN+')<br>';
+      courseInfos.push(s);
+    }
+  }
+  s = '';
+  courseInfos = courseInfos.sort();
+  for (info in courseInfos) {
+    s += courseInfos[info];
+  }
+  return s;
+}
+
+// This function updates the display showing the current schedule numnber
+function updateCurrentSchedule(schedules, currentSchedule) {
+  scheduleNumber.innerHTML = '<p><strong>Current optimal schedule: '+(currentSchedule+1)+' of '+schedules.length+'</strong><p>';
+}
+
+// This function displays the previous schedule in the list of schedules
+function previousClick(schedules, currentSchedule) {
+  if (currentSchedule > 0) {
+    currentSchedule -= 1;
+  }
+  else {
+    currentSchedule = schedules.length - 1;
+  }
+  $('#calendar').fullCalendar('removeEvents');
+  addSectionsToCalendar(schedules[currentSchedule]);
+  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
+  updateCurrentSchedule(schedules, currentSchedule);
+  return currentSchedule;
+}
+
+// This function displays the next schedule in the list of schedules
+function nextClick(schedules, currentSchedule) {
+  if (currentSchedule < schedules.length - 1) {
+    currentSchedule += 1;
+  }
+  else {
+    currentSchedule = 0;
+  }
+  $('#calendar').fullCalendar('removeEvents');
+  addSectionsToCalendar(schedules[currentSchedule]);
+  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
+  updateCurrentSchedule(schedules, currentSchedule);
+  return currentSchedule;
 }

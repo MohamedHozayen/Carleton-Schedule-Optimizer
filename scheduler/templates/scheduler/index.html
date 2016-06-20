@@ -63,60 +63,15 @@
 							var next = document.getElementById('next');
 							var scheduleInfo = document.getElementById('scheduleInfo');
 							var scheduleNumber = document.getElementById('scheduleNumber');
-							scheduleInfo.innerHTML = updateScheduleInfo();
-							updateCurrentSchedule();
-
-							function updateCurrentSchedule() {
-								scheduleNumber.innerHTML = '<p><strong>Current optimal schedule: '+(currentSchedule+1)+' of '+schedules.length+'</strong><p>';
-							}
-
-							function updateScheduleInfo() {
-								crns = [];
-								courseInfos = [];
-								for (section in schedules[currentSchedule]) {
-									courseCRN = schedules[currentSchedule][section].CRN;
-									if ($.inArray(courseCRN, crns) == -1) {
-										crns.push(courseCRN);
-										title = schedules[currentSchedule][section].title;
-								    courseCode = schedules[currentSchedule][section].courseCode;
-								    courseType = schedules[currentSchedule][section].courseType;
-										s = ''+title+' '+courseCode+' '+courseType+' (CRN: '+courseCRN+')<br>';
-										courseInfos.push(s);
-									}
-								}
-								s = '';
-								courseInfos = courseInfos.sort();
-								for (info in courseInfos) {
-									s += courseInfos[info];
-								}
-								return s;
-							};
+							scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
+							updateCurrentSchedule(schedules, currentSchedule);
 
 							previous.onclick = function() {
-								if (currentSchedule > 0) {
-									currentSchedule -= 1;
-								}
-								else {
-									currentSchedule = schedules.length - 1;
-								}
-								$('#calendar').fullCalendar('removeEvents');
-							  addSectionsToCalendar(schedules[currentSchedule]);
-								scheduleInfo.innerHTML = updateScheduleInfo();
-								updateCurrentSchedule();
+								currentSchedule = previousClick(schedules, currentSchedule);
 							};
 							next.onclick = function() {
-								if (currentSchedule < schedules.length - 1) {
-									currentSchedule += 1;
-								}
-								else {
-									currentSchedule = 0;
-								}
-								$('#calendar').fullCalendar('removeEvents');
-							  addSectionsToCalendar(schedules[currentSchedule]);
-								scheduleInfo.innerHTML = updateScheduleInfo();
-								updateCurrentSchedule();
+								currentSchedule = nextClick(schedules, currentSchedule);
 							};
-
 						});
 						</script>
 					{% endif %}
