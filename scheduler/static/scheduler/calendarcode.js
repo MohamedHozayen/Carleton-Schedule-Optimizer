@@ -64,6 +64,7 @@ function addSectionsToCalendar(sections) {
   for (section in sections) {
     title = sections[section].title;
     courseCode = sections[section].courseCode;
+    courseCRN = sections[section].CRN;
     start = getStartTime(sections[section].start);
     end = getEndTime(sections[section].end);
     day = sections[section].day;
@@ -80,15 +81,15 @@ function addSectionsToCalendar(sections) {
 
     if (courseType == 'Lecture') {
       colour = 'blue';
-      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
     }
     else if (courseType == 'Lab') {
       colour = 'red';
-      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
     }
     else { // Here we have a tutorial
       colour = 'green';
-      courseCode = courseCode+' '+courseType+'\n'+room;
+      courseCode = courseCode+' '+courseType+'\n'+room+'\nCRN: '+courseCRN;
     }
     addCalanderEvent(courseCode, start, end, [day], colour);
   }
