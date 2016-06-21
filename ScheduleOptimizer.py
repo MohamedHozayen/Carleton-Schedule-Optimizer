@@ -208,6 +208,21 @@ class Schedule:
 			i+=1
 		return data
 
+	# This method goes through each filter, adding it as a dummy section to each corresponding day
+	# Each filter is of the form X####, with X being the day and #### the 30 minute time block
+	def addFilters(self, filters):
+		for fil in filters:
+			if 'M' in fil[0]:
+				self.monday.timeSlots[fil[1:5]] += 1
+			elif 'T' in fil[0]:
+				self.tuesday.timeSlots[fil[1:5]] += 1
+			elif 'W' in fil[0]:
+				self.wednesday.timeSlots[fil[1:5]] += 1
+			elif 'R' in fil[0]:
+				self.thursday.timeSlots[fil[1:5]] += 1
+			elif 'F' in fil[0]:
+				self.friday.timeSlots[fil[1:5]] += 1
+
 # This function goes through a list of schedules, consolidating the data into a JSON object
 def getJSONData(schedules):
 	data = []
@@ -331,99 +346,105 @@ def getCourseData(course, term):
 	# We return the list of all the sections for the given course
 	return sections
 
-def getOptimizedSchedules(semesterData):
+def getOptimizedSchedules(semesterData, filters):
 	maxschedules = 50
 	firstpass = True
 	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
 
+	# We add the filters to the schedule
+	newschedule.addFilters(filters)
+
 	# The lectures and tutorials/labs for all sections are added in for each loops,
 	# and we check for conflicts after each addition. If a conflict is found, then
 	# we do not proceed deeper into the loop.
 	for lec1 in semesterData[0]:
 		newschedule.addSection(lec1)
-		for lt1 in lec1.labstuts:
-			newschedule.addSection(lt1)
-			if newschedule.checkForConflicts():
-				newschedule.removeSection(lt1)
-			else:
-				for lec2 in semesterData[1]:
-					newschedule.addSection(lec2)
-					if newschedule.checkForConflicts():
-						newschedule.removeSection(lec2)
-					else:
-						for lt2 in lec2.labstuts:
-							newschedule.addSection(lt2)
-							if newschedule.checkForConflicts():
-								newschedule.removeSection(lt2)
-							else:
-								for lec3 in semesterData[2]:
-									newschedule.addSection(lec3)
-									if newschedule.checkForConflicts():
-										newschedule.removeSection(lec3)
-									else:
-										for lt3 in lec3.labstuts:
-											newschedule.addSection(lt3)
-											if newschedule.checkForConflicts():
-												newschedule.removeSection(lt3)
-											else:
-												for lec4 in semesterData[3]:
-													newschedule.addSection(lec4)
-													if newschedule.checkForConflicts():
-														newschedule.removeSection(lec4)
-													else:
-														for lt4 in lec4.labstuts:
-															newschedule.addSection(lt4)
-															if newschedule.checkForConflicts():
-																newschedule.removeSection(lt4)
-															else:
-																for lec5 in semesterData[4]:
-																	newschedule.addSection(lec5)
-																	if newschedule.checkForConflicts():
-																		newschedule.removeSection(lec5)
-																	else:
-																		for lt5 in lec5.labstuts:
-																			newschedule.addSection(lt5)
-																			if newschedule.checkForConflicts():
-																				newschedule.removeSection(lt5)
-																			else:
-																				for lec6 in semesterData[5]:
-																					newschedule.addSection(lec6)
-																					if newschedule.checkForConflicts():
-																						newschedule.removeSection(lec6)
-																					else:
-																						for lt6 in lec6.labstuts:
-																							newschedule.addSection(lt6)
-																							if newschedule.checkForConflicts():
-																								newschedule.removeSection(lt6)
-																							else:
-																								newschedule.calculateBreaks()
-																								# Here we found the first conflict-free schedule
-																								if firstpass:
-																									schedule = copy.deepcopy(newschedule)
-																									schedules = [schedule]
-																									firstpass = False
-																								# Here we found a schedule with smaller breaks than the previous best schedule
-																								elif newschedule.breaks < schedule.breaks:
-																									schedule = copy.deepcopy(newschedule)
-																									schedules = [schedule]
-																								# Here we found a schedule with the same amount of breaks as the previous best
-																								elif newschedule.breaks == schedule.breaks:
-																									if len(schedules) < maxschedules:
-																										schedules.append(copy.deepcopy(newschedule))
-																								newschedule.removeSection(lt6)
-																						newschedule.removeSection(lec6)
-																				newschedule.removeSection(lt5)
-																		newschedule.removeSection(lec5)
-																newschedule.removeSection(lt4)
-														newschedule.removeSection(lec4)
-												newschedule.removeSection(lt3)
-										newschedule.removeSection(lec3)
-								newschedule.removeSection(lt2)
-						newschedule.removeSection(lec2)
-				newschedule.removeSection(lt1)
-		newschedule.removeSection(lec1)
+		if newschedule.checkForConflicts():
+			newschedule.removeSection(lec1)
+		else:
+			for lt1 in lec1.labstuts:
+				newschedule.addSection(lt1)
+				if newschedule.checkForConflicts():
+					newschedule.removeSection(lt1)
+				else:
+					for lec2 in semesterData[1]:
+						newschedule.addSection(lec2)
+						if newschedule.checkForConflicts():
+							newschedule.removeSection(lec2)
+						else:
+							for lt2 in lec2.labstuts:
+								newschedule.addSection(lt2)
+								if newschedule.checkForConflicts():
+									newschedule.removeSection(lt2)
+								else:
+									for lec3 in semesterData[2]:
+										newschedule.addSection(lec3)
+										if newschedule.checkForConflicts():
+											newschedule.removeSection(lec3)
+										else:
+											for lt3 in lec3.labstuts:
+												newschedule.addSection(lt3)
+												if newschedule.checkForConflicts():
+													newschedule.removeSection(lt3)
+												else:
+													for lec4 in semesterData[3]:
+														newschedule.addSection(lec4)
+														if newschedule.checkForConflicts():
+															newschedule.removeSection(lec4)
+														else:
+															for lt4 in lec4.labstuts:
+																newschedule.addSection(lt4)
+																if newschedule.checkForConflicts():
+																	newschedule.removeSection(lt4)
+																else:
+																	for lec5 in semesterData[4]:
+																		newschedule.addSection(lec5)
+																		if newschedule.checkForConflicts():
+																			newschedule.removeSection(lec5)
+																		else:
+																			for lt5 in lec5.labstuts:
+																				newschedule.addSection(lt5)
+																				if newschedule.checkForConflicts():
+																					newschedule.removeSection(lt5)
+																				else:
+																					for lec6 in semesterData[5]:
+																						newschedule.addSection(lec6)
+																						if newschedule.checkForConflicts():
+																							newschedule.removeSection(lec6)
+																						else:
+																							for lt6 in lec6.labstuts:
+																								newschedule.addSection(lt6)
+																								if newschedule.checkForConflicts():
+																									newschedule.removeSection(lt6)
+																								else:
+																									newschedule.calculateBreaks()
+																									# Here we found the first conflict-free schedule
+																									if firstpass:
+																										schedule = copy.deepcopy(newschedule)
+																										schedules = [schedule]
+																										firstpass = False
+																									# Here we found a schedule with smaller breaks than the previous best schedule
+																									elif newschedule.breaks < schedule.breaks:
+																										schedule = copy.deepcopy(newschedule)
+																										schedules = [schedule]
+																									# Here we found a schedule with the same amount of breaks as the previous best
+																									elif newschedule.breaks == schedule.breaks:
+																										if len(schedules) < maxschedules:
+																											schedules.append(copy.deepcopy(newschedule))
+																									newschedule.removeSection(lt6)
+																							newschedule.removeSection(lec6)
+																					newschedule.removeSection(lt5)
+																			newschedule.removeSection(lec5)
+																	newschedule.removeSection(lt4)
+															newschedule.removeSection(lec4)
+													newschedule.removeSection(lt3)
+											newschedule.removeSection(lec3)
+									newschedule.removeSection(lt2)
+							newschedule.removeSection(lec2)
+					newschedule.removeSection(lt1)
+			newschedule.removeSection(lec1)
 
 	if firstpass:
 		return 'There is no possible conflict-free schedule for the given courses'
@@ -434,11 +455,11 @@ def getOptimizedSchedules(semesterData):
 
 # This function collects the semester data, ensures the courses were valid,
 # and then runs the getOptimizedSchedules function
-def scheduleOptimizer(subjects, term):
+def scheduleOptimizer(subjects, term, filters):
 	semesterData = getSemesterData(subjects, term)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
-	return getOptimizedSchedules(semesterData)
+	return getOptimizedSchedules(semesterData, filters)
 
 # term = '201630'
 # term = '201710'
@@ -448,6 +469,8 @@ def scheduleOptimizer(subjects, term):
 # courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['TSES3001']
 # getCourseData('TSES3001',term)
-# schedules = scheduleOptimizer(courses,term)
+# filters = ['M0835','T0835','W0835','R1805','F1435']
+# schedules = scheduleOptimizer(courses,term, filters)
+# print(schedules[5])
 # getJSONData(schedules)
 # schedules[0].getJSON()

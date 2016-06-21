@@ -42,8 +42,10 @@ def scheduler(request):
                     'error': 'Error: duplicate courses submitted',
                 })
 
+            filters = []
+
             # Result will be a string if there was an invalid course or a schedule could not be found
-            result = scheduleOptimizer(subjects, term)
+            result = scheduleOptimizer(subjects, term, filters)
 
             # If the result is a string, then one of the courses was invalid
             if isinstance(result, str):
