@@ -16,6 +16,9 @@ def scheduler(request):
             c4 = form.cleaned_data['c4'].upper()
             c5 = form.cleaned_data['c5'].upper()
             c6 = form.cleaned_data['c6'].upper()
+            filters = form.cleaned_data['timeFilters']
+            if len(filters) > 0:
+                filters = filters.split(',')
             subjects = [c1,c2,c3,c4,c5,c6]
 
             if term == '201630' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
@@ -41,8 +44,6 @@ def scheduler(request):
                     'form': form,
                     'error': 'Error: duplicate courses submitted',
                 })
-
-            filters = []
 
             # Result will be a string if there was an invalid course or a schedule could not be found
             result = scheduleOptimizer(subjects, term, filters)
