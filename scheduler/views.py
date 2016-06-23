@@ -57,7 +57,7 @@ def scheduler(request):
             else:
                 return render(request, 'scheduler/index.html', {
                     'form': form,
-                    'result': result[0].outputSchedule(len(result)), # This just outputs the courses for one schedule
+                    'result': result[0].outputBreakTime(), # This just outputs the break time for the schedules
                     'djangoJSON': getJSONData(result), # This returns a JSON object containing the data for all valid schedules
                 })
 

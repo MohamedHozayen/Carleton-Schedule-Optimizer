@@ -168,24 +168,9 @@ class Schedule:
 			s += x
 		return s[:-1]
 
-	# This method returns the schedule as a string. It shows the total break time
-	# and each class for each day
-	def outputSchedule(self, numschedules):
+	# This method returns the break time for the given schedule
+	def outputBreakTime(self):
 		s = 'The minimal possible break time for these courses is '+str(self.breaks*30)+' minutes'
-		# s = 'Minimal break time for the given courses: '+str(self.breaks*30)+' minutes'+'\n'
-		# s += 'Number of schedules with minimal break time: '+str(numschedules)+'\n\n'
-		# s += str(self)+'\n'+'\n'
-		# for day in ['monday','tuesday','wednesday','thursday','friday']:
-		# 	s += day.capitalize()+'\n'
-		# 	daylist = []
-		# 	for section in getattr(self,day).sections:
-		# 		daylist.append(section.time+": "+section.courseCode+' '+section.section+' '+section.courseType)
-		# 	if len(daylist) == 0:
-		# 		s += 'No courses today!\n'
-		# 	for section in sorted(daylist):
-		# 		s += section+'\n'
-		# 	s += '\n'
-		# s = s[:-2] # We want to remove the excess newline characters
 		return s
 
 	# This method gathers all the sections for the schedule into a JSON object
@@ -447,10 +432,10 @@ def getOptimizedSchedules(semesterData, filters):
 			newschedule.removeSection(lec1)
 
 	if firstpass:
-		return 'There is no possible conflict-free schedule for the given courses'
+		if len(filters) > 0:
+			return 'There is no possible conflict-free schedule for the given courses. Try using fewer filters.'
+		return 'There is no possible conflict-free schedule for the given courses.'
 	else:
-		# return schedule.outputSchedule(len(schedules))
-		# schedule.outputSchedule(len(schedules))
 		return schedules
 
 # This function collects the semester data, ensures the courses were valid,
