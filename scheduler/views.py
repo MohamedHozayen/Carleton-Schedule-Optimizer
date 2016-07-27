@@ -10,12 +10,12 @@ def scheduler(request):
         # check whether it's valid:
         if form.is_valid():
             term = form.cleaned_data['semester']
-            c1 = form.cleaned_data['c1'].upper()
-            c2 = form.cleaned_data['c2'].upper()
-            c3 = form.cleaned_data['c3'].upper()
-            c4 = form.cleaned_data['c4'].upper()
-            c5 = form.cleaned_data['c5'].upper()
-            c6 = form.cleaned_data['c6'].upper()
+            c1 = form.cleaned_data['c1'].upper().replace(' ','')
+            c2 = form.cleaned_data['c2'].upper().replace(' ','')
+            c3 = form.cleaned_data['c3'].upper().replace(' ','')
+            c4 = form.cleaned_data['c4'].upper().replace(' ','')
+            c5 = form.cleaned_data['c5'].upper().replace(' ','')
+            c6 = form.cleaned_data['c6'].upper().replace(' ','')
             filters = form.cleaned_data['timeFilters']
             if len(filters) > 0:
                 filters = filters.split(',')
