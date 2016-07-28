@@ -60,6 +60,8 @@ function addCalanderEvent(title, start, end, days, colour) {
 // This function takes a JSON list of sections, adding them one by one to the calendar
 function addSectionsToCalendar(sections) {
   var section;
+  var titles = ["","","","","",""];
+  count = 0;
 
   for (section in sections) {
     title = sections[section].title;
@@ -79,6 +81,7 @@ function addSectionsToCalendar(sections) {
       room = 'Room TBA'
     }
 
+    // Here we assign colours to the sections based on their type
     if (courseType == 'Lecture') {
       colour = 'blue';
       courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
@@ -91,6 +94,16 @@ function addSectionsToCalendar(sections) {
       colour = 'green';
       courseCode = courseCode+' '+courseType+'\n'+room+'\nCRN: '+courseCRN;
     }
+
+    // This code block assigns different colours to each course instead of to each section type
+    if (!(titles.includes(title))) {
+      titles[count] = title;
+      console.log(titles);
+      count++;
+    }
+    console.log(title);
+    console.log(titles.indexOf(title));
+
     addCalanderEvent(courseCode, start, end, [day], colour);
   }
 }
