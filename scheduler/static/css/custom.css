@@ -1,0 +1,35 @@
+.navbar-custom{
+  background :#B4353B !important;
+  color:black;
+  height:100px;
+}
+
+#carleton-logo img{
+  padding-top:20px;
+  float:right;
+}
+
+#app-title{
+  line-height: 100px;
+  color: white;
+  font-size: 24px;
+}
+
+.main-content{
+  padding:20px;
+}
+
+.input-form{
+  background:black;
+  color:white;
+  padding:20px;
+}
+
+
+#addFilterBtn{
+  margin-top:20px;
+}
+
+#findBtn{
+  margin-top:20px;
+}
