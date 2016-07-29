@@ -17,6 +17,7 @@ $(document).ready(function() {
 				minTime: "8:00",
 				maxTime: "22:00",
 				contentHeight: 'auto',
+        // contentWidth: 'auto',
         timeFormat: '',
     })
 });

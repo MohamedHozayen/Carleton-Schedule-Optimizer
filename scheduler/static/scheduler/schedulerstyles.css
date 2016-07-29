@@ -96,6 +96,7 @@ body {
     text-align: center;
 }
 
-.checkbox {
-    /*text-align: center !important;*/
+.carletonColour {
+  background-color: #b4353b;
+  color: white;
 }
