@@ -259,6 +259,9 @@ def getCourseData(course, term):
 		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
 		text = '\n'.join(chunk for chunk in chunks if chunk)[:-37]
 
+	# This fixes receiving unwanted data in the JSON
+	text = text.split('\n')[0]
+
 	# Check if the given course is valid
 	if len(text) < 10:
 		return 'invalid'
