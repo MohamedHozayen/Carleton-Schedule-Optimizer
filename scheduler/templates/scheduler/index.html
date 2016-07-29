@@ -1,14 +1,14 @@
-{% load staticfiles %}
-{% load bootstrap3 %}
-
+{% load staticfiles %} {% load bootstrap3 %}
+{% load crispy_forms_tags %}
 <script src="{% static 'fullcalendar/lib/jquery.min.js' %}"></script>
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% bootstrap_css %} {% bootstrap_javascript %}
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/schedulerstyles.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
 <script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
 <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 <script src="{% static 'scheduler/calendarcode.js' %}"></script>
+<script src="{% static 'scheduler/custom.js' %}"></script>
 
 <head>
 	<link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
@@ -16,155 +16,89 @@
 </head>
 
 <body>
-
-	<div class='row' id='wrap'>
-			<div class="col-md-2" id='sides'></div>
-
-			<div class="col-md-8" id='middle'>
-				<h3 align="center">Carleton Schedule Optimizer</h3>
-				<p>Welcome to the Carleton Schedule Optimizer! This web app grabs course data from Carleton University's website and uses it to build an "optimal" schedule. Optimal in this case means a schedule with the fewest number of breaks between classes.
-				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code. Submit an empty form to see the results for an example semester.</p>
-
-			    <div class="row">
-			      <div class="col-md-4" id="form">
-
-							<form action="" method="post">
-							    {% csrf_token %}
-							    {{ form.as_p }}
-							    <input type="submit" value="Find Optimal Schedules!" />
-							</form>
-
-							<!-- Trigger/Open The Modal -->
-							<button id="myBtn">Add Time Filters</button>
-
-							<!-- The Modal -->
-							<div id="myModal" class="modal">
-							  <!-- Modal content -->
-							  <div class="modal-content">
-							    <span class="close">×</span>
-									<table id="timeFilterTable">
-										<tr>
-											<td></td><td>Monday</td> <td>Tuesday</td> <td>Wednesday</td> <td>Thursday</td> <td>Friday</td>
-										</tr>
-										<tr><td>8:35</td><td><input type="checkbox" class="checkbox" name="M0835"></td> <td><input type="checkbox" class="checkbox" name="T0835"></td> <td><input type="checkbox" class="checkbox" name="W0835"></td> <td><input type="checkbox" class="checkbox" name="R0835"></td> <td><input type="checkbox" class="checkbox" name="F0835"></td></tr>
-										<tr><td>9:05</td><td><input type="checkbox" class="checkbox" name="M0905"></td> <td><input type="checkbox" class="checkbox" name="T0905"></td> <td><input type="checkbox" class="checkbox" name="W0905"></td> <td><input type="checkbox" class="checkbox" name="R0905"></td> <td><input type="checkbox" class="checkbox" name="F0905"></td></tr>
-										<tr><td>9:35</td><td><input type="checkbox" class="checkbox" name="M0935"></td> <td><input type="checkbox" class="checkbox" name="T0935"></td> <td><input type="checkbox" class="checkbox" name="W0935"></td> <td><input type="checkbox" class="checkbox" name="R0935"></td> <td><input type="checkbox" class="checkbox" name="F0935"></td></tr>
-										<tr><td>10:05</td><td><input type="checkbox" class="checkbox" name="M1005"></td> <td><input type="checkbox" class="checkbox" name="T1005"></td> <td><input type="checkbox" class="checkbox" name="W1005"></td> <td><input type="checkbox" class="checkbox" name="R1005"></td> <td><input type="checkbox" class="checkbox" name="F1005"></td></tr>
-										<tr><td>10:35</td><td><input type="checkbox" class="checkbox" name="M1035"></td> <td><input type="checkbox" class="checkbox" name="T1035"></td> <td><input type="checkbox" class="checkbox" name="W1035"></td> <td><input type="checkbox" class="checkbox" name="R1035"></td> <td><input type="checkbox" class="checkbox" name="F1035"></td></tr>
-										<tr><td>11:05</td><td><input type="checkbox" class="checkbox" name="M1105"></td> <td><input type="checkbox" class="checkbox" name="T1105"></td> <td><input type="checkbox" class="checkbox" name="W1105"></td> <td><input type="checkbox" class="checkbox" name="R1105"></td> <td><input type="checkbox" class="checkbox" name="F1105"></td></tr>
-										<tr><td>11:35</td><td><input type="checkbox" class="checkbox" name="M1135"></td> <td><input type="checkbox" class="checkbox" name="T1135"></td> <td><input type="checkbox" class="checkbox" name="W1135"></td> <td><input type="checkbox" class="checkbox" name="R1135"></td> <td><input type="checkbox" class="checkbox" name="F1135"></td></tr>
-										<tr><td>12:05</td><td><input type="checkbox" class="checkbox" name="M1205"></td> <td><input type="checkbox" class="checkbox" name="T1205"></td> <td><input type="checkbox" class="checkbox" name="W1205"></td> <td><input type="checkbox" class="checkbox" name="R1205"></td> <td><input type="checkbox" class="checkbox" name="F1205"></td></tr>
-										<tr><td>12:35</td><td><input type="checkbox" class="checkbox" name="M1235"></td> <td><input type="checkbox" class="checkbox" name="T1235"></td> <td><input type="checkbox" class="checkbox" name="W1235"></td> <td><input type="checkbox" class="checkbox" name="R1235"></td> <td><input type="checkbox" class="checkbox" name="F1235"></td></tr>
-										<tr><td>13:05</td><td><input type="checkbox" class="checkbox" name="M1305"></td> <td><input type="checkbox" class="checkbox" name="T1305"></td> <td><input type="checkbox" class="checkbox" name="W1305"></td> <td><input type="checkbox" class="checkbox" name="R1305"></td> <td><input type="checkbox" class="checkbox" name="F1305"></td></tr>
-										<tr><td>13:35</td><td><input type="checkbox" class="checkbox" name="M1335"></td> <td><input type="checkbox" class="checkbox" name="T1335"></td> <td><input type="checkbox" class="checkbox" name="W1335"></td> <td><input type="checkbox" class="checkbox" name="R1335"></td> <td><input type="checkbox" class="checkbox" name="F1335"></td></tr>
-										<tr><td>14:05</td><td><input type="checkbox" class="checkbox" name="M1405"></td> <td><input type="checkbox" class="checkbox" name="T1405"></td> <td><input type="checkbox" class="checkbox" name="W1405"></td> <td><input type="checkbox" class="checkbox" name="R1405"></td> <td><input type="checkbox" class="checkbox" name="F1405"></td></tr>
-										<tr><td>14:35</td><td><input type="checkbox" class="checkbox" name="M1435"></td> <td><input type="checkbox" class="checkbox" name="T1435"></td> <td><input type="checkbox" class="checkbox" name="W1435"></td> <td><input type="checkbox" class="checkbox" name="R1435"></td> <td><input type="checkbox" class="checkbox" name="F1435"></td></tr>
-										<tr><td>15:05</td><td><input type="checkbox" class="checkbox" name="M1505"></td> <td><input type="checkbox" class="checkbox" name="T1505"></td> <td><input type="checkbox" class="checkbox" name="W1505"></td> <td><input type="checkbox" class="checkbox" name="R1505"></td> <td><input type="checkbox" class="checkbox" name="F1505"></td></tr>
-										<tr><td>15:35</td><td><input type="checkbox" class="checkbox" name="M1535"></td> <td><input type="checkbox" class="checkbox" name="T1535"></td> <td><input type="checkbox" class="checkbox" name="W1535"></td> <td><input type="checkbox" class="checkbox" name="R1535"></td> <td><input type="checkbox" class="checkbox" name="F1535"></td></tr>
-										<tr><td>16:05</td><td><input type="checkbox" class="checkbox" name="M1605"></td> <td><input type="checkbox" class="checkbox" name="T1605"></td> <td><input type="checkbox" class="checkbox" name="W1605"></td> <td><input type="checkbox" class="checkbox" name="R1605"></td> <td><input type="checkbox" class="checkbox" name="F1605"></td></tr>
-										<tr><td>16:35</td><td><input type="checkbox" class="checkbox" name="M1635"></td> <td><input type="checkbox" class="checkbox" name="T1635"></td> <td><input type="checkbox" class="checkbox" name="W1635"></td> <td><input type="checkbox" class="checkbox" name="R1635"></td> <td><input type="checkbox" class="checkbox" name="F1635"></td></tr>
-										<tr><td>17:05</td><td><input type="checkbox" class="checkbox" name="M1705"></td> <td><input type="checkbox" class="checkbox" name="T1705"></td> <td><input type="checkbox" class="checkbox" name="W1705"></td> <td><input type="checkbox" class="checkbox" name="R1705"></td> <td><input type="checkbox" class="checkbox" name="F1705"></td></tr>
-										<tr><td>17:35</td><td><input type="checkbox" class="checkbox" name="M1735"></td> <td><input type="checkbox" class="checkbox" name="T1735"></td> <td><input type="checkbox" class="checkbox" name="W1735"></td> <td><input type="checkbox" class="checkbox" name="R1735"></td> <td><input type="checkbox" class="checkbox" name="F1735"></td></tr>
-										<tr><td>18:05</td><td><input type="checkbox" class="checkbox" name="M1805"></td> <td><input type="checkbox" class="checkbox" name="T1805"></td> <td><input type="checkbox" class="checkbox" name="W1805"></td> <td><input type="checkbox" class="checkbox" name="R1805"></td> <td><input type="checkbox" class="checkbox" name="F1805"></td></tr>
-										<tr><td>18:35</td><td><input type="checkbox" class="checkbox" name="M1835"></td> <td><input type="checkbox" class="checkbox" name="T1835"></td> <td><input type="checkbox" class="checkbox" name="W1835"></td> <td><input type="checkbox" class="checkbox" name="R1835"></td> <td><input type="checkbox" class="checkbox" name="F1835"></td></tr>
-										<tr><td>19:05</td><td><input type="checkbox" class="checkbox" name="M1905"></td> <td><input type="checkbox" class="checkbox" name="T1905"></td> <td><input type="checkbox" class="checkbox" name="W1905"></td> <td><input type="checkbox" class="checkbox" name="R1905"></td> <td><input type="checkbox" class="checkbox" name="F1905"></td></tr>
-										<tr><td>19:35</td><td><input type="checkbox" class="checkbox" name="M1935"></td> <td><input type="checkbox" class="checkbox" name="T1935"></td> <td><input type="checkbox" class="checkbox" name="W1935"></td> <td><input type="checkbox" class="checkbox" name="R1935"></td> <td><input type="checkbox" class="checkbox" name="F1935"></td></tr>
-										<tr><td>20:05</td><td><input type="checkbox" class="checkbox" name="M2005"></td> <td><input type="checkbox" class="checkbox" name="T2005"></td> <td><input type="checkbox" class="checkbox" name="W2005"></td> <td><input type="checkbox" class="checkbox" name="R2005"></td> <td><input type="checkbox" class="checkbox" name="F2005"></td></tr>
-										<tr><td>20:35</td><td><input type="checkbox" class="checkbox" name="M2035"></td> <td><input type="checkbox" class="checkbox" name="T2035"></td> <td><input type="checkbox" class="checkbox" name="W2035"></td> <td><input type="checkbox" class="checkbox" name="R2035"></td> <td><input type="checkbox" class="checkbox" name="F2035"></td></tr>
-										<tr><td>21:05</td><td><input type="checkbox" class="checkbox" name="M2105"></td> <td><input type="checkbox" class="checkbox" name="T2105"></td> <td><input type="checkbox" class="checkbox" name="W2105"></td> <td><input type="checkbox" class="checkbox" name="R2105"></td> <td><input type="checkbox" class="checkbox" name="F2105"></td></tr>
-										<tr><td>21:35</td><td><input type="checkbox" class="checkbox" name="M2135"></td> <td><input type="checkbox" class="checkbox" name="T2135"></td> <td><input type="checkbox" class="checkbox" name="W2135"></td> <td><input type="checkbox" class="checkbox" name="R2135"></td> <td><input type="checkbox" class="checkbox" name="F2135"></td></tr>
-									</table>
-							  </div>
-							</div>
-
-							<script>
-							// Get the modal
-							var modal = document.getElementById('myModal');
-							// Get the button that opens the modal
-							var btn = document.getElementById("myBtn");
-							// Get the <span> element that closes the modal
-							var span = document.getElementsByClassName("close")[0];
-							// When the user clicks the button, open the modal
-							btn.onclick = function() {
-							    modal.style.display = "block";
-							}
-							// When the user clicks on <span> (x), close the modal
-							span.onclick = function() {
-							    modal.style.display = "none";
-							}
-							// When the user clicks anywhere outside of the modal, close it
-							window.onclick = function(event) {
-							    if (event.target == modal) {
-							        modal.style.display = "none";
-							    }
-							}
-
-							var checkboxList = [];
-							// This function adds times to the checkboxList when they are checked and removes them when unchecked
-							$('td .checkbox').click(function () {
-								if(this.checked) {
-									checkboxList.push(this.name);
-								}
-								else {
-									checkboxList.splice(checkboxList.indexOf(this.name),1);
-								}
-								console.log(checkboxList);
-								document.getElementById("id_timeFilters").value = checkboxList.join();
-							});
-							</script>
-
-						</div>
-			        <div class="col-md-8">
-
-								{% if result %}
-										<p><strong>{{ result|linebreaksbr }}</strong><p>
-										<div id="scheduleNumber"></div>
-										<div id="scheduleInfo"></div>
-								{% endif %}
-
-								{% if error %}
-									<p><strong>{{ error|safe}}</strong><p>
-								{% endif %}
-
-							</div>
-			    </div>
-
-					{% if result %}
-						<script>
-						$(document).ready(function() {
-							var currentSchedule = 0;
-
-							// schedules is a JSON file containing all of the returned schedules
-							var schedules = {{ djangoJSON|safe }};
-							addSectionsToCalendar(schedules[currentSchedule]);
-
-							var previous = document.getElementById('previous');
-							var next = document.getElementById('next');
-							var scheduleInfo = document.getElementById('scheduleInfo');
-							var scheduleNumber = document.getElementById('scheduleNumber');
-							scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
-							updateCurrentSchedule(schedules, currentSchedule);
-
-							previous.onclick = function() {
-								currentSchedule = previousClick(schedules, currentSchedule);
-							};
-							next.onclick = function() {
-								currentSchedule = nextClick(schedules, currentSchedule);
-							};
-						});
-						</script>
-					{% endif %}
-
-					<div id='buttons' style='text-align:center'>
-						<input id="previous" type="button" value="Previous Schedule" />
-						<input id="next" type="button" value="Next Schedule" />
-					</div>
-					<div id='calendar'></div>
-
-			    <div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
+	<div class="navbar-custom">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-xs-6" id="app-title">
+					Carleton Schedule Optimizer
+				</div>
+				<div class="col-xs-6" id="carleton-logo">
+					<img src="{% static 'images/carletonLogo.png' %}" />
+				</div>
 			</div>
-
-			<div class="col-md-2" id='sides'></div>
+		</div>
 	</div>
 
+	<div class="container-fuild main-content">
+		<div class='row-fluid'>
+			<!-- <h3 align="center">Carleton Schedule Optimizer</h3>
+				<p>Welcome to the Carleton Schedule Optimizer! This web app grabs course data from Carleton University's website and uses it to build an "optimal" schedule. Optimal in this case means a schedule with the fewest number of breaks between classes.
+				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code. Submit an empty form to see the results for an example semester.</p> -->
+			<div class="col-md-3 input-form" id="form">
+				<!-- <form action="" method="post"> -->
+					{% csrf_token %}
+					<!-- {% for field in form %}
+					<div class="form-group">
+						{{field.label_tag}}
+						{{field}}
+					</div>
+					{% endfor %} -->
+					<!-- {{ form.as_p }} -->
+					{% crispy form %}
+					<button id="addFilterBtn" class="btn btn-default col-sm-12">Add Time Filters</button>
+					<!-- <input type="submit" value="Find Optimal Schedules!" class="btn btn-default" id="findBtn" /> -->
+				</form>
+			</div>
+			<!-- end of input form -->
+			<div class="col-md-9">
+
+				{% if result %}
+				<p><strong>{{ result|linebreaksbr }}</strong>
+					<p>
+						<div id="scheduleNumber"></div>
+						<div id="scheduleInfo"></div>
+						{% endif %} {% if error %}
+						<p><strong>{{ error|safe}}</strong>
+							<p>
+								{% endif %}
+
+			</div>
+
+			{% if result %}
+			<script>
+				$(document).ready(function() {
+					var currentSchedule = 0;
+
+					// schedules is a JSON file containing all of the returned schedules
+					var schedules = {{djangoJSON | safe}};
+					addSectionsToCalendar(schedules[currentSchedule]);
+
+					var previous = document.getElementById('previous');
+					var next = document.getElementById('next');
+					var scheduleInfo = document.getElementById('scheduleInfo');
+					var scheduleNumber = document.getElementById('scheduleNumber');
+					scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
+					updateCurrentSchedule(schedules, currentSchedule);
+
+					previous.onclick = function() {
+						currentSchedule = previousClick(schedules, currentSchedule);
+					};
+					next.onclick = function() {
+						currentSchedule = nextClick(schedules, currentSchedule);
+					};
+				});
+			</script>
+			{% endif %}
+
+			<div id='buttons' style='text-align:center'>
+				<input id="previous" type="button" value="Previous Schedule" />
+				<input id="next" type="button" value="Next Schedule" />
+			</div>
+			<div class="col-md-8" id='calendar'></div>
+
+			<div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
+		</div>
+		<!-- end of body row-->
+	</div>
+	<!-- end of body container-->
 </body>
