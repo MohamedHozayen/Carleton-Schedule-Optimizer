@@ -57,9 +57,22 @@ function addCalanderEvent(title, start, end, days, colour) {
 		return eventObject;
 }
 
+// This enum is used to convert an array element index to a colour
+var ColourEnum = {
+  0 : "red",
+  1 : "green",
+  2 : "blue",
+  3 : "orange",
+  4 : "purple",
+  5 : "deeppink"
+}
+
 // This function takes a JSON list of sections, adding them one by one to the calendar
 function addSectionsToCalendar(sections) {
   var section;
+  var titles = ["","","","","",""];
+  count = 0;
+  courseText = "";
 
   for (section in sections) {
     title = sections[section].title;
@@ -67,6 +80,8 @@ function addSectionsToCalendar(sections) {
     courseCRN = sections[section].CRN;
     start = getStartTime(sections[section].start);
     end = getEndTime(sections[section].end);
+    // start = sections[section].start;
+    // end = sections[section].end;
     day = sections[section].day;
     courseType = sections[section].courseType;
     room = sections[section].room;
@@ -79,19 +94,28 @@ function addSectionsToCalendar(sections) {
       room = 'Room TBA'
     }
 
+    // Here we assign colours to the sections based on their type
     if (courseType == 'Lecture') {
-      colour = 'blue';
-      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
+      // colour = 'blue';
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
     }
     else if (courseType == 'Lab') {
-      colour = 'red';
-      courseCode = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
+      // colour = 'red';
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
     }
     else { // Here we have a tutorial
-      colour = 'green';
-      courseCode = courseCode+' '+courseType+'\n'+room+'\nCRN: '+courseCRN;
+      // colour = 'green';
+      courseText = courseCode+' '+courseType+'\n'+room;
     }
-    addCalanderEvent(courseCode, start, end, [day], colour);
+
+    // This code block assigns different colours to each course instead of to each section type
+    if (!(titles.includes(title))) {
+      titles[count] = title;
+      count++;
+    }
+    colour = ColourEnum[titles.indexOf(title)];
+
+    addCalanderEvent(courseText, start, end, [day], colour);
   }
 }
 

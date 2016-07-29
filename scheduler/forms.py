@@ -4,13 +4,13 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 class ScheduleForm(forms.Form):
-	semester = forms.ChoiceField(choices = SEMESTER_CHOICES, label = 'Semester', widget = forms.Select(),required = False)
-	c1 = forms.CharField(label='Course 1', max_length=8, required = False)
-	c2 = forms.CharField(label='Course 2', max_length=8, required = False)
-	c3 = forms.CharField(label='Course 3', max_length=8, required = False)
-	c4 = forms.CharField(label='Course 4', max_length=8, required = False)
-	c5 = forms.CharField(label='Course 5', max_length=8, required = False)
-	c6 = forms.CharField(label='Course 6', max_length=8, required = False)
+	semester = forms.ChoiceField(choices = SEMESTER_CHOICES, label = 'Semester', widget = forms.Select(), required = False)
+	c1 = forms.CharField(label='Course 1', max_length=9, required = False)
+	c2 = forms.CharField(label='Course 2', max_length=9, required = False)
+	c3 = forms.CharField(label='Course 3', max_length=9, required = False)
+	c4 = forms.CharField(label='Course 4', max_length=9, required = False)
+	c5 = forms.CharField(label='Course 5', max_length=9, required = False)
+	c6 = forms.CharField(label='Course 6', max_length=9, required = False)
 	timeFilters = forms.CharField(widget = forms.HiddenInput(), label='This should be hidden', required = False)
 
 	helper = FormHelper()
