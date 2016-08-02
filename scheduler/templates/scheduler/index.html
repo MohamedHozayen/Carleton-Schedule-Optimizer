@@ -50,17 +50,21 @@
 				</form>
 			</div>
 			<!-- end of input form -->
-			<div class="col-md-9">
+			<div class="col-md-8">
 
+
+				<!-- Fix this up -->
 				{% if result %}
-				<p><strong>{{ result|linebreaksbr }}</strong>
-					<p>
-						<div id="scheduleNumber"></div>
-						<div id="scheduleInfo"></div>
-						{% endif %} {% if error %}
-						<p><strong>{{ error|safe}}</strong>
-							<p>
-								{% endif %}
+				<!-- <div id="scheduleNumber"></div> -->
+				<div id="scheduleInfo" style="display: none;"></div>
+				<p style="text-align: center;"><strong>{{ result|linebreaksbr }}</strong></p>
+				{% endif %}
+
+
+
+				{% if error %}
+						<p><strong>{{ error|safe}}</strong><p>
+				{% endif %}
 
 			</div>
 
@@ -90,13 +94,23 @@
 			</script>
 			{% endif %}
 
-			<div id='buttons' style='text-align:center'>
-				<!-- <input id="previous" type="btn btn-primary" value="Previous Schedule" /> -->
-				<!-- <input id="next" type="btn btn-primary" value="Next Schedule" /> -->
-				<button id="previous" class="btn btn-default carletonColour">Previous Schedule</button>
-				<button id="next" class="btn btn-default carletonColour">Next Schedule</button>
+			<div class="col-md-8">
+				<div id='buttons' style='text-align: center'>
+					<div style="float: right;">
+						<button id="next" class="btn btn-default carletonColour">Next Schedule</button>
+					</div>
+					<div style="float: left;">
+						<button id="previous" class="btn btn-default carletonColour">Previous Schedule</button>
+					</div>
+
+					<!-- This span css needs to be fixed so that the text is vertically centered -->
+					{% if result %}
+						<div><span id="scheduleNumber"></span></div>
+					{% endif %}
+
+				</div>
+				<div id='calendar'></div>
 			</div>
-			<div class="col-md-8" id='calendar'></div>
 
 			<div id='footer'>Designed and developed by <a href='http://seanrt.github.io/'>Sean Tohidi</a></div>
 		</div>

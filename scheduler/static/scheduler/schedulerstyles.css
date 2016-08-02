@@ -24,6 +24,11 @@ body {
   float: right;
 }
 
+span {
+  /*display: inline-block;
+  vertical-align: middle;*/
+}
+
 /*This is for the calendar*/
 .fc-today {
   background: #EFEFEF !important;

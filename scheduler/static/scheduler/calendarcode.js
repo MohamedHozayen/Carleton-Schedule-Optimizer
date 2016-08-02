@@ -95,7 +95,7 @@ function addSectionsToCalendar(sections) {
       room = 'Room TBA'
     }
 
-    // Here we assign colours to the sections based on their type
+    // Here we collect the event text and assign colours to the sections based on their type
     if (courseType == 'Lecture') {
       // colour = 'blue';
       courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
@@ -106,7 +106,7 @@ function addSectionsToCalendar(sections) {
     }
     else { // Here we have a tutorial
       // colour = 'green';
-      courseText = courseCode+' '+courseType+'\n'+room;
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
 
     // This code block assigns different colours to each course instead of to each section type
