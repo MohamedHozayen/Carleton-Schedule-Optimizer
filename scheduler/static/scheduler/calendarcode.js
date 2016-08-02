@@ -19,6 +19,23 @@ $(document).ready(function() {
 				contentHeight: 'auto',
         // contentWidth: 'auto',
         timeFormat: '',
+
+        eventMouseover:function(event){
+          if(event.color=="green"){
+            $(this).css("background","#0b960b");
+          }else if(event.color=="blue"){
+            $(this).css("background","#0000ab");
+          }else if(event.color=="red"){
+            $(this).css("background","#d00404");
+          }else if (event.color=="purple") {
+            $(this).css("background","#9e029e");
+          }else if (event.color=="orange") {
+            $(this).css("background","#a06904");
+          }
+        },
+        eventMouseout: function(event){
+          $(this).css("background",event.color);
+        }
     })
 });
 
