@@ -126,3 +126,7 @@ span {
   background-color: #b4353b;
   color: white;
 }
+
+.fc-time-grid-event{
+  cursor: pointer;
+}
