@@ -19,7 +19,15 @@ $(document).ready(function() {
 				contentHeight: 'auto',
         // contentWidth: 'auto',
         timeFormat: '',
-
+        eventRender: function(event, element) {
+          $(element).tooltip(
+            {
+              title: event.title,
+              container: "body",
+              placement:"right"
+            }
+          );
+        },
         eventMouseover:function(event){
           if(event.color=="green"){
             $(this).css("background","#0b960b");
