@@ -24,6 +24,7 @@ body {
   float: right;
 }
 
+/*This homogenizes the button text*/
 button {
   font-weight: 700 !important;
 }
@@ -33,7 +34,7 @@ button {
   background-color: #333333;
 }
 
-/*This is for the submit button*/
+/*This is for the submit button, although the position/left/width are for the desktop view*/
 #submit-id-submit {
   position: relative;
   left: -80%;
@@ -47,11 +48,6 @@ button {
   color: white;
   background-color:#B4353B;
   border-style: none;
-}
-
-span {
-  /*display: inline-block;
-  vertical-align: middle;*/
 }
 
 /*This is for the calendar*/
@@ -69,12 +65,8 @@ span {
 
 /*This block is for viewing the page on mobile*/
 @media all and (max-width: 1000px) {
-  #middle {
-    width: 100%;
-  }
-
-  #sides {
-    display: none;
+  #results {
+    margin-top: 20px;
   }
 
   #footer {
