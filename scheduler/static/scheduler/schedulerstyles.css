@@ -24,6 +24,31 @@ body {
   float: right;
 }
 
+button {
+  font-weight: 700 !important;
+}
+
+/*This is for the crispy form*/
+#form {
+  background-color: #333333;
+}
+
+/*This is for the submit button*/
+#submit-id-submit {
+  position: relative;
+  left: -80%;
+  width: 180%;
+  background-color:#B4353B;
+  border-style: none;
+  font-weight: 700;
+}
+
+#addFilterBtn {
+  color: white;
+  background-color:#B4353B;
+  border-style: none;
+}
+
 span {
   /*display: inline-block;
   vertical-align: middle;*/
@@ -54,6 +79,16 @@ span {
 
   #footer {
     display: none;
+  }
+
+  #form {
+    overflow: auto;
+  }
+
+  #submit-id-submit {
+    position: inherit;
+    left: 0%;
+    width: 100%;
   }
 }
 
