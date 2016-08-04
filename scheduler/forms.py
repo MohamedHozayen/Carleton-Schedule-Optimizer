@@ -15,8 +15,8 @@ class ScheduleForm(forms.Form):
 
 	helper = FormHelper()
 	helper.form_class='form-horizontal'
-	helper.label_class = 'col-sm-2 col-md-6'
-	helper.field_class = 'col-sm-10 col-md-6'
+	helper.label_class = 'col-sm-2 col-md-5'
+	helper.field_class = 'col-sm-10 col-md-7'
 	helper.form_method = 'post'
 	helper.form_action = ''
 	helper.add_input(Submit('submit', 'Submit'))
