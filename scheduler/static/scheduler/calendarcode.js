@@ -30,6 +30,7 @@ $(document).ready(function() {
               title: event.id,
               container: "body",
               placement: placem,
+              html: true,
             }
           );
         },
@@ -146,7 +147,7 @@ function addSectionsToCalendar(sections) {
     }
     colour = ColourEnum[titles.indexOf(title)];
 
-    details = title+"\n"+courseCode+"\n"+prof+"\n"+room+"\n"+courseCRN;
+    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
     addCalanderEvent(courseText, start, end, [day], colour, details);
   }
 }
