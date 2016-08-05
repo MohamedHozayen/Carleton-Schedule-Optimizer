@@ -20,25 +20,32 @@ $(document).ready(function() {
         // contentWidth: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
+          if(event.start._d.getDate() > 3) {
+            placem = "left";
+          }else {
+            placem = "right";
+          }
           $(element).tooltip(
             {
-              title: event.title,
+              title: event.id,
               container: "body",
-              placement:"right"
+              placement: placem,
             }
           );
         },
         eventMouseover:function(event){
           if(event.color=="green"){
-            $(this).css("background","#0b960b");
+            $(this).css("background","#556B2F");
           }else if(event.color=="blue"){
-            $(this).css("background","#0000ab");
+            $(this).css("background","#191970");
           }else if(event.color=="red"){
-            $(this).css("background","#d00404");
+            $(this).css("background","#8B0000");
           }else if (event.color=="purple") {
-            $(this).css("background","#9e029e");
+            $(this).css("background","#663399");
           }else if (event.color=="orange") {
             $(this).css("background","#a06904");
+          }else if (event.color=="SaddleBrown") {
+            $(this).css("background","#592720");
           }
         },
         eventMouseout: function(event){
@@ -70,13 +77,14 @@ function getEndTime(time) {
 }
 
 // Colour > color.
-function addCalanderEvent(title, start, end, days, colour) {
+function addCalanderEvent(title, start, end, days, colour, id) {
 		var eventObject = {
 		title: title,
 		start: start,
 		end: end,
 		dow: days,
     color: colour,
+    id: id,
 		};
 
 		$('#calendar').fullCalendar('renderEvent', eventObject, true);
@@ -90,7 +98,7 @@ var ColourEnum = {
   2 : "blue",
   3 : "orange",
   4 : "purple",
-  5 : "deeppink"
+  5 : "SaddleBrown"
 }
 
 // This function takes a JSON list of sections, adding them one by one to the calendar
@@ -122,16 +130,13 @@ function addSectionsToCalendar(sections) {
 
     // Here we collect the event text and assign colours to the sections based on their type
     if (courseType == 'Lecture') {
-      // colour = 'blue';
-      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
     else if (courseType == 'Lab') {
-      // colour = 'red';
-      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
     else { // Here we have a tutorial
-      // colour = 'green';
-      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+      courseText = courseCode+' '+courseType+'\n'+room;
     }
 
     // This code block assigns different colours to each course instead of to each section type
@@ -141,7 +146,8 @@ function addSectionsToCalendar(sections) {
     }
     colour = ColourEnum[titles.indexOf(title)];
 
-    addCalanderEvent(courseText, start, end, [day], colour);
+    details = title+"\n"+courseCode+"\n"+prof+"\n"+room+"\n"+courseCRN;
+    addCalanderEvent(courseText, start, end, [day], colour, details);
   }
 }
 
