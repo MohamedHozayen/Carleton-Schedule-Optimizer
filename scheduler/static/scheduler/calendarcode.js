@@ -43,8 +43,8 @@ $(document).ready(function() {
             $(this).css("background","#8B0000");
           }else if (event.color=="purple") {
             $(this).css("background","#663399");
-          }else if (event.color=="orange") {
-            $(this).css("background","#a06904");
+          }else if (event.color=="DarkOrange") {
+            $(this).css("background","#B8860B");
           }else if (event.color=="SaddleBrown") {
             $(this).css("background","#592720");
           }
@@ -97,7 +97,7 @@ var ColourEnum = {
   0 : "red",
   1 : "green",
   2 : "blue",
-  3 : "orange",
+  3 : "DarkOrange",
   4 : "purple",
   5 : "SaddleBrown"
 }
