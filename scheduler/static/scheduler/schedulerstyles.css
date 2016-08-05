@@ -128,7 +128,32 @@ button {
     text-align: center;
 }
 
+.carleton-btn {
+  background-color: #b4353b;
+  color: white;
+}
+
+.carleton-btn:hover{
+  background-color: #000;
+  color: white;
+}
+
+.carleton-btn:active{
+  color: white;
+  background-color: black;
+  border-color: #b4353b;
+}
+
+.carleton-btn:focus{
+  background-color: #b4353b;
+  color: white;
+}
+
 .carletonColour {
   background-color: #b4353b;
   color: white;
+}
+
+.fc-time-grid-event{
+  cursor: pointer;
 }
