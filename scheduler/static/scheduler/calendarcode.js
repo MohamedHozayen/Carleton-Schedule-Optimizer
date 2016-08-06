@@ -55,6 +55,16 @@ $(document).ready(function() {
     })
 });
 
+// This enum is used to manage the colours
+var ColourEnum = {
+  0 : "red",
+  1 : "green",
+  2 : "blue",
+  3 : "DarkOrange",
+  4 : "purple",
+  5 : "SaddleBrown"
+}
+
 // This function pads the start time, making it five minutes earlier
 function getStartTime(time) {
   if (time.substring(3,5) == '05') {
@@ -90,16 +100,6 @@ function addCalanderEvent(title, start, end, days, colour, id) {
 
 		$('#calendar').fullCalendar('renderEvent', eventObject, true);
 		return eventObject;
-}
-
-// This enum is used to convert an array element index to a colour
-var ColourEnum = {
-  0 : "red",
-  1 : "green",
-  2 : "blue",
-  3 : "DarkOrange",
-  4 : "purple",
-  5 : "SaddleBrown"
 }
 
 // This function takes a JSON list of sections, adding them one by one to the calendar
@@ -159,29 +159,6 @@ function displayNewSchedule(scheduleNumber) {
   addSectionsToCalendar(schedules[currentSchedule.Value]);
 }
 
-// This function updates the text with all of the current schedule's courses and information
-function updateScheduleInfo(schedules, currentSchedule) {
-  crns = [];
-  courseInfos = [];
-  for (section in schedules[currentSchedule]) {
-    courseCRN = schedules[currentSchedule][section].CRN;
-    if ($.inArray(courseCRN, crns) == -1) {
-      crns.push(courseCRN);
-      title = schedules[currentSchedule][section].title;
-      courseCode = schedules[currentSchedule][section].courseCode;
-      courseType = schedules[currentSchedule][section].courseType;
-      s = ''+title+' '+courseCode+' '+courseType+' (CRN: '+courseCRN+')<br>';
-      courseInfos.push(s);
-    }
-  }
-  s = '';
-  courseInfos = courseInfos.sort();
-  for (info in courseInfos) {
-    s += courseInfos[info];
-  }
-  return s;
-}
-
 // This function updates the display showing the current schedule numnber
 function updateCurrentSchedule(schedules, currentSchedule) {
   scheduleNumber.innerHTML = '<p><strong>Current optimal schedule: '+(currentSchedule+1)+' of '+schedules.length+'</strong><p>';
@@ -197,7 +174,6 @@ function previousClick(schedules, currentSchedule) {
   }
   $('#calendar').fullCalendar('removeEvents');
   addSectionsToCalendar(schedules[currentSchedule]);
-  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
   updateCurrentSchedule(schedules, currentSchedule);
   return currentSchedule;
 }
@@ -212,7 +188,6 @@ function nextClick(schedules, currentSchedule) {
   }
   $('#calendar').fullCalendar('removeEvents');
   addSectionsToCalendar(schedules[currentSchedule]);
-  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
   updateCurrentSchedule(schedules, currentSchedule);
   return currentSchedule;
 }
