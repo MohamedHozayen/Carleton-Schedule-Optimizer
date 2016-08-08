@@ -35,39 +35,23 @@
 				<p>Welcome to the Carleton Schedule Optimizer! This web app grabs course data from Carleton University's website and uses it to build an "optimal" schedule. Optimal in this case means a schedule with the fewest number of breaks between classes.
 				Fill in the semester of interest along with each of the courses you want to take in the text boxes below. Please input the courses in the format XXXX1000, where XXXX is the department code and 1000 is the course code. Submit an empty form to see the results for an example semester.</p> -->
 			<div class="col-md-3 input-form" id="form">
-				<!-- <form action="" method="post"> -->
 					{% csrf_token %}
-					<!-- {% for field in form %}
-					<div class="form-group">
-						{{field.label_tag}}
-						{{field}}
-					</div>
-					{% endfor %} -->
-					<!-- {{ form.as_p }} -->
 					{% crispy form %}
 					<button id="addFilterBtn" class="btn btn-default col-sm-12">Add Time Filters</button>
-					<!-- <input type="submit" value="Find Optimal Schedules!" class="btn btn-default" id="findBtn" /> -->
-				<!-- </form> -->
 			</div>
-			<!-- end of input form -->
+
+			<!-- This div covers the text above the calendar -->
 			<div class="col-md-8" id="results">
-
-
-				<!-- Fix this up -->
 				{% if result %}
-				<!-- <div id="scheduleNumber"></div> -->
-				<div id="scheduleInfo" style="display: none;"></div>
-				<p style="text-align: center;"><strong>{{ result|linebreaksbr }}</strong></p>
+						<p style="text-align: center;"><strong>{{ result|linebreaksbr }}</strong></p>
+				{% elif error%}
+						<p style="text-align: center;"><strong>{{ error|safe}}</strong><p>
+				{% else %}
+						<p style="text-align: center;"><strong>Submit an empty form to see the results for an example semester</strong></p>
 				{% endif %}
-
-
-
-				{% if error %}
-						<p><strong>{{ error|safe}}</strong><p>
-				{% endif %}
-
 			</div>
 
+			<!-- This script sets up the data and functions for the calendar -->
 			{% if result %}
 			<script>
 				$(document).ready(function() {
@@ -79,9 +63,7 @@
 
 					var previous = document.getElementById('previous');
 					var next = document.getElementById('next');
-					var scheduleInfo = document.getElementById('scheduleInfo');
 					var scheduleNumber = document.getElementById('scheduleNumber');
-					scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
 					updateCurrentSchedule(schedules, currentSchedule);
 
 					previous.onclick = function() {
@@ -94,6 +76,7 @@
 			</script>
 			{% endif %}
 
+			<!-- This div houses the previous/next buttons as well as the calendar -->
 			<div class="col-md-8">
 				<div id='buttons' style='text-align: center'>
 					<div style="float: right;">

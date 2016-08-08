@@ -17,28 +17,35 @@ $(document).ready(function() {
 				minTime: "8:00",
 				maxTime: "22:00",
 				contentHeight: 'auto',
-        // contentWidth: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
+          if(event.start._d.getDate() > 3) {
+            placem = "left";
+          }else {
+            placem = "right";
+          }
           $(element).tooltip(
             {
-              title: event.title,
+              title: event.id,
               container: "body",
-              placement:"right"
+              placement: placem,
+              html: true,
             }
           );
         },
         eventMouseover:function(event){
           if(event.color=="green"){
-            $(this).css("background","#0b960b");
+            $(this).css("background","#556B2F");
           }else if(event.color=="blue"){
-            $(this).css("background","#0000ab");
+            $(this).css("background","#191970");
           }else if(event.color=="red"){
-            $(this).css("background","#d00404");
+            $(this).css("background","#8B0000");
           }else if (event.color=="purple") {
-            $(this).css("background","#9e029e");
-          }else if (event.color=="orange") {
-            $(this).css("background","#a06904");
+            $(this).css("background","#663399");
+          }else if (event.color=="DarkOrange") {
+            $(this).css("background","#B8860B");
+          }else if (event.color=="SaddleBrown") {
+            $(this).css("background","#592720");
           }
         },
         eventMouseout: function(event){
@@ -46,6 +53,16 @@ $(document).ready(function() {
         }
     })
 });
+
+// This enum is used to manage the colours
+var ColourEnum = {
+  0 : "red",
+  1 : "green",
+  2 : "blue",
+  3 : "DarkOrange",
+  4 : "purple",
+  5 : "SaddleBrown"
+}
 
 // This function pads the start time, making it five minutes earlier
 function getStartTime(time) {
@@ -70,27 +87,18 @@ function getEndTime(time) {
 }
 
 // Colour > color.
-function addCalanderEvent(title, start, end, days, colour) {
+function addCalanderEvent(title, start, end, days, colour, id) {
 		var eventObject = {
 		title: title,
 		start: start,
 		end: end,
 		dow: days,
     color: colour,
+    id: id,
 		};
 
 		$('#calendar').fullCalendar('renderEvent', eventObject, true);
 		return eventObject;
-}
-
-// This enum is used to convert an array element index to a colour
-var ColourEnum = {
-  0 : "red",
-  1 : "green",
-  2 : "blue",
-  3 : "orange",
-  4 : "purple",
-  5 : "deeppink"
 }
 
 // This function takes a JSON list of sections, adding them one by one to the calendar
@@ -106,12 +114,11 @@ function addSectionsToCalendar(sections) {
     courseCRN = sections[section].CRN;
     start = getStartTime(sections[section].start);
     end = getEndTime(sections[section].end);
-    // start = sections[section].start;
-    // end = sections[section].end;
     day = sections[section].day;
     courseType = sections[section].courseType;
     room = sections[section].room;
     prof = sections[section].prof;
+    full = sections[section].full;
 
     if (prof === '') {
       prof = 'Prof TBA'
@@ -122,26 +129,29 @@ function addSectionsToCalendar(sections) {
 
     // Here we collect the event text and assign colours to the sections based on their type
     if (courseType == 'Lecture') {
-      // colour = 'blue';
-      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
-    }
-    else if (courseType == 'Lab') {
-      // colour = 'red';
-      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room+'\nCRN: '+courseCRN;
-    }
-    else { // Here we have a tutorial
-      // colour = 'green';
       courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
+    else if (courseType == 'Lab') {
+      courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
+    }
+    else { // Here we have a tutorial
+      courseText = courseCode+' '+courseType+'\n'+room;
+    }
+    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
 
     // This code block assigns different colours to each course instead of to each section type
     if (!(titles.includes(title))) {
       titles[count] = title;
       count++;
     }
-    colour = ColourEnum[titles.indexOf(title)];
+    if(full) {
+      colour = "black"
+      details += "<br><b>THIS SECTION IS FULL<b>"
+    } else {
+      colour = ColourEnum[titles.indexOf(title)];
+    }
 
-    addCalanderEvent(courseText, start, end, [day], colour);
+    addCalanderEvent(courseText, start, end, [day], colour, details);
   }
 }
 
@@ -150,29 +160,6 @@ function displayNewSchedule(scheduleNumber) {
   $('#calendar').fullCalendar('removeEvents');
   currentSchedule.Value += 1;
   addSectionsToCalendar(schedules[currentSchedule.Value]);
-}
-
-// This function updates the text with all of the current schedule's courses and information
-function updateScheduleInfo(schedules, currentSchedule) {
-  crns = [];
-  courseInfos = [];
-  for (section in schedules[currentSchedule]) {
-    courseCRN = schedules[currentSchedule][section].CRN;
-    if ($.inArray(courseCRN, crns) == -1) {
-      crns.push(courseCRN);
-      title = schedules[currentSchedule][section].title;
-      courseCode = schedules[currentSchedule][section].courseCode;
-      courseType = schedules[currentSchedule][section].courseType;
-      s = ''+title+' '+courseCode+' '+courseType+' (CRN: '+courseCRN+')<br>';
-      courseInfos.push(s);
-    }
-  }
-  s = '';
-  courseInfos = courseInfos.sort();
-  for (info in courseInfos) {
-    s += courseInfos[info];
-  }
-  return s;
 }
 
 // This function updates the display showing the current schedule numnber
@@ -190,7 +177,6 @@ function previousClick(schedules, currentSchedule) {
   }
   $('#calendar').fullCalendar('removeEvents');
   addSectionsToCalendar(schedules[currentSchedule]);
-  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
   updateCurrentSchedule(schedules, currentSchedule);
   return currentSchedule;
 }
@@ -205,7 +191,6 @@ function nextClick(schedules, currentSchedule) {
   }
   $('#calendar').fullCalendar('removeEvents');
   addSectionsToCalendar(schedules[currentSchedule]);
-  scheduleInfo.innerHTML = updateScheduleInfo(schedules, currentSchedule);
   updateCurrentSchedule(schedules, currentSchedule);
   return currentSchedule;
 }
