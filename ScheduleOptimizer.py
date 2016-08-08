@@ -8,7 +8,7 @@ import copy
 # This class is used for each section of a given course, and contains all the
 # corresponding lectures and labs/tutorials
 class Section:
-	def __init__(self, title, courseCode, section, CRN, time, day, room, prof, courseType):
+	def __init__(self, title, courseCode, section, CRN, time, day, room, prof, courseType, full):
 		self.title = title
 		self.courseCode = courseCode
 		self.section = section
@@ -19,6 +19,7 @@ class Section:
 		self.prof = prof
 		self.courseType = courseType
 		self.specialFlag = False
+		self.full = full
 
 	# This adds a list of all the lab and tutorial sections for the given
 	# lecture section
@@ -189,6 +190,7 @@ class Schedule:
 				sectionData['end'] = section.time[-4:-2]+':'+section.time[-2:]
 				sectionData['prof'] = section.prof
 				sectionData['room'] = section.room
+				sectionData['full'] = section.full
 				data.append(sectionData)
 			i+=1
 		return data
@@ -236,8 +238,8 @@ def getSemesterData(courses, term):
 
 	# We fill up the list with dummy courses to make the huge scheduleOptimizer work
 	while(len(semesterData) < 6):
-		dummy = Section('', '', '', '', '', '', '', '', '')
-		dummy.addLabsOrTuts([Section('', '', '', '', '', '', '', '', '')])
+		dummy = Section('', '', '', '', '', '', '', '', '', False)
+		dummy.addLabsOrTuts([Section('', '', '', '', '', '', '', '', '', False)])
 		semesterData.append([dummy])
 	return semesterData
 
@@ -278,6 +280,7 @@ def getCourseData(course, term):
 		courseSection = section['section']
 		courseCRN = section['crn']
 		courseProf = section['timeslots'][0]['prof']
+		courseFull = section['space'] == 0
 
 		# Here we have an online course
 		if section['link_id'] == 'AV':
@@ -293,14 +296,14 @@ def getCourseData(course, term):
 				courseDays = section['days']
 			courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
 			courseRoom = section['room']
-			currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture')
+			currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture', courseFull)
 		if specialFlag:
-			currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture'))
+			currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture', courseFull))
 
 		# If there are no labs or tutorials, we are done with the current course
 		numberOfLabsOrTutorials = len(section['labs'])
 		if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0:
-			labstuts = [Section('', '', '', '', '', '', '', '', '')]
+			labstuts = [Section('', '', '', '', '', '', '', '', '', False)]
 
 		# Here we have labs or tutorials, so we deal with all of them
 		else:
@@ -325,7 +328,8 @@ def getCourseData(course, term):
 				ltTime = labtut['start'][:-3]+'-'+labtut['end'][:-3]
 				ltTime = ltTime.replace(':','')
 				ltRoom = labtut['room']
-				labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial))
+				ltFull = labtut['space'] == 0
+				labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial, ltFull))
 
 		currentSection.addLabsOrTuts(labstuts)
 		# The current section of the course is added to the list of sections
@@ -456,9 +460,9 @@ def scheduleOptimizer(subjects, term, filters):
 # courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
 # courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['TSES3001']
-# getCourseData('TSES3001',term)
+# getCourseData('MATH1104',term)
 # filters = ['M0835','T0835','W0835','R1805','F1435']
+# filters = []
 # schedules = scheduleOptimizer(courses,term, filters)
-# print(schedules[5])
-# getJSONData(schedules)
+# print(getJSONData(schedules))
 # schedules[0].getJSON()

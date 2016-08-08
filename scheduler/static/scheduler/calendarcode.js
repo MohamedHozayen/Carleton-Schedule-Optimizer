@@ -17,7 +17,6 @@ $(document).ready(function() {
 				minTime: "8:00",
 				maxTime: "22:00",
 				contentHeight: 'auto',
-        // contentWidth: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
           if(event.start._d.getDate() > 3) {
@@ -115,12 +114,11 @@ function addSectionsToCalendar(sections) {
     courseCRN = sections[section].CRN;
     start = getStartTime(sections[section].start);
     end = getEndTime(sections[section].end);
-    // start = sections[section].start;
-    // end = sections[section].end;
     day = sections[section].day;
     courseType = sections[section].courseType;
     room = sections[section].room;
     prof = sections[section].prof;
+    full = sections[section].full;
 
     if (prof === '') {
       prof = 'Prof TBA'
@@ -139,15 +137,20 @@ function addSectionsToCalendar(sections) {
     else { // Here we have a tutorial
       courseText = courseCode+' '+courseType+'\n'+room;
     }
+    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
 
     // This code block assigns different colours to each course instead of to each section type
     if (!(titles.includes(title))) {
       titles[count] = title;
       count++;
     }
-    colour = ColourEnum[titles.indexOf(title)];
+    if(full) {
+      colour = "black"
+      details += "<br><b>THIS SECTION IS FULL<b>"
+    } else {
+      colour = ColourEnum[titles.indexOf(title)];
+    }
 
-    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
     addCalanderEvent(courseText, start, end, [day], colour, details);
   }
 }
