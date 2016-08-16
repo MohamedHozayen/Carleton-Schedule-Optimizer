@@ -19,7 +19,7 @@ $(document).ready(function() {
 				contentHeight: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
-          if(event.start._d.getDate() > 3) {
+          if(event.start._d.getUTCDay() > 3) {
             placem = "left";
           }else {
             placem = "right";

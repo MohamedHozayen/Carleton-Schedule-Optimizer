@@ -32,6 +32,9 @@ class Section:
 		self.special = special
 		self.specialFlag = True
 
+	def __str__(self):
+		return self.courseCode+self.section+'\n'+self.courseType+'\n'+self.day+self.time+'\n'
+
 # This class keeps track of sections, time slots, total breaks, and conflict
 # for a given day
 class Day:
@@ -154,7 +157,6 @@ class Schedule:
 	def __str__(self):
 		c = []
 		s = ''
-		# s = 'Courses and sections for optimal schedule:\n'
 		for day in ['monday','tuesday','wednesday','thursday','friday']:
 			for section in getattr(self,day).sections:
 				course = section.courseCode
@@ -284,16 +286,28 @@ def getCourseData(course, term):
 
 		# Here we have an online course
 		if section['link_id'] == 'AV':
-			currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course')
+			currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course', courseFull)
 		else:
+			# For some reason, the JSON started showing days twice for sections with tutorials or labs
+			# This chunk of code handles that case while still taking care of "special" sections
+			days = section['days']
+			if len(set(days.split(','))) == 1:
+				days = days[:2]
+
 			# If there is a comma, then we have the special extra lecture
-			if ',' in section['days']:
-				courseDays = section['days'].split(',')[0]
-				specialDays = section['days'].split(',')[1]
+			if ',' in days:
+				days = days.split(',')
+				# The special and regular days are not consistently in order
+				if len(days[0]) > len(days[1]):
+					courseDays = days[0]
+					specialDays = days[1]
+				else:
+					courseDays = days[1]
+					specialDays = days[0]
 				specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
 				specialFlag = True
 			else:
-				courseDays = section['days']
+				courseDays = days
 			courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
 			courseRoom = section['room']
 			currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture', courseFull)
@@ -325,7 +339,10 @@ def getCourseData(course, term):
 				ltSection = labtut['section']
 				ltCRN = labtut['crn']
 				ltDay = labtut['days']
-				ltTime = labtut['start'][:-3]+'-'+labtut['end'][:-3]
+				ltDay = list(set(ltDay.split(',')))[0] # tutorial days and start/end times started showing up twice
+				ltstart = list(set(labtut['start'].split(',')))[0]
+				ltend = list(set(labtut['end'].split(',')))[0]
+				ltTime = ltstart[:-3]+'-'+ltend[:-3]
 				ltTime = ltTime.replace(':','')
 				ltRoom = labtut['room']
 				ltFull = labtut['space'] == 0
@@ -458,11 +475,10 @@ def scheduleOptimizer(subjects, term, filters):
 # courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
 # courses = ['SYSC2004','SYSC2001','CCDP2100','MATH2004','ELEC2501']
 # courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
-# courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['TSES3001']
 # getCourseData('MATH1104',term)
 # filters = ['M0835','T0835','W0835','R1805','F1435']
 # filters = []
 # schedules = scheduleOptimizer(courses,term, filters)
-# print(getJSONData(schedules))
+# print(schedules[0].getJSON())
 # schedules[0].getJSON()
