@@ -19,7 +19,7 @@ $(document).ready(function() {
 				contentHeight: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
-          if(event.start._d.getUTCDay() > 3) {
+          if(event.start._d.getDate() > 3) {
             placem = "left";
           }else {
             placem = "right";
@@ -50,10 +50,62 @@ $(document).ready(function() {
         },
         eventMouseout: function(event){
           $(this).css("background",event.color);
-        }
-    })
-});
+        }});
 
+    $('#addFilterBtn').click(function(e){
+      //ask them to choose a day
+      var days = [
+        'Mon',
+        'Tues',
+        'Wed',
+        'Thurs',
+        'Fri'
+      ]
+      var formGroup =$('<div class="form-group">');
+      var buttonToolBar = $('<div class="btn-toolbar"></div>');
+      var buttonGroup = $('<div class="btn-group"></div>');
+      var filter =$('<div class="filter"></div>');
+      var daysObj = $('<div class="days"></div>')
+
+      formGroup.append(buttonToolBar)
+      buttonToolBar.append(buttonGroup);
+      daysObj.append(formGroup);
+      filter.append(daysObj);
+      $('.filters').append(filter);
+      for (var day in days){
+        var individualDayButton = '<button type="button" class="btn btn-default dayBtn">'+days[day]+'</button>';
+        buttonGroup.append(individualDayButton);
+      };
+    });
+
+    $('body').on('click', '.dayBtn', function(e) {
+      var day = $(this).text();
+      $(this).siblings().css("display","none");
+
+      var filter = $(this).parent().parent().parent().parent();
+      filter.append("<div class=\"form-group\"><div class=\"slider-range\"></div></div>");
+      var toolTip = function(event,ui){
+        var startHour = Math.floor(ui.values[0]/60)
+        var endHour = Math.floor(ui.values[1]/60)
+        var startMinute = ui.values[0] - (startHour * 60);
+        var endMinute = ui.values[1] - (endHour * 60);
+        console.log("start Time: "+startHour+":"+startMinute);
+        console.log("End Time: "+endHour+":"+endMinute);
+        console.log(ui.values[1]-ui.values[0]);
+        console.log(day);
+      };
+      $( ".slider-range" ).slider({
+        range: true,
+        min: 515,
+        max: 1235,
+        step:30,
+        values: [ 515, 545 ],
+        slide: toolTip
+      });
+    });
+    //   $(".filters").append("<div class=\"form-group\"><div class=\"slider-range\"></div></div>");
+
+});
 // This enum is used to manage the colours
 var ColourEnum = {
   0 : "red",
