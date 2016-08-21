@@ -95,6 +95,15 @@ class Day:
 		self.breaks = values.count('0') - len(values.split('1',1)[0]) - len(values[::-1].split('1',1)[0])
 		return self.breaks
 
+	# This method adds one time filter in the format ########, with the first
+	# four numbers indicating the start and the last four indicating the end
+	def addFilter(self, filter):
+		start = filter[0:4]
+		end = filter[4:8]
+		while int(start) < int(end):
+			self.timeSlots[start] += 1
+			start = sorted(self.timeSlots.keys())[sorted(self.timeSlots.keys()).index(start)+1]
+
 # This class keeps track of every section for day of the week
 class Schedule:
 	def __init__(self):
@@ -198,19 +207,19 @@ class Schedule:
 		return data
 
 	# This method goes through each filter, adding it as a dummy section to each corresponding day
-	# Each filter is of the form X####, with X being the day and #### the 30 minute time block
+	# Each filter is of the form X########, with X being the day and #### the 30 minute time blocks at the start and end
 	def addFilters(self, filters):
 		for fil in filters:
 			if 'M' in fil[0]:
-				self.monday.timeSlots[fil[1:5]] += 1
+				self.monday.addFilter(fil[1:])
 			elif 'T' in fil[0]:
-				self.tuesday.timeSlots[fil[1:5]] += 1
+				self.tuesday.addFilter(fil[1:])
 			elif 'W' in fil[0]:
-				self.wednesday.timeSlots[fil[1:5]] += 1
+				self.wednesday.addFilter(fil[1:])
 			elif 'R' in fil[0]:
-				self.thursday.timeSlots[fil[1:5]] += 1
+				self.thursday.addFilter(fil[1:])
 			elif 'F' in fil[0]:
-				self.friday.timeSlots[fil[1:5]] += 1
+				self.friday.addFilter(fil[1:])
 
 # This function goes through a list of schedules, consolidating the data into a JSON object
 def getJSONData(schedules):
@@ -474,11 +483,12 @@ def scheduleOptimizer(subjects, term, filters):
 # term = '201710'
 # courses = ['COMP3005','ECOR3800','SYSC3110','SYSC3303','SYSC4001']
 # courses = ['SYSC2004','SYSC2001','CCDP2100','MATH2004','ELEC2501']
-# courses = ['ECOR1010','MATH1104','MATH1004','PHYS1003','SYSC1005']
+# courses = ['ECOR1010','MATH1104','MATH1004']
 # courses = ['TSES3001']
 # getCourseData('MATH1104',term)
 # filters = ['M0835','T0835','W0835','R1805','F1435']
+# filters = ['M08351735']
 # filters = []
 # schedules = scheduleOptimizer(courses,term, filters)
-# print(schedules[0].getJSON())
+# print(json.dumps(schedules[0].getJSON(), indent=4, sort_keys=True))
 # schedules[0].getJSON()

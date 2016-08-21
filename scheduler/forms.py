@@ -11,7 +11,7 @@ class ScheduleForm(forms.Form):
 	c4 = forms.CharField(label='Course 4', max_length=9, required = False)
 	c5 = forms.CharField(label='Course 5', max_length=9, required = False)
 	c6 = forms.CharField(label='Course 6', max_length=9, required = False)
-	timeFilters = forms.CharField(widget = forms.HiddenInput(), label='This should be hidden', required = False)
+	timeFilters = forms.CharField(widget = forms.HiddenInput(), label='This should be hidden', required = False, initial = 'test')
 
 	helper = FormHelper()
 	helper.form_class='form-horizontal'

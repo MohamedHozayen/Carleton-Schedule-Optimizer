@@ -89,10 +89,11 @@ $(document).ready(function() {
         var endHour = Math.floor(ui.values[1]/60)
         var startMinute = ui.values[0] - (startHour * 60);
         var endMinute = ui.values[1] - (endHour * 60);
-        console.log("start Time: "+startHour+":"+startMinute);
-        console.log("End Time: "+endHour+":"+endMinute);
-        console.log(ui.values[1]-ui.values[0]);
-        console.log(day);
+        var filterTime = getTimeAsString(day, startHour, startMinute, endHour, endMinute);
+        // console.log(getTimeAsString(day, startHour, startMinute, endHour, endMinute));
+        // console.log(filterTime);
+        changeFilters(filterTime);
+        // console.log(ui.values[1]-ui.values[0]);
       };
       $( ".slider-range" ).slider({
         range: true,
@@ -105,7 +106,43 @@ $(document).ready(function() {
     });
     //   $(".filters").append("<div class=\"form-group\"><div class=\"slider-range\"></div></div>");
 
+    // This ensures no filters are applied after each post request
+    changeFilters('');
 });
+
+// This enum is used to convert the days to a usable format
+var DayEnum = {
+  'Mon' : 'M',
+  'Tues' : 'T',
+  'Wed' : 'W',
+  'Thurs' : 'R',
+  'Fri' : 'F',
+};
+
+function changeFilters(newTime) {
+  // This is the element containing all the filters
+  var filterElement = document.getElementsByName('timeFilters')[0];
+  filterElement.value = newTime;
+  console.log(filterElement.value);
+}
+
+// This function returns a start or end time in the correct string format
+function getTimeAsString(day, startHour, startMinute, endHour, endMinute) {
+  if (startHour < 10) {
+    startHour = '0'+startHour.toString();
+  }
+  if (startMinute < 10) {
+    startMinute = '0'+startMinute.toString();
+  }
+  if (endHour < 10) {
+    endHour = '0'+endHour.toString();
+  }
+  if (endMinute < 10) {
+    endMinute = '0'+endMinute.toString();
+  }
+  return DayEnum[day]+startHour.toString()+startMinute.toString()+endHour.toString()+endMinute.toString();
+}
+
 // This enum is used to manage the colours
 var ColourEnum = {
   0 : "red",
@@ -117,7 +154,7 @@ var ColourEnum = {
 }
 
 // This function pads the start time, making it five minutes earlier
-function getStartTime(time) {
+function padStartTime(time) {
   if (time.substring(3,5) == '05') {
     time = time.substring(0,3)+'00';
   }
@@ -128,7 +165,7 @@ function getStartTime(time) {
 }
 
 // This function pads the end time, making it five minutes later
-function getEndTime(time) {
+function padEndTime(time) {
   if (time.substring(3,5) == '25') {
     time = time.substring(0,3)+'30';
   }
@@ -164,8 +201,8 @@ function addSectionsToCalendar(sections) {
     title = sections[section].title;
     courseCode = sections[section].courseCode;
     courseCRN = sections[section].CRN;
-    start = getStartTime(sections[section].start);
-    end = getEndTime(sections[section].end);
+    start = padStartTime(sections[section].start);
+    end = padEndTime(sections[section].end);
     day = sections[section].day;
     courseType = sections[section].courseType;
     room = sections[section].room;
