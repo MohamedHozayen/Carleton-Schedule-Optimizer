@@ -28,8 +28,7 @@ $(document).ready(function() {
             {
               title: event.id,
               container: "body",
-              placement:'left',
-              //placement: placem,
+              placement: placem,
               html: true,
             }
           );
