@@ -19,7 +19,9 @@ def scheduler(request):
             subjects = [c1,c2,c3,c4,c5,c6]
 
             filters = form.cleaned_data['timeFilters']
+
             if len(filters) > 0:
+                filters=filters[1:-1]
                 filters = filters.split(',')
 
             if term == '201630' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
