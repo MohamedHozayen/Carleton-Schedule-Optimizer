@@ -122,7 +122,7 @@ var DayEnum = {
 function changeFilters(newTime) {
   // This is the element containing all the filters
   var filterElement = document.getElementsByName('timeFilters')[0];
-  filterElement.value = newTime;
+  filterElement.value +=newTime+',';
   console.log(filterElement.value);
 }
 
