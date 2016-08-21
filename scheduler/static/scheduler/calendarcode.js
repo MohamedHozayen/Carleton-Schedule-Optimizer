@@ -28,7 +28,8 @@ $(document).ready(function() {
             {
               title: event.id,
               container: "body",
-              placement: placem,
+              placement:'left',
+              //placement: placem,
               html: true,
             }
           );
@@ -77,34 +78,33 @@ $(document).ready(function() {
         buttonGroup.append(individualDayButton);
       };
     });
-
+    var filters=[];
     $('body').on('click', '.dayBtn', function(e) {
       var day = $(this).text();
       $(this).siblings().css("display","none");
 
       var filter = $(this).parent().parent().parent().parent();
-      filter.append("<div class=\"form-group\"><div class=\"slider-range\"></div></div>");
-      var toolTip = function(event,ui){
+      var index = $(this).closest(".filter").index();
+      filter.append("<div class=\"form-group\"><div class=\"slider-range-"+index+"\"></div></div>");
+      var onslideFunction = function(event,ui){
         var startHour = Math.floor(ui.values[0]/60)
         var endHour = Math.floor(ui.values[1]/60)
         var startMinute = ui.values[0] - (startHour * 60);
         var endMinute = ui.values[1] - (endHour * 60);
         var filterTime = getTimeAsString(day, startHour, startMinute, endHour, endMinute);
-        // console.log(getTimeAsString(day, startHour, startMinute, endHour, endMinute));
-        // console.log(filterTime);
-        changeFilters(filterTime);
-        // console.log(ui.values[1]-ui.values[0]);
+        filters[index]=filterTime
+        addPreviousFilterToHiddenInput(filters);
       };
-      $( ".slider-range" ).slider({
+      $( ".slider-range-"+index).slider({
+        animate:true,
         range: true,
         min: 515,
         max: 1235,
         step:30,
         values: [ 515, 545 ],
-        slide: toolTip
+        slide: onslideFunction,
       });
     });
-    //   $(".filters").append("<div class=\"form-group\"><div class=\"slider-range\"></div></div>");
 
     // This ensures no filters are applied after each post request
     changeFilters('');
@@ -119,11 +119,20 @@ var DayEnum = {
   'Fri' : 'F',
 };
 
-function changeFilters(newTime) {
+function addPreviousFilterToHiddenInput(filters) {
+  var filterElement = document.getElementsByName('timeFilters')[0];
+  filterElement.value="";
+  filters.forEach(function(filter){
+    filterElement.value+=','+filter;
+  });
+  console.log(filterElement.value);
+}
+
+function changeFilters(newTime,index) {
   // This is the element containing all the filters
   var filterElement = document.getElementsByName('timeFilters')[0];
-  filterElement.value +=newTime+',';
-  console.log(filterElement.value);
+  filterElement.value=newTime;
+  //console.log(index+":"+filterElement.value);
 }
 
 // This function returns a start or end time in the correct string format
