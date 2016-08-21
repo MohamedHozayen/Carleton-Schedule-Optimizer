@@ -19,7 +19,7 @@ $(document).ready(function() {
 				contentHeight: 'auto',
         timeFormat: '',
         eventRender: function(event, element) {
-          if(event.start._d.getDate() > 3) {
+          if(event.start._d.getDay() > 3) {
             placem = "left";
           }else {
             placem = "right";
@@ -127,11 +127,10 @@ function addPreviousFilterToHiddenInput(filters) {
   console.log(filterElement.value);
 }
 
-function changeFilters(newTime,index) {
+function changeFilters(newTime) {
   // This is the element containing all the filters
   var filterElement = document.getElementsByName('timeFilters')[0];
   filterElement.value=newTime;
-  //console.log(index+":"+filterElement.value);
 }
 
 // This function returns a start or end time in the correct string format
