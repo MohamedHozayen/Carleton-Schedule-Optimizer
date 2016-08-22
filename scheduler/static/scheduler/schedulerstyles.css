@@ -33,23 +33,6 @@ button {
 #form {
   background-color: #333333;
 }
-
-/*This is for the submit button, although the position/left/width are for the desktop view*/
-#submit-id-submit {
-  position: relative;
-  left: -80%;
-  width: 180%;
-  background-color:#B4353B;
-  border-style: none;
-  font-weight: 700;
-}
-
-#addFilterBtn {
-  color: white;
-  background-color:#B4353B;
-  border-style: none;
-}
-
 /*This is for the calendar*/
 .fc-today {
   background: #EFEFEF !important;
@@ -75,12 +58,6 @@ button {
 
   #form {
     overflow: auto;
-  }
-
-  #submit-id-submit {
-    position: inherit;
-    left: 0%;
-    width: 100%;
   }
 }
 
@@ -134,13 +111,13 @@ button {
 }
 
 .carleton-btn:hover{
-  background-color: #000;
+  background-color: #b40d25;
   color: white;
 }
 
 .carleton-btn:active{
   color: white;
-  background-color: black;
+  background-color: #b40d25;
   border-color: #b4353b;
 }
 
