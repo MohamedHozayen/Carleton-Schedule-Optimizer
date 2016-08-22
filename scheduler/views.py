@@ -19,6 +19,7 @@ def scheduler(request):
             subjects = [c1,c2,c3,c4,c5,c6]
 
             filters = form.cleaned_data['timeFilters']
+            fullFlag = form.cleaned_data['noFullCoursesFlag']
 
             if len(filters) > 0:
                 filters=filters[1:]
@@ -26,12 +27,12 @@ def scheduler(request):
 
             if term == '201630' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
                 subjects = ['MATH2004','ELEC2501','SYSC2001','SYSC2004','CCDP2100','']
-                data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5], 'timeFilters': ''}
+                data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5], 'timeFilters': '', 'noFullCoursesFlag': False}
                 form = ScheduleForm(data, initial=data)
 
             elif term == '201710' and c1=='' and c2=='' and c3=='' and c4=='' and c5=='' and c6=='':
                 subjects = ['COMP1805','ELEC2607','SYSC2003','SYSC2100','STAT3502','']
-                data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5], 'timeFilters': ''}
+                data = {'semester': term, 'c1': subjects[0], 'c2': subjects[1], 'c3': subjects[2], 'c4': subjects[3], 'c5': subjects[4], 'c6': subjects[5], 'timeFilters': '', 'noFullCoursesFlag': False}
                 form = ScheduleForm(data, initial=data)
 
             # Here at least one course was entered incorrectly
@@ -49,7 +50,7 @@ def scheduler(request):
                 })
 
             # Result will be a string if there was an invalid course or a schedule could not be found
-            result = scheduleOptimizer(subjects, term, filters)
+            result = scheduleOptimizer(subjects, term, filters, fullFlag)
 
             # If the result is a string, then one of the courses was invalid
             if isinstance(result, str):
