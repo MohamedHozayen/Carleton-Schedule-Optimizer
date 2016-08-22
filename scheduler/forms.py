@@ -19,8 +19,8 @@ class ScheduleForm(forms.Form):
 	helper.field_class = 'col-sm-10 col-md-7'
 	helper.form_method = 'post'
 	helper.form_action = ''
-	helper.add_input(Submit('submit', 'Submit'))
-
+	# helper.add_input(Submit('submit', 'Submit'))
+	#
 	def is_valid(self):
 		# Run the parent validation so django won't complain about not checking
 		valid = super(ScheduleForm, self).is_valid()
