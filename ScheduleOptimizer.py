@@ -104,6 +104,12 @@ class Day:
 			self.timeSlots[start] += 1
 			start = sorted(self.timeSlots.keys())[sorted(self.timeSlots.keys()).index(start)+1]
 
+	# This method checks if there are any sections in the day that are full
+	def checkForFullSections(self):
+		for section in self.sections:
+			if section.full:
+				return True
+
 # This class keeps track of every section for day of the week
 class Schedule:
 	def __init__(self):
@@ -113,6 +119,7 @@ class Schedule:
 		self.thursday = Day()
 		self.friday = Day()
 		self.breaks = 0
+		self.noFullSectionsAllowed = False
 
 	# This method adds a section to the schedule. It checks which days to add
 	# the section to and then adds them using the Day addSection() method
@@ -151,10 +158,14 @@ class Schedule:
 			self.removeSection(newsection.special)
 
 	# This method iterates over every day, calling their own checkForConflicts methods
+	# If the no full sections are allowed, then we check for those as well
 	def checkForConflicts(self):
 		for day in [self.monday, self.tuesday, self.wednesday, self.thursday, self.friday]:
 			if day.checkForConflicts():
 				return True
+			if self.noFullSectionsAllowed:
+				if day.checkForFullSections():
+					return True
 		return False
 
 	# This method iterates over every day, calculating their total break times
@@ -364,14 +375,16 @@ def getCourseData(course, term):
 	# We return the list of all the sections for the given course
 	return sections
 
-def getOptimizedSchedules(semesterData, filters):
+def getOptimizedSchedules(semesterData, filters, noFullCoursesFlag):
 	maxschedules = 50
 	firstpass = True
 	schedules = []
 	schedule = Schedule()
 	newschedule = Schedule()
 
-	# We add the filters to the schedule
+	if(noFullCoursesFlag):
+		newschedule.noFullSectionsAllowed = True
+
 	newschedule.addFilters(filters)
 
 	# The lectures and tutorials/labs for all sections are added in for each loops,
@@ -473,11 +486,11 @@ def getOptimizedSchedules(semesterData, filters):
 
 # This function collects the semester data, ensures the courses were valid,
 # and then runs the getOptimizedSchedules function
-def scheduleOptimizer(subjects, term, filters):
+def scheduleOptimizer(subjects, term, filters, noFullCoursesFlag):
 	semesterData = getSemesterData(subjects, term)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
-	return getOptimizedSchedules(semesterData, filters)
+	return getOptimizedSchedules(semesterData, filters, noFullCoursesFlag)
 
 # term = '201630'
 # term = '201710'
@@ -490,5 +503,6 @@ def scheduleOptimizer(subjects, term, filters):
 # filters = ['M08351735']
 # filters = []
 # schedules = scheduleOptimizer(courses,term, filters)
+# print(schedules)
 # print(json.dumps(schedules[0].getJSON(), indent=4, sort_keys=True))
 # schedules[0].getJSON()
