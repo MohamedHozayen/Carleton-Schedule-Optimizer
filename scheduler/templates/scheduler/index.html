@@ -38,9 +38,10 @@
 			<div class="col-md-3 input-form" id="form">
 					{% csrf_token %}
 					{% crispy form %}
+					<button id="form-submit" class="btn carleton-btn col-xs-12 carletonColor">Submit</button>
 					<div class="filters">
 					</div>
-					<button id="addFilterBtn" class="btn btn-default col-sm-12">Add Time Filters</button>
+					<button id="addFilterBtn" class="btn carleton-btn col-xs-12">Add Time Filters</button>
 			</div>
 
 			<!-- This div covers the text above the calendar -->
