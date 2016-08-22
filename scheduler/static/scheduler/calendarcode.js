@@ -108,6 +108,10 @@ $(document).ready(function() {
 
     // This ensures no filters are applied after each post request
     changeFilters('');
+
+    $('#form-submit').click(function(){
+      $('.form-horizontal').submit();
+    });
 });
 
 // This enum is used to convert the days to a usable format
