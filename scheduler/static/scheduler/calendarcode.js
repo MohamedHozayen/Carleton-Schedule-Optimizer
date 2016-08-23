@@ -104,10 +104,17 @@ $(document).ready(function() {
         endMinute = endMinute<10 ? '0'+endMinute : endMinute
         var filterTime = getTimeAsString(day, startHour, startMinute, endHour, endMinute);
         filters[index]=filterTime
-        $('.startTime'+index+'').text(startHour+": "+startMinute);
-        $('.stopTime'+index+'').text(endHour+": "+endMinute);
+        $('.startTime'+index+'').text(startHour+":"+startMinute);
+        $('.stopTime'+index+'').text(endHour+":"+endMinute);
         addPreviousFilterToHiddenInput(filters);
       };
+
+      // This snippet ensures that the filter is added when it is created
+      // (originally, the filter would only be added if the user modified the time)
+      var filterElement = document.getElementsByName('timeFilters')[0];
+      filterElement.value+=','+DayEnum[day]+'08351035';
+      // console.log(filterElement.value);
+
       $( ".slider-range-"+index).slider({
         animate:true,
         range: true,
@@ -142,7 +149,7 @@ function addPreviousFilterToHiddenInput(filters) {
   filters.forEach(function(filter){
     filterElement.value+=','+filter;
   });
-  console.log(filterElement.value);
+  // console.log(filterElement.value);
 }
 
 function changeFilters(newTime) {
