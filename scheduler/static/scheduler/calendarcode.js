@@ -63,7 +63,7 @@ $(document).ready(function() {
       ]
       var formGroup =$('<div class="form-group">');
       var buttonToolBar = $('<div class="btn-toolbar"></div>');
-      var buttonGroup = $('<div class="btn-group"></div>');
+      var buttonGroup = $('<div class="btn-group dayButtons col-xs-12 "></div>');
       var filter =$('<div class="filter"></div>');
       var daysObj = $('<div class="days"></div>')
 
@@ -71,27 +71,41 @@ $(document).ready(function() {
       buttonToolBar.append(buttonGroup);
       daysObj.append(formGroup);
       filter.append(daysObj);
+      filter.hide();
       $('.filters').append(filter);
       for (var day in days){
         var individualDayButton = '<button type="button" class="btn btn-default dayBtn">'+days[day]+'</button>';
         buttonGroup.append(individualDayButton);
       };
+      filter.fadeIn('200');
     });
     var filters=[];
+
+    $('body').on('click', '.removeFilter', function(e) {
+      var index = $(this).closest(".filter").index();
+      delete filters[index];
+      $(this).closest(".filter").fadeOut('200',function(){$(this).remove()});
+      addPreviousFilterToHiddenInput(filters);
+    });
+
     $('body').on('click', '.dayBtn', function(e) {
       var day = $(this).text();
       $(this).siblings().css("display","none");
-
-      var filter = $(this).parent().parent().parent().parent();
+      var filter = $(this).parent().parent().parent().parent().parent();
       var index = $(this).closest(".filter").index();
-      filter.append("<div class=\"form-group\"><div class=\"slider-range-"+index+"\"></div></div>");
-      var onslideFunction = function(event,ui){
+      $(this).parent().parent().parent().parent().remove();
+      filter.append('<div class="form-group"><div class="info col-xs-12 filter-info"><span class="day col-xs-4">'+day+'</span><span class="start"><span class="startTime'+index+'">8:35</span></span><span class="stop"> - <span class="stopTime'+index+'">10:35</span></span></div><div><div class=" col-xs-11 col-md-10 slider-range-'+index+'"></div><span class="glyphicon glyphicon-remove pull-right col-xs-1 removeFilter" aria-hidden="true" id="remove-filter-'+index+'"></span></div></div>').hide().fadeIn('200');
+      var onslideFunction = function(event,ui){1
         var startHour = Math.floor(ui.values[0]/60)
         var endHour = Math.floor(ui.values[1]/60)
         var startMinute = ui.values[0] - (startHour * 60);
+        startMinute = startMinute<10 ? '0'+startMinute : startMinute
         var endMinute = ui.values[1] - (endHour * 60);
+        endMinute = endMinute<10 ? '0'+endMinute : endMinute
         var filterTime = getTimeAsString(day, startHour, startMinute, endHour, endMinute);
         filters[index]=filterTime
+        $('.startTime'+index+'').text(startHour+": "+startMinute);
+        $('.stopTime'+index+'').text(endHour+": "+endMinute);
         addPreviousFilterToHiddenInput(filters);
       };
       $( ".slider-range-"+index).slider({
@@ -100,7 +114,7 @@ $(document).ready(function() {
         min: 515,
         max: 1235,
         step:30,
-        values: [ 515, 545 ],
+        values: [ 515, 645 ],
         slide: onslideFunction,
       });
     });
