@@ -12,7 +12,7 @@ class ScheduleForm(forms.Form):
 	c5 = forms.CharField(label='Course 5', max_length=9, required = False)
 	c6 = forms.CharField(label='Course 6', max_length=9, required = False)
 	timeFilters = forms.CharField(widget = forms.HiddenInput(), label='This should be hidden', required = False, initial = '')
-	noFullCoursesFlag = forms.BooleanField(widget = forms.HiddenInput(), label='This should also be hidden', required = False, initial = False)
+	noFullCoursesFlag = forms.BooleanField(label='Include Full Sections', required = False, initial = False)
 
 	helper = FormHelper()
 	helper.form_class='form-horizontal'
