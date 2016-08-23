@@ -134,3 +134,33 @@ button {
 .fc-time-grid-event{
   cursor: pointer;
 }
+
+#form-submit{
+  margin-top: 20px;
+}
+
+#addFilterBtn>span:nth-child(2){
+  padding-left:10px;
+}
+#addFilterBtn {
+  margin-bottom: 10px;
+}
+.dayButtons{
+  margin-top: 20px;
+}
+
+.dayBtn{
+  width:20%;
+}
+
+.info{
+  margin-bottom:10px;
+}
+
+.removeFilter{
+  cursor: pointer;
+}
+
+.removeFilter:hover{
+  color: #b4353b;
+}
