@@ -1,15 +1,17 @@
 {% load staticfiles %} {% load bootstrap3 %}
 {% load crispy_forms_tags %}
 <script src="{% static 'fullcalendar/lib/jquery.min.js' %}"></script>
-<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<script src="{% static 'scheduler/js/jquery-ui.js' %}"></script>
 {% bootstrap_css %} {% bootstrap_javascript %}
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/schedulerstyles.css' %}" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/css/jquery-ui.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
 <script src="{% static 'fullcalendar/lib/moment.min.js' %}"></script>
 <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 <script src="{% static 'scheduler/calendarcode.js' %}"></script>
+<script src="{% static 'scheduler/js/jquery.ui.touch-punch.min.js' %}"></script>
+
 
 <head>
 	<link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
@@ -38,10 +40,14 @@
 			<div class="col-md-3 input-form" id="form">
 					{% csrf_token %}
 					{% crispy form %}
-					<button id="form-submit" class="btn carleton-btn col-xs-12 carletonColor">Submit</button>
+					<div class="Heading">
+						<button type="button" class="btn carleton-btn pull-right" id="addFilterBtn">
+							<span class="pull-left glyphicon glyphicon-plus" aria-hidden="true"></span><span>Add Filter</span>
+						</button>
+					</div>
 					<div class="filters">
 					</div>
-					<button id="addFilterBtn" class="btn carleton-btn col-xs-12">Add Time Filters</button>
+					<button id="form-submit" class="btn carleton-btn col-xs-12">Submit</button>
 			</div>
 
 			<!-- This div covers the text above the calendar -->
