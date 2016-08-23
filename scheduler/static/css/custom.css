@@ -10,9 +10,21 @@
 }
 
 #app-title{
-  line-height: 100px;
   color: white;
   font-size: 24px;
+  margin-top:20px;
+}
+@media (min-width: 720px){
+  #app-title{
+    line-height: 100px;
+    margin-top: 0px;
+  }
+}
+
+@media (max-width: 500px){
+  #app-title{
+    font-size: 20px;
+  }
 }
 
 .main-content{
@@ -23,11 +35,6 @@
   background:black;
   color:white;
   padding:20px;
-}
-
-
-#addFilterBtn{
-  margin-top:20px;
 }
 
 #findBtn{
