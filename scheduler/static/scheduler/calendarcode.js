@@ -176,14 +176,17 @@ function getTimeAsString(day, startHour, startMinute, endHour, endMinute) {
 }
 
 // This enum is used to manage the colours
-var ColourEnum = {
+var colourEnum = {
   0 : "red",
   1 : "green",
   2 : "blue",
   3 : "DarkOrange",
   4 : "purple",
-  5 : "SaddleBrown"
+  5 : "SaddleBrown",
 }
+
+// This dictionary is used to keep the colours consistent between the courses
+var courseColours = {}
 
 // This function pads the start time, making it five minutes earlier
 function padStartTime(time) {
@@ -225,7 +228,7 @@ function addCalanderEvent(title, start, end, days, colour, id) {
 // This function takes a JSON list of sections, adding them one by one to the calendar
 function addSectionsToCalendar(sections) {
   var section;
-  var titles = ["","","","","",""];
+  // var titles = ["","","","","",""];
   count = 0;
   courseText = "";
 
@@ -260,17 +263,16 @@ function addSectionsToCalendar(sections) {
     }
     details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
 
-    // This code block assigns different colours to each course instead of to each section type
-    if (!(titles.includes(title))) {
-      titles[count] = title;
-      count++;
+    // Courses are added to the courseColours dict to ensure consistent colours
+    if (!(Object.keys(courseColours).includes(title))) {
+        courseColours[title] = count;
+        count++;
     }
+    colour = colourEnum[courseColours[title]];
+
     if(full) {
-      // colour = "black"
       courseText += '\nTHIS SECTION IS FULL'
       details += "<br><b>THIS SECTION IS FULL</b>"
-    } else {
-      colour = ColourEnum[titles.indexOf(title)];
     }
 
     addCalanderEvent(courseText, start, end, [day], colour, details);
