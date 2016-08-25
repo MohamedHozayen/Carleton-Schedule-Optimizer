@@ -266,8 +266,9 @@ function addSectionsToCalendar(sections) {
       count++;
     }
     if(full) {
-      colour = "black"
-      details += "<br><b>THIS SECTION IS FULL<b>"
+      // colour = "black"
+      courseText += '\nTHIS SECTION IS FULL'
+      details += "<br><b>THIS SECTION IS FULL</b>"
     } else {
       colour = ColourEnum[titles.indexOf(title)];
     }
