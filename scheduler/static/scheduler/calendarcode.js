@@ -94,10 +94,12 @@ $(document).ready(function() {
       var filter = $(this).parent().parent().parent().parent().parent();
       var index = $(this).closest(".filter").index();
       $(this).parent().parent().parent().parent().remove();
-      filter.append('<div class="form-group"><div class="info col-xs-12 filter-info"><span class="day col-xs-4">'+day+'</span><span class="start"><span class="startTime'+index+'">8:35</span></span><span class="stop"> - <span class="stopTime'+index+'">10:35</span></span></div><div><div class=" col-xs-11 col-md-10 slider-range-'+index+'"></div><span class="glyphicon glyphicon-remove pull-right col-xs-1 removeFilter" aria-hidden="true" id="remove-filter-'+index+'"></span></div></div>').hide().fadeIn('200');
-      var onslideFunction = function(event,ui){1
-        var startHour = Math.floor(ui.values[0]/60)
-        var endHour = Math.floor(ui.values[1]/60)
+      filter.append('<div class="form-group"><div class="info col-xs-12 filter-info"><span class="day col-xs-4">'+day+'</span><span class="start"><span class="startTime'+index+'">08:35</span></span><span class="stop"> - <span class="stopTime'+index+'">10:35</span></span></div><div><div class=" col-xs-11 col-md-10 slider-range-'+index+'"></div><span class="glyphicon glyphicon-remove pull-right col-xs-1 removeFilter" aria-hidden="true" id="remove-filter-'+index+'"></span></div></div>').hide().fadeIn('200');
+      var onslideFunction = function(event,ui){
+        var startHour = Math.floor(ui.values[0]/60);
+        startHour = startHour<10 ? '0'+startHour : startHour
+        var endHour = Math.floor(ui.values[1]/60);
+        endHour = endHour<10 ? '0'+endHour : endHour
         var startMinute = ui.values[0] - (startHour * 60);
         startMinute = startMinute<10 ? '0'+startMinute : startMinute
         var endMinute = ui.values[1] - (endHour * 60);
@@ -149,6 +151,7 @@ function addPreviousFilterToHiddenInput(filters) {
   filters.forEach(function(filter){
     filterElement.value+=','+filter;
   });
+  console.log(filterElement.value);
   // console.log(filterElement.value);
 }
 
@@ -160,18 +163,6 @@ function changeFilters(newTime) {
 
 // This function returns a start or end time in the correct string format
 function getTimeAsString(day, startHour, startMinute, endHour, endMinute) {
-  if (startHour < 10) {
-    startHour = '0'+startHour.toString();
-  }
-  if (startMinute < 10) {
-    startMinute = '0'+startMinute.toString();
-  }
-  if (endHour < 10) {
-    endHour = '0'+endHour.toString();
-  }
-  if (endMinute < 10) {
-    endMinute = '0'+endMinute.toString();
-  }
   return DayEnum[day]+startHour.toString()+startMinute.toString()+endHour.toString()+endMinute.toString();
 }
 
