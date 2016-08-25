@@ -96,6 +96,7 @@ $(document).ready(function() {
       $(this).parent().parent().parent().parent().remove();
       filter.append('<div class="form-group"><div class="info col-xs-12 filter-info"><span class="day col-xs-4">'+day+'</span><span class="start"><span class="startTime'+index+'">08:35</span></span><span class="stop"> - <span class="stopTime'+index+'">10:35</span></span></div><div><div class=" col-xs-11 col-md-10 slider-range-'+index+'"></div><span class="glyphicon glyphicon-remove pull-right col-xs-1 removeFilter" aria-hidden="true" id="remove-filter-'+index+'"></span></div></div>').hide().fadeIn('200');
       var onslideFunction = function(event,ui){
+        ui.values = $(this).slider("values");
         var startHour = Math.floor(ui.values[0]/60);
         startHour = startHour<10 ? '0'+startHour : startHour
         var endHour = Math.floor(ui.values[1]/60);
@@ -105,7 +106,9 @@ $(document).ready(function() {
         var endMinute = ui.values[1] - (endHour * 60);
         endMinute = endMinute<10 ? '0'+endMinute : endMinute
         var filterTime = getTimeAsString(day, startHour, startMinute, endHour, endMinute);
-        filters[index]=filterTime
+        if(filters.indexOf(filterTime)==-1){
+          filters[index]=filterTime;
+        }
         $('.startTime'+index+'').text(startHour+":"+startMinute);
         $('.stopTime'+index+'').text(endHour+":"+endMinute);
         addPreviousFilterToHiddenInput(filters);
@@ -125,6 +128,7 @@ $(document).ready(function() {
         step:30,
         values: [ 515, 645 ],
         slide: onslideFunction,
+        create: onslideFunction
       });
     });
 
@@ -151,8 +155,6 @@ function addPreviousFilterToHiddenInput(filters) {
   filters.forEach(function(filter){
     filterElement.value+=','+filter;
   });
-  console.log(filterElement.value);
-  // console.log(filterElement.value);
 }
 
 function changeFilters(newTime) {
