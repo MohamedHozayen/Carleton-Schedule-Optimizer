@@ -193,7 +193,11 @@ class Schedule:
 
 	# This method returns the break time for the given schedule
 	def outputBreakTime(self):
-		s = 'The minimum break time for these courses with the given time filters is '+str(self.breaks*30)+' minutes'
+		hours = int(self.breaks/2)
+		minutes = self.breaks*30%60
+		s = 'The minimum break time for these courses with the given time filters is '+str(hours)+' hours'
+		if minutes:
+			s += ' and '+str(minutes)+' minutes'
 		return s
 
 	# This method gathers all the sections for the schedule into a JSON object
