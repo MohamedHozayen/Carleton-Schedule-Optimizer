@@ -243,35 +243,9 @@ def getJSONData(schedules):
 		data.append(schedule.getJSON())
 	return json.dumps(data)
 
-# This function goes through the list of courses and gathers all the data for
-# all of them, returning the data in a list of lists of course sections
-def getSemesterData(courses, term):
-	# Each element in semesterData is a list of course sections. Each course section
-	# has its own list of the available tutorials or labs
-	semesterData = []
-	for course in courses:
-		if course != '':
-			courseData = getCourseData(course, term)
-			if courseData == 'invalid':
-				if term[-2:] == '10':
-					season = 'winter'
-				elif term[-2:] == '20':
-					season = 'summer'
-				else:
-					season = 'fall'
-				return 'Error: '+course+' is not offered in the '+season+' of '+term[:4]
-			semesterData.append(courseData)
-
-	# We fill up the list with dummy courses to make the huge scheduleOptimizer work
-	while(len(semesterData) < 6):
-		dummy = Section('', '', '', '', '', '', '', '', '', False)
-		dummy.addLabsOrTuts([Section('', '', '', '', '', '', '', '', '', False)])
-		semesterData.append([dummy])
-	return semesterData
-
 # This function uses the Carleton API to grab all the section data for the given
 # course, returning a list of every available section
-def getCourseData(course, term):
+def getCourseData(course, term, noFullCoursesFlag):
 	# The sections will be defined as tutorials or labs when they are constructed
 	# Each course can only have either tutorials or labs
 	sections = []
@@ -308,76 +282,109 @@ def getCourseData(course, term):
 		courseProf = section['timeslots'][0]['prof']
 		courseFull = section['space'] == 0
 
-		# Here we have an online course
-		if section['link_id'] == 'AV':
-			currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course', courseFull)
-		else:
-			# For some reason, the JSON started showing days twice for sections with tutorials or labs
-			# This chunk of code handles that case while still taking care of "special" sections
-			days = section['days']
-			if len(set(days.split(','))) == 1:
-				days = days[:2]
+		if not noFullCoursesFlag or not courseFull:
+			# Here we have an online course
+			if section['link_id'] == 'AV':
+				currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course', courseFull)
+			else:
+				# For some reason, the JSON started showing days twice for sections with tutorials or labs
+				# This chunk of code handles that case while still taking care of "special" sections
+				days = section['days']
+				if len(set(days.split(','))) == 1:
+					days = days[:2]
 
-			# If there is a comma, then we have the special extra lecture
-			if ',' in days:
-				days = days.split(',')
-				# The special and regular days are not consistently in order
-				if len(days[0]) > len(days[1]):
-					courseDays = days[0]
-					specialDays = days[1]
+				# If there is a comma, then we have the special extra lecture
+				if ',' in days:
+					days = days.split(',')
+					# The special and regular days are not consistently in order
+					if len(days[0]) > len(days[1]):
+						courseDays = days[0]
+						specialDays = days[1]
+					else:
+						courseDays = days[1]
+						specialDays = days[0]
+					specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
+					specialFlag = True
 				else:
-					courseDays = days[1]
-					specialDays = days[0]
-				specialTime = section['start'].replace(':','').split(',')[1][:4]+'-'+section['end'].replace(':','').split(',')[1][:4]
-				specialFlag = True
+					courseDays = days
+				courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
+				courseRoom = section['room']
+				currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture', courseFull)
+			if specialFlag:
+				currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture', courseFull))
+
+			# If there are no labs or tutorials, we are done with the current course
+			numberOfLabsOrTutorials = len(section['labs'])
+			if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0:
+				labstuts = [Section('', '', '', '', '', '', '', '', '', False)]
+
+			# Here we have labs or tutorials, so we deal with all of them
 			else:
-				courseDays = days
-			courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
-			courseRoom = section['room']
-			currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture', courseFull)
-		if specialFlag:
-			currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture', courseFull))
+				# I am assuming that all tutorials have the link_id T# and all labs have the link_id L#
+				# This might cause errors in the future if a tutorial does not have the assumed ID
+				labOrTutorial = section['labs'][0][0]['link_id']
+				if labOrTutorial[0] == 'T':
+					labOrTutorial = 'Tutorial'
+				elif labOrTutorial[0] == 'L':
+					labOrTutorial = 'Lab'
+				# If we end up here then my link_id assumption is wrong
+				else:
+					pass
 
-		# If there are no labs or tutorials, we are done with the current course
-		numberOfLabsOrTutorials = len(section['labs'])
-		if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0:
-			labstuts = [Section('', '', '', '', '', '', '', '', '', False)]
+				# Here we gather the data for each lab/tutorial section and add them
+				# to the list labstuts. This list will be added to the course section
+				labstuts = []
+				for labtut in section['labs'][0]:
+					ltSection = labtut['section']
+					ltCRN = labtut['crn']
+					ltDay = labtut['days']
+					ltDay = list(set(ltDay.split(',')))[0] # tutorial days and start/end times started showing up twice
+					ltstart = list(set(labtut['start'].split(',')))[0]
+					ltend = list(set(labtut['end'].split(',')))[0]
+					ltTime = ltstart[:-3]+'-'+ltend[:-3]
+					ltTime = ltTime.replace(':','')
+					ltRoom = labtut['room']
+					ltFull = labtut['space'] == 0
+					labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial, ltFull))
 
-		# Here we have labs or tutorials, so we deal with all of them
-		else:
-			# I am assuming that all tutorials have the link_id T# and all labs have the link_id L#
-			# This might cause errors in the future if a tutorial does not have the assumed ID
-			labOrTutorial = section['labs'][0][0]['link_id']
-			if labOrTutorial[0] == 'T':
-				labOrTutorial = 'Tutorial'
-			elif labOrTutorial[0] == 'L':
-				labOrTutorial = 'Lab'
-			# If we end up here then my link_id assumption is wrong
-			else:
-				pass
+			currentSection.addLabsOrTuts(labstuts)
+			# The current section of the course is added to the list of sections
+			sections.append(currentSection)
 
-			# Here we gather the data for each lab/tutorial section and add them
-			# to the list labstuts. This list will be added to the course section
-			labstuts = []
-			for labtut in section['labs'][0]:
-				ltSection = labtut['section']
-				ltCRN = labtut['crn']
-				ltDay = labtut['days']
-				ltDay = list(set(ltDay.split(',')))[0] # tutorial days and start/end times started showing up twice
-				ltstart = list(set(labtut['start'].split(',')))[0]
-				ltend = list(set(labtut['end'].split(',')))[0]
-				ltTime = ltstart[:-3]+'-'+ltend[:-3]
-				ltTime = ltTime.replace(':','')
-				ltRoom = labtut['room']
-				ltFull = labtut['space'] == 0
-				labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial, ltFull))
-
-		currentSection.addLabsOrTuts(labstuts)
-		# The current section of the course is added to the list of sections
-		sections.append(currentSection)
+	if len(sections) == 0:
+		sections = 'full'
 
 	# We return the list of all the sections for the given course
 	return sections
+
+# This function goes through the list of courses and gathers all the data for
+# all of them, returning the data in a list of lists of course sections
+def getSemesterData(courses, term, noFullCoursesFlag):
+	# Each element in semesterData is a list of course sections. Each course section
+	# has its own list of the available tutorials or labs
+	semesterData = []
+	for course in courses:
+		if course != '':
+			courseData = getCourseData(course, term, noFullCoursesFlag)
+			if isinstance(courseData, str):
+				if term[-2:] == '10':
+					season = 'winter'
+				elif term[-2:] == '20':
+					season = 'summer'
+				else:
+					season = 'fall'
+				if courseData == 'invalid':
+					return 'Error: '+course+' is not offered in the '+season+' of '+term[:4]
+				if courseData == 'full':
+					return 'Error: '+course+' is completely full in the '+season+' of '+term[:4]
+			semesterData.append(courseData)
+
+	# We fill up the list with dummy courses to make the huge scheduleOptimizer work
+	while(len(semesterData) < 6):
+		dummy = Section('', '', '', '', '', '', '', '', '', False)
+		dummy.addLabsOrTuts([Section('', '', '', '', '', '', '', '', '', False)])
+		semesterData.append([dummy])
+	return semesterData
 
 def getOptimizedSchedules(semesterData, filters, noFullCoursesFlag):
 	maxschedules = 50
@@ -491,7 +498,7 @@ def getOptimizedSchedules(semesterData, filters, noFullCoursesFlag):
 # This function collects the semester data, ensures the courses were valid,
 # and then runs the getOptimizedSchedules function
 def scheduleOptimizer(subjects, term, filters, noFullCoursesFlag):
-	semesterData = getSemesterData(subjects, term)
+	semesterData = getSemesterData(subjects, term, noFullCoursesFlag)
 	if isinstance(semesterData, str): # Here one or more of the given courses was invalid
 		return semesterData
 	return getOptimizedSchedules(semesterData, filters, noFullCoursesFlag)
