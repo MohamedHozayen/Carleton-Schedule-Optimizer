@@ -5,19 +5,19 @@ from crispy_forms.layout import Submit
 
 class ScheduleForm(forms.Form):
 	semester = forms.ChoiceField(choices = SEMESTER_CHOICES, label = 'Semester', widget = forms.Select(), required = False)
-	c1 = forms.CharField(label='Course 1', max_length=9, required = False)
-	c2 = forms.CharField(label='Course 2', max_length=9, required = False)
-	c3 = forms.CharField(label='Course 3', max_length=9, required = False)
-	c4 = forms.CharField(label='Course 4', max_length=9, required = False)
-	c5 = forms.CharField(label='Course 5', max_length=9, required = False)
-	c6 = forms.CharField(label='Course 6', max_length=9, required = False)
+	c1 = forms.CharField(label='Course 1', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
+	c2 = forms.CharField(label='Course 2', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
+	c3 = forms.CharField(label='Course 3', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
+	c4 = forms.CharField(label='Course 4', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
+	c5 = forms.CharField(label='Course 5', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
+	c6 = forms.CharField(label='Course 6', max_length=9, required = False,widget=forms.TextInput(attrs={'class': 'courseInput'}))
 	timeFilters = forms.CharField(widget = forms.HiddenInput(), label='This should be hidden', required = False, initial = '')
 	noFullCoursesFlag = forms.BooleanField(label='Exclude Full Sections', required = False, initial = False)
 
 	helper = FormHelper()
 	helper.form_class='form-horizontal'
 	helper.label_class = 'col-sm-2 col-md-5'
-	helper.field_class = 'col-sm-10 col-md-7'
+	helper.field_class = 'col-sm-10 col-md-7 courseInput'
 	helper.form_method = 'post'
 	helper.form_action = ''
 	# helper.add_input(Submit('submit', 'Submit'))
