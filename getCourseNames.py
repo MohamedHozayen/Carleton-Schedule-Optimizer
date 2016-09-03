@@ -11,7 +11,8 @@ def getCourseNumber(courseName):
 
 for course in allCourses:
     for number in getCourseNumber(course):
-        courses.append(course+" "+number)
+        if len(number) == 4:
+            courses.append(course+" "+number)
 
 with open('scheduler/static/courseNames.json', 'w') as fp:
     json.dump(courses, fp)
