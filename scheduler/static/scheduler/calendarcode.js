@@ -52,6 +52,22 @@ $(document).ready(function() {
           $(this).css("background",event.color);
         }});
 
+    $(function(){
+      $.ajax({
+        url: "static/courseNames.json",
+        dataType: "json",
+        data: {},
+        success: function(data) {
+          $(".courseInput").autocomplete({
+                delay: 0,
+                source: data,
+                minlength:0
+            });
+          console.log(data);
+        }
+      });
+    });
+
     $('#addFilterBtn').click(function(e){
       //ask them to choose a day
       var days = [
