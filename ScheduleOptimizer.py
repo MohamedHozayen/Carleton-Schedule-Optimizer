@@ -61,6 +61,9 @@ class Day:
 	# This method removes a given course section from the day, decrementing its
 	# time slots
 	def removeSection(self, section):
+		if section.courseType == 'Online Course':
+			self.sections.remove(section)
+			return
 		times = section.time.split('-')
 		startTime = int(times[0])
 		endTime = int(times[1])
@@ -124,7 +127,7 @@ class Schedule:
 	# This method adds a section to the schedule. It checks which days to add
 	# the section to and then adds them using the Day addSection() method
 	def addSection(self, newsection):
-		if newsection.day == 'Online':
+		if newsection.courseType == 'Online Course':
 			self.monday.addSection(newsection)
 			return
 		for day in newsection.day: # section.day is a string storing the days the class is held
@@ -143,6 +146,9 @@ class Schedule:
 
 	# This method removes a section from the schedule.
 	def removeSection(self, newsection):
+		if newsection.courseType == 'Online Course':
+			self.monday.removeSection(newsection)
+			return
 		for day in newsection.day: # section.day is a string storing the days the class is held
 			if 'M' in day:
 				self.monday.removeSection(newsection)
@@ -282,9 +288,13 @@ def getCourseData(course, term, noFullCoursesFlag):
 		courseProf = section['timeslots'][0]['prof']
 		courseFull = section['space'] == 0
 
+		# Thanks deMorgan for this weird boolean logic
 		if not noFullCoursesFlag or not courseFull:
+			courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
+
 			# Here we have an online course
-			if section['link_id'] == 'AV':
+			# I'm not sure if checking the link_id to be AV is required
+			if section['link_id'] == 'AV' or courseTime == '0000-0000':
 				currentSection = Section(courseTitle, course, courseSection, courseCRN, '', 'Online', '', courseProf, 'Online Course', courseFull)
 			else:
 				# For some reason, the JSON started showing days twice for sections with tutorials or labs
@@ -307,7 +317,7 @@ def getCourseData(course, term, noFullCoursesFlag):
 					specialFlag = True
 				else:
 					courseDays = days
-				courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
+				# courseTime = section['start'].replace(':','')[:4]+'-'+section['end'].replace(':','')[:4]
 				courseRoom = section['room']
 				currentSection = Section(courseTitle, course, courseSection, courseCRN, courseTime, courseDays, courseRoom, courseProf, 'Lecture', courseFull)
 			if specialFlag:
@@ -346,8 +356,8 @@ def getCourseData(course, term, noFullCoursesFlag):
 					ltRoom = labtut['room']
 					ltFull = labtut['space'] == 0
 					labstuts.append(Section(courseTitle, course, ltSection, ltCRN, ltTime, ltDay, ltRoom, courseProf, labOrTutorial, ltFull))
-
 			currentSection.addLabsOrTuts(labstuts)
+
 			# The current section of the course is added to the list of sections
 			sections.append(currentSection)
 

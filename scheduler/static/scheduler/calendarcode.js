@@ -261,16 +261,23 @@ function addSectionsToCalendar(sections) {
     }
 
     // Here we collect the event text and assign colours to the sections based on their type
+    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
     if (courseType == 'Lecture') {
       courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
     else if (courseType == 'Lab') {
       courseText = courseCode+' '+courseType+'\n'+prof+'\n'+room;
     }
-    else { // Here we have a tutorial
+    else if (courseType == 'Tutorial'){ // Here we have a tutorial
       courseText = courseCode+' '+courseType+'\n'+room;
     }
-    details = courseCode+"<br>"+title+"<br>"+prof+"<br>Room: "+room+"<br>CRN: "+courseCRN;
+    else if (courseType == 'Online Course') {
+      courseType = 'ONLINE COURSE'
+      courseText = courseCode+'\n'+courseType+'\n'+prof;
+      start = '21:00';
+      end = '22:00';
+      details = courseCode+"<br>"+title+"<br>"+prof+"<br>CRN: "+courseCRN+"<br><b>ONLINE COURSE</b>";
+    }
 
     // Courses are added to the courseColours dict to ensure consistent colours
     if (!(Object.keys(courseColours).includes(title))) {
