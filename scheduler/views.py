@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from ScheduleOptimizer import *
 from .forms import ScheduleForm
+from scheduler.static.weirdCourseCodes import WEIRD_COURSE_CODES
 
 def scheduler(request):
     # if this is a POST request we need to process the form data
@@ -18,11 +19,11 @@ def scheduler(request):
             c6 = form.cleaned_data['c6'].upper().replace(' ','')
             subjects = [c1,c2,c3,c4,c5,c6]
 
-            filters = form.cleaned_data['timeFilters']
             fullFlag = form.cleaned_data['noFullCoursesFlag']
-
+            filters = form.cleaned_data['timeFilters']
+            # If there are filters, we convert the string into a list
             if len(filters) > 0:
-                filters=filters[1:]
+                filters = filters[1:] # This gets rid of an unwanted initial comma
                 filters = filters.split(',')
 
             # These are the default semester options
@@ -36,7 +37,8 @@ def scheduler(request):
                 form = ScheduleForm(data, initial=data)
 
             # Here at least one course was entered incorrectly
-            elif any( (len(y) < 8) for y in [x for x in [c1,c2,c3,c4,c5,c6] if x != '']):
+            # The weird course codes are those that have less than 4 digit numbers (e.g. MATH5)
+            elif any( (len(y) < 8) for y in [x for x in [c1,c2,c3,c4,c5,c6] if x != ''] if y not in WEIRD_COURSE_CODES):
                 return render(request, 'scheduler/index.html', {
                     'form': form,
                     'error': 'Error: courses must be entered in the format XXXX1000, where XXXX is the department code and 1000 is the course code',
