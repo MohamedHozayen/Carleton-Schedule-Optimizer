@@ -277,6 +277,10 @@ def getCourseData(course, term, noFullCoursesFlag):
 	# Here we grab the course data from the JSON data
 	courseData = json.loads(text)[1][0]
 
+	# This list holds the different section names
+	# For some reason, certain courses (i.e. NEUR 1201) have other sections showing up as labs
+	secs = [section['section'] for section in courseData]
+
 	for section in courseData:
 		# This flag keeps track of sections with extra lectures (e.g. ECOR1010)
 		specialFlag = False
@@ -324,8 +328,9 @@ def getCourseData(course, term, noFullCoursesFlag):
 				currentSection.addSpecial(Section(courseTitle, course, courseSection, courseCRN, specialTime, specialDays, courseRoom, courseProf, 'Lecture', courseFull))
 
 			# If there are no labs or tutorials, we are done with the current course
+			# Some courses (NEUR1201) have errors where other sections show up as labs when they shouldn't
 			numberOfLabsOrTutorials = len(section['labs'])
-			if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0:
+			if numberOfLabsOrTutorials == 0 or len(section['labs'][0]) == 0 or section['labs'][0][0]['section'] in secs:
 				labstuts = [Section('', '', '', '', '', '', '', '', '', False)]
 
 			# Here we have labs or tutorials, so we deal with all of them
